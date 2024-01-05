@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">AroundCompose</string>
+    <string name="mapbox_access_token">sk.eyJ1IjoiYmFmaSIsImEiOiJjbGl5aWpxNHQwMTEwM3NsNDFtbjQ1MDc1In0.zwa3M2vaGydZJobnwjF06g</string>
+    <string name="openStreetMapKey">https://api.maptiler.com/maps/openstreetmap/style.json?key=f5zwHVm4noZoKlkPQsAG</string>
+    <string name="mapTilerKey">https://api.maptiler.com/maps/streets-v2/style.json?key=f5zwHVm4noZoKlkPQsAG</string>
+    <string name="globeKey">mapbox://styles/mapbox/streets-v12</string>
+    <string name="globe3dKey">mapbox://styles/bafi/clizk5qjc01bg01pf3q0zgp0y</string>
+
+    <!--Bottom menu-->
+    <string name="map">Карта</string>
+    <string name="skills">Навыки</string>
+    <string name="profile">Профиль</string>
+
+    <!--PermissionsScreen-->
+    <string name="allow_access_to_location">Разреши доступ к геопозиции</string>
+    <string name="to_settings_bnt">В настройки</string>
+</resources>
