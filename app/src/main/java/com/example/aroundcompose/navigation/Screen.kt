@@ -13,6 +13,7 @@ sealed class Screen(val titleId: Int, val iconId: Int, val route: String) {
             return listOf(SkillsScreen, MapScreen, ProfileScreen)
         }
 
+        const val SPLASH_ROUTE = "SPLASH_ROUTE"
         const val MAIN_ROUTE = "MAIN_ROUTE"
         const val PERMISSIONS_ROUTE = "PERMISSIONS_ROUTE"
         const val MAP_ROUTE = "MAP_ROUTE"
