@@ -19,7 +19,13 @@ fun BottomNavigation(navController: NavController, currentRoute: String) {
         listItems.forEach { item ->
             NavigationBarItem(
                 selected = currentRoute == item.route,
-                onClick = { navController.navigate(item.route) },
+                onClick = {
+                    if (item.route == Screen.MAP_ROUTE) {
+                        navController.navigate(item.route) {
+                            popUpTo(item.route) { inclusive = true }
+                        }
+                    } else navController.navigate(item.route)
+                },
                 icon = {
                     Icon(painter = painterResource(id = item.iconId), contentDescription = "icon")
                 },

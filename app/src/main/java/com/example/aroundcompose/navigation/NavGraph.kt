@@ -1,28 +1,25 @@
 package com.example.aroundcompose.navigation
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.example.aroundcompose.screens.MapScreen
+import com.example.aroundcompose.screens.map.MapScreen
 import com.example.aroundcompose.screens.ProfileScreen
 import com.example.aroundcompose.screens.SkillsScreen
+import com.example.aroundcompose.screens.map.MapViewModel
 import com.example.aroundcompose.screens.splash.SplashScreen
 
 @Composable
 fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
     val activity = (LocalContext.current as? Activity)
+    val mapViewModel = hiltViewModel<MapViewModel>()
     NavHost(
         navController = navController,
         startDestination = Screen.SPLASH_ROUTE,
@@ -34,7 +31,7 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
                 navController.navigate(Screen.MAP_ROUTE)
             })
         }
-        composable(Screen.MAP_ROUTE) { MapScreen() }
+        composable(Screen.MAP_ROUTE) { MapScreen(mapViewModel) }
         composable(Screen.SKILLS_ROUTE) { SkillsScreen() }
         composable(Screen.PROFILE_ROUTE) { ProfileScreen() }
     }

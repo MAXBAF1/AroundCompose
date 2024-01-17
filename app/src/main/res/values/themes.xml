@@ -2,4 +2,8 @@
 <resources>
 
     <style name="Theme.AroundCompose" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!--Location Service Notification-->
+    <string name="around_running">Around Running!</string>
+    <string name="stop_and_exit">Остановить и выйти</string>
 </resources>

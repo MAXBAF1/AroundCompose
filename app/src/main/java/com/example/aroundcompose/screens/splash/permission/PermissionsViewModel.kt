@@ -17,26 +17,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModel
+import com.example.aroundcompose.domain.BaseViewModel
 import com.example.aroundcompose.screens.splash.permission.models.PermissionsAction
 import com.example.aroundcompose.screens.splash.permission.models.PermissionsEvent
+import com.example.aroundcompose.screens.splash.permission.models.PermissionsViewState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class PermissionsViewModel @Inject constructor() : ViewModel() {
-    //    private val _permissionViewState = MutableLiveData(PermissionViewState())
-//    val permissionViewState: LiveData<PermissionViewState> = _permissionViewState
-    private val _permissionsAction = MutableStateFlow(PermissionsAction.CheckGranted)
-    val permissionsAction: StateFlow<PermissionsAction> = _permissionsAction
+class PermissionsViewModel @Inject constructor() :
+    BaseViewModel<PermissionsViewState, PermissionsAction, PermissionsEvent>(
+        initialAction = PermissionsAction.CheckGranted
+    ) {
 
     @Composable
-    fun obtainEvent(event: PermissionsEvent) {
-        when (event) {
+    override fun obtainEvent(viewEvent: PermissionsEvent) {
+        when (viewEvent) {
             PermissionsEvent.CheckGranted -> setLocationPermissionState()
             PermissionsEvent.NotGranted -> launchPermissions()
             PermissionsEvent.AppSettings -> openAppSettings()
@@ -47,9 +45,9 @@ class PermissionsViewModel @Inject constructor() : ViewModel() {
     @Composable
     private fun launchPermissions() {
         val launcher = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION) {
-            _permissionsAction.value = if (it) {
-                PermissionsAction.Granted
-            } else PermissionsAction.PermissionNotAllowed
+            setActionState(
+                if (it) PermissionsAction.Granted else PermissionsAction.PermissionNotAllowed
+            )
         }
 
         SideEffect { launcher.launchPermissionRequest() }
@@ -85,9 +83,7 @@ class PermissionsViewModel @Inject constructor() : ViewModel() {
             LocalContext.current, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
-        _permissionsAction.value = if (isGranted) {
-            PermissionsAction.Granted
-        } else PermissionsAction.NotGranted
+        setActionState(if (isGranted) PermissionsAction.Granted else PermissionsAction.NotGranted)
 
         return isGranted
     }

@@ -13,20 +13,20 @@ fun PermissionsScreen(
     onBackPressed: () -> Unit,
     onPermissionsGranted: () -> Unit,
 ) {
-    val viewAction by viewModel.permissionsAction.collectAsState()
+    val viewAction by viewModel.viewAction.collectAsState()
 
     when (viewAction) {
         PermissionsAction.CheckGranted -> {
-            viewModel.obtainEvent(event = PermissionsEvent.CheckGranted)
+            viewModel.obtainEvent(viewEvent = PermissionsEvent.CheckGranted)
         }
 
         PermissionsAction.NotGranted -> {
-            viewModel.obtainEvent(event = PermissionsEvent.NotGranted)
+            viewModel.obtainEvent(viewEvent = PermissionsEvent.NotGranted)
         }
 
         PermissionsAction.PermissionNotAllowed -> {
             PermissionsBottomSheet(onBackPressed = onBackPressed, onOpenAppSettings = {
-                viewModel.obtainEvent(event = PermissionsEvent.AppSettings)
+                viewModel.obtainEvent(viewEvent = PermissionsEvent.AppSettings)
             })
         }
 
