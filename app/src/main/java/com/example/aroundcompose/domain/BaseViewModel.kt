@@ -1,28 +1,27 @@
 package com.example.aroundcompose.domain
 
+import android.app.Application
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class BaseViewModel<State, Action, Event>(
+    application: Application,
     initialState: State? = null,
     initialAction: Action,
-) : ViewModel() {
-    private val _viewState = MutableStateFlow(initialState)
-    private val _viewAction = MutableStateFlow(initialAction)
+) : AndroidViewModel(application) {
+    protected val context
+        get() = getApplication<Application>()
+    protected val viewState = MutableStateFlow(initialState)
+    protected val viewAction = MutableStateFlow(initialAction)
 
-    var viewState: StateFlow<State?> = _viewState
-    var viewAction: StateFlow<Action> = _viewAction
+    fun getViewState(): StateFlow<State?> = viewState
+    fun getViewAction(): StateFlow<Action> = viewAction
 
-    protected fun setViewState(state: State?) {
-        _viewState.value = state
-    }
-
-    protected fun setActionState(action: Action) {
-        _viewAction.value = action
-    }
 
     @Composable
-    abstract fun obtainEvent(viewEvent: Event)
+    open fun composableObtainEvent(viewEvent: Event) {}
+
+    open fun obtainEvent(viewEvent: Event) {}
 }

@@ -1,6 +1,7 @@
 package com.example.aroundcompose.screens.splash.permission
 
 import android.Manifest
+import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -24,16 +25,17 @@ import com.example.aroundcompose.screens.splash.permission.models.PermissionsVie
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class PermissionsViewModel @Inject constructor() :
+class PermissionsViewModel @Inject constructor(application: Application) :
     BaseViewModel<PermissionsViewState, PermissionsAction, PermissionsEvent>(
-        initialAction = PermissionsAction.CheckGranted
+        application = application, initialAction = PermissionsAction.CheckGranted
     ) {
 
     @Composable
-    override fun obtainEvent(viewEvent: PermissionsEvent) {
+    override fun composableObtainEvent(viewEvent: PermissionsEvent) {
         when (viewEvent) {
             PermissionsEvent.CheckGranted -> setLocationPermissionState()
             PermissionsEvent.NotGranted -> launchPermissions()
@@ -45,9 +47,9 @@ class PermissionsViewModel @Inject constructor() :
     @Composable
     private fun launchPermissions() {
         val launcher = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION) {
-            setActionState(
+            viewAction.update { _ ->
                 if (it) PermissionsAction.Granted else PermissionsAction.PermissionNotAllowed
-            )
+            }
         }
 
         SideEffect { launcher.launchPermissionRequest() }
@@ -55,8 +57,8 @@ class PermissionsViewModel @Inject constructor() :
 
     @Composable
     private fun openAppSettings() {
-        val context = LocalContext.current
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         val uri = Uri.fromParts("package", context.packageName, null)
         intent.data = uri
         context.startActivity(intent)
@@ -80,10 +82,12 @@ class PermissionsViewModel @Inject constructor() :
     @Composable
     private fun setLocationPermissionState(): Boolean {
         val isGranted = ContextCompat.checkSelfPermission(
-            LocalContext.current, Manifest.permission.ACCESS_FINE_LOCATION
+            context, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
-        setActionState(if (isGranted) PermissionsAction.Granted else PermissionsAction.NotGranted)
+        viewAction.update {
+            if (isGranted) PermissionsAction.Granted else PermissionsAction.NotGranted
+        }
 
         return isGranted
     }

@@ -1,26 +1,23 @@
 package com.example.aroundcompose.screens.map.locationService
 
-import android.content.Context
-import android.content.pm.PackageManager
-import android.location.LocationManager
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.CurrentLocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
 import android.os.IBinder
 import android.os.Looper
-import android.os.Process.killProcess
-import android.os.Process.myPid
+import androidx.core.app.ActivityCompat
 import com.example.aroundcompose.utils.toJsonPoint
+import com.google.android.gms.location.CurrentLocationRequest
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.mapbox.geojson.Point
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 
 class LocationService : Service() {
     private val locationManager by lazy {

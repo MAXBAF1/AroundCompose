@@ -3,33 +3,30 @@ package com.example.aroundcompose.screens.map
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.example.aroundcompose.screens.map.models.MapAction
 import com.example.aroundcompose.screens.map.models.MapEvent
 import com.example.aroundcompose.screens.map.views.MyMapboxMap
-import com.mapbox.maps.MapboxExperimental
-import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
-import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.maps.MapView
 
-@OptIn(MapboxExperimental::class)
 @Composable
 fun MapScreen(viewModel: MapViewModel) {
-    val viewState by viewModel.viewState.collectAsState()
-    val viewAction by viewModel.viewAction.collectAsState()
+    val viewState by viewModel.getViewState().collectAsState()
+    val viewAction by viewModel.getViewAction().collectAsState()
 
-    val viewportState = rememberMapViewportState {
-        setCameraOptions {
-            center(viewState?.currentLocation)
-            zoom(ZOOM_LEVEL)
-            bearing(0.0)
-        }
-    }
-    MyMapboxMap(viewportState)
+    var mapView: MapView? by remember { mutableStateOf(null) }
 
+    MyMapboxMap(
+        mapViewCallback = { mapView = it },
+        onMapMove = { viewModel.obtainEvent(MapEvent.MoveMap) },
+        onCompassClicked = { viewModel.obtainEvent(MapEvent.CompassClick) },
+        onDoubleTap = { viewModel.obtainEvent(MapEvent.DoubleTap) }
+    )
 
     when (viewAction) {
-        MapAction.Init -> {
-            viewModel.obtainEvent(viewEvent = MapEvent.Init)
-        }
+        MapAction.Init -> viewModel.obtainEvent(MapEvent.Init(mapView))
     }
 }
 
