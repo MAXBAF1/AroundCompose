@@ -1,7 +1,8 @@
 package com.example.aroundcompose.screens.map.models
 
-import com.mapbox.maps.MapView
+import com.mapbox.geojson.Point
 
-data class MapViewState constructor(
-    val mapView: MapView? = null,
-)
+sealed class MapViewState {
+    data class Init(val lastLocation: Point? = null) : MapViewState()
+    data class CellsCaptured(val paintedCells: List<String> = listOf()) : MapViewState()
+}

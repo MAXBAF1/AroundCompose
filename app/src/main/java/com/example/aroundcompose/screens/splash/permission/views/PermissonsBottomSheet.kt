@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -45,12 +46,8 @@ fun PermissionsBottomSheet(onBackPressed: () -> Unit, onOpenAppSettings: @Compos
         }
     }
 
-    if (isOpenAppSettings) onOpenAppSettings()
-
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    PermissionsBottomSheet(onBackPressed = {}, onOpenAppSettings = {})
+    if (isOpenAppSettings) {
+        onOpenAppSettings()
+        isOpenAppSettings = false
+    }
 }

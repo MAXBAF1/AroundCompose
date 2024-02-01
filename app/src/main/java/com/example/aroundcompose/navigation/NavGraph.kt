@@ -31,7 +31,7 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
                 navController.navigate(Screen.MAP_ROUTE)
             })
         }
-        composable(Screen.MAP_ROUTE) { MapScreen(mapViewModel) }
+        composable(Screen.MAP_ROUTE) { MapScreen(mapViewModel).Create() }
         composable(Screen.SKILLS_ROUTE) { SkillsScreen() }
         composable(Screen.PROFILE_ROUTE) { ProfileScreen() }
     }

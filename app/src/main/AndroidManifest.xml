@@ -29,11 +29,11 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".screens.map.locationService.LocationService"
+            android:name=".screens.map.location_service.LocationService"
             android:foregroundServiceType="location"
             android:enabled="true" />
         <receiver
-            android:name=".screens.map.locationService.StopServiceReceiver"
+            android:name=".screens.map.location_service.StopServiceReceiver"
             android:enabled="true">
         </receiver>
     </application>

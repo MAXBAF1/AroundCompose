@@ -1,4 +1,4 @@
-package com.example.aroundcompose.screens.map.locationService
+package com.example.aroundcompose.screens.map.location_service
 
 import android.Manifest
 import android.annotation.SuppressLint
