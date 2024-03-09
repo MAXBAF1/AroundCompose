@@ -1,10 +1,8 @@
-package com.example.aroundcompose.screens.map.locationService
+package com.example.aroundcompose.screens.map.location_service
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Process.killProcess
-import android.os.Process.myPid
 
 class StopServiceReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

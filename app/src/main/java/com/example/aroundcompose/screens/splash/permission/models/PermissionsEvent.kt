@@ -1,5 +1,8 @@
 package com.example.aroundcompose.screens.splash.permission.models
 
-enum class PermissionsEvent {
-    CheckGranted, NotGranted, AppSettings
+import android.content.Context
+
+sealed class PermissionsEvent {
+    object NotGranted : PermissionsEvent()
+    object DismissPermission : PermissionsEvent()
 }

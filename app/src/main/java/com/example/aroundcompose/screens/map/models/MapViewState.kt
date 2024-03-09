@@ -1,13 +1,8 @@
 package com.example.aroundcompose.screens.map.models
 
-import android.location.Location
 import com.mapbox.geojson.Point
-import com.mapbox.maps.MapboxExperimental
-import com.mapbox.maps.extension.compose.animation.viewport.MapViewportState
-import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 
-
-data class MapViewState(
-    val currentLocation: Point? = null,
-)
-
+sealed class MapViewState {
+    data class Init(val lastLocation: Point? = null) : MapViewState()
+    data class CellsCaptured(val paintedCells: List<String> = listOf()) : MapViewState()
+}

@@ -5,24 +5,12 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class BaseViewModel<State, Action, Event>(
-    initialState: State? = null,
-    initialAction: Action,
+abstract class BaseViewModel<State, Event>(
+    initialState: State,
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(initialState)
-    private val _viewAction = MutableStateFlow(initialAction)
+    protected val viewState = MutableStateFlow(initialState)
 
-    var viewState: StateFlow<State?> = _viewState
-    var viewAction: StateFlow<Action> = _viewAction
+    fun getViewState(): StateFlow<State> = viewState
 
-    protected fun setViewState(state: State?) {
-        _viewState.value = state
-    }
-
-    protected fun setActionState(action: Action) {
-        _viewAction.value = action
-    }
-
-    @Composable
-    abstract fun obtainEvent(viewEvent: Event)
+    open fun obtainEvent(viewEvent: Event) {}
 }

@@ -52,7 +52,9 @@ android {
 }
 
 dependencies {
-    implementation("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
+    // H3
+    implementation("com.uber:h3:4.1.1")
+
     // Hilt
     val hiltVersion = 2.48
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")

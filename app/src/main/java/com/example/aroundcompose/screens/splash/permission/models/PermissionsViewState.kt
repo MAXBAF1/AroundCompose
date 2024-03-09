@@ -1,3 +1,5 @@
 package com.example.aroundcompose.screens.splash.permission.models
 
-class PermissionsViewState
+enum class PermissionsViewState {
+    CheckGranted, NotGranted, PermissionDismissed
+}
