@@ -4,17 +4,29 @@ import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.example.aroundcompose.R
 import com.example.aroundcompose.screens.map.location_service.LocationService
 import com.example.aroundcompose.screens.map.models.MapEvent
 import com.example.aroundcompose.screens.map.models.MapViewState
 import com.example.aroundcompose.screens.map.views.ALL_CELLS_LAYER_ID
+import com.example.aroundcompose.screens.map.views.MapBtn
 import com.example.aroundcompose.screens.map.views.MyMapboxMap
 import com.example.aroundcompose.screens.map.views.PAINTED_CELLS_LAYER_ID
 import com.example.aroundcompose.screens.map.views.SOURCE_ID
@@ -51,6 +63,24 @@ class MapScreen(private val viewModel: MapViewModel) {
         },
             onMapMove = { removeCameraFollow(mapView) },
             onCompassClicked = { onCompassClick(mapView) })
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.End
+        ) {
+            Spacer(modifier = Modifier.size(width = 0.dp, height = 60.dp)) // FIXME Заглушка
+            Column {
+                Spacer(modifier = Modifier.size(width = 0.dp, height = 60.dp))
+                MapBtn(iconId = R.drawable.ic_plus) { }
+                Spacer(modifier = Modifier.size(width = 0.dp, height = 12.dp))
+                MapBtn(iconId = R.drawable.ic_minus) { }
+            }
+            MapBtn(iconId = R.drawable.ic_navigate) { }
+        }
+
 
         when (viewState) {
             is MapViewState.Init -> {

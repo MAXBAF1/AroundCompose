@@ -31,16 +31,13 @@ data class JetAroundShape(
 
 object JetAroundTheme {
     internal val colors: JetAroundColors
-        @Composable
-        internal get() = LocalJetAroundColors.current
+        @Composable get() = LocalJetAroundColors.current
 
     internal val typography: JetAroundTypography
-        @Composable
-        internal get() = LocalJetAroundTypography.current
+        @Composable get() = LocalJetAroundTypography.current
 
     internal val shapes: JetAroundShape
-        @Composable
-        internal get() = LocalJetAroundShape.current
+        @Composable get() = LocalJetAroundShape.current
 }
 
 enum class JetAroundStyle {

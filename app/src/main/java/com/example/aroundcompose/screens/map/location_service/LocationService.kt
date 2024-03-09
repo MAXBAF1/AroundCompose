@@ -29,15 +29,15 @@ class LocationService : Service() {
 
     override fun onBind(p0: Intent?): IBinder? = null
 
+    override fun onCreate() {
+        super.onCreate()
+        startLocationUpdates()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startNotification(this)
         isRunning = true
         return START_STICKY
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        startLocationUpdates()
     }
 
     override fun onDestroy() {
