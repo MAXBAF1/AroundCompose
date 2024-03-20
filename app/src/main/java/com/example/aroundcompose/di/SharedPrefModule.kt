@@ -3,7 +3,7 @@ package com.example.aroundcompose.di
 import android.app.Service
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.aroundcompose.screens.map.location_service.LocationService
+import com.example.aroundcompose.ui.screens.map.location_service.LocationService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

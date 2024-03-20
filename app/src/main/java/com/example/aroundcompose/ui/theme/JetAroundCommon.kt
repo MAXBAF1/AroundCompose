@@ -8,20 +8,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 
 data class JetAroundColors(
-    val primaryText: Color,
     val primaryBackground: Color,
-    val secondaryText: Color,
-    val secondaryBackground: Color,
-    val tintColor: Color,
-    val controlColor: Color,
-    val errorColor: Color,
+    val mapSearchInactive: Color,
+    val mapBtnBg: Color,
+    val mapElements: Color,
+    val searchHint: Color,
 )
 
 data class JetAroundTypography(
+    val appName: TextStyle,
     val heading: TextStyle,
-    val body: TextStyle,
-    val toolbar: TextStyle,
-    val caption: TextStyle
+    val coin: TextStyle,
+    val search: TextStyle,
 )
 
 data class JetAroundShape(

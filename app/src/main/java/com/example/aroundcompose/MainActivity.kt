@@ -7,9 +7,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.aroundcompose.navigation.BottomNavigation
-import com.example.aroundcompose.navigation.NavGraph
-import com.example.aroundcompose.navigation.Screen
+import com.example.aroundcompose.ui.navigation.BottomNavigation
+import com.example.aroundcompose.ui.navigation.NavGraph
+import com.example.aroundcompose.ui.navigation.Screen
 import com.example.aroundcompose.ui.theme.AroundComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
