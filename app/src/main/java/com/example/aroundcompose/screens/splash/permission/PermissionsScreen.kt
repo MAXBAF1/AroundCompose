@@ -1,6 +1,7 @@
 package com.example.aroundcompose.screens.splash.permission
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -77,6 +78,7 @@ private fun openAppSettings(context: Context) {
     context.startActivity(intent)
 }
 
+@SuppressLint("ComposableNaming")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun showPermissionDialog(onAccept: () -> Unit, onDismiss: () -> Unit) {

@@ -2,7 +2,6 @@ package com.example.aroundcompose.navigation
 
 import com.example.aroundcompose.R
 
-
 sealed class Screen(val titleId: Int, val iconId: Int, val route: String) {
     object MapScreen : Screen(R.string.map, R.drawable.ic_map, MAP_ROUTE)
     object SkillsScreen : Screen(R.string.skills, R.drawable.ic_skills, SKILLS_ROUTE)

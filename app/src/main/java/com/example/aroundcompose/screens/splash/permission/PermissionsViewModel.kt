@@ -15,6 +15,7 @@ class PermissionsViewModel @Inject constructor() :
         when (viewEvent) {
             PermissionsEvent.NotGranted -> viewState.update { PermissionsViewState.NotGranted }
             PermissionsEvent.DismissPermission -> viewState.update { PermissionsViewState.PermissionDismissed }
+            else -> {}
         }
     }
 }
