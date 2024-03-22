@@ -20,6 +20,7 @@ import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.OnMoveListener
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.generated.LocationComponentSettings
+import com.mapbox.maps.plugin.scalebar.scalebar
 
 
 class MyMapboxMap(
@@ -58,6 +59,8 @@ class MyMapboxMap(
 
                 mapViewCallback(it)
                 it.compass.addCompassClickListener(onCompassClicked)
+                it.compass.marginTop = 200f
+                it.scalebar.marginTop = 1800f
                 it.gestures.addOnMoveListener(getOnMoveListener())
             }
         }

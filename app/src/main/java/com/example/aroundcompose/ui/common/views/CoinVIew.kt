@@ -1,4 +1,4 @@
-package com.example.aroundcompose.ui.global_views
+package com.example.aroundcompose.ui.common.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,7 +23,8 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 fun CoinView(modifier: Modifier, value: Int) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(12.dp)
+        shape = JetAroundTheme.shapes.mapElementsShape,
+        elevation = CardDefaults.cardElevation(10.dp)
     ) {
         Row(
             modifier = Modifier.background(JetAroundTheme.colors.primaryBackground).padding(10.dp),

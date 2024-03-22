@@ -27,17 +27,10 @@ internal fun AroundComposeTheme(
         }
     }
 
-    val shapes = JetAroundShape(
-        padding = 16.dp, cornersStyle = when (corners) {
-            JetAroundCorners.Flat -> RoundedCornerShape(0.dp)
-            JetAroundCorners.Rounded -> RoundedCornerShape(8.dp)
-        }
-    )
-
     CompositionLocalProvider(
         LocalJetAroundColors provides colors,
         LocalJetAroundTypography provides typography,
-        LocalJetAroundShape provides shapes,
+        LocalJetAroundShape provides shape,
         content = content
     )
 }

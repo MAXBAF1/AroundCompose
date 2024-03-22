@@ -1,7 +1,7 @@
 package com.example.aroundcompose.ui.screens.map
 
 import android.content.SharedPreferences
-import com.example.aroundcompose.domain.BaseViewModel
+import com.example.aroundcompose.models.BaseViewModel
 import com.example.aroundcompose.ui.screens.map.location_service.LocationService
 import com.example.aroundcompose.ui.screens.map.models.MapEvent
 import com.example.aroundcompose.ui.screens.map.models.MapViewState

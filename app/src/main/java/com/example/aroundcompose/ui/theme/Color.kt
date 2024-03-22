@@ -8,6 +8,7 @@ internal val baseLightPalette = JetAroundColors(
     mapBtnBg = Color(1f, 1f, 1f, 0.9f),
     mapSearchInactive = Color(0xFFBDBDBD),
     searchHint = Color(0xFF929292),
+    textColor = Color(0xFF1D1D1D),
 )
 
 internal val baseDarkPalette = JetAroundColors(
@@ -16,4 +17,5 @@ internal val baseDarkPalette = JetAroundColors(
     mapBtnBg = Color(1f, 1f, 1f, 0.9f),
     mapSearchInactive = Color(0xFFBDBDBD),
     searchHint = Color(0xFF929292),
+    textColor = Color(0xFF1D1D1D),
 )
