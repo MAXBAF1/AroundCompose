@@ -31,6 +31,7 @@ internal fun AroundComposeTheme(
         LocalJetAroundColors provides colors,
         LocalJetAroundTypography provides typography,
         LocalJetAroundShape provides shape,
+        LocalJetAroundShadow provides shadow,
         content = content
     )
 }

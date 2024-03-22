@@ -18,7 +18,7 @@ fun MapBtn(iconId: Int, onClick: () -> Unit) {
         modifier = Modifier.size(47.dp),
         shape = RoundedCornerShape(12.dp),
         containerColor = JetAroundTheme.colors.mapBtnBg,
-        elevation = FloatingActionButtonDefaults.elevation(0.dp)
+        elevation = FloatingActionButtonDefaults.elevation(JetAroundTheme.shadows.mapElementsShadow)
     ) {
         Icon(
             painter = painterResource(id = iconId),
@@ -26,6 +26,4 @@ fun MapBtn(iconId: Int, onClick: () -> Unit) {
             tint = JetAroundTheme.colors.mapElements
         )
     }
-
-
 }

@@ -3,9 +3,11 @@ package com.example.aroundcompose.ui.screens.map.views
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.aroundcompose.R
+import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.maps.CameraState
 import com.mapbox.maps.MapView
@@ -43,7 +45,6 @@ class MyMapboxMap(
     @Composable
     fun Create() {
         val styleUri = stringResource(id = R.string.globe3dKey)
-
         MapboxMap(
             modifier = Modifier.fillMaxSize(),
             locationComponentSettings = LocationComponentSettings.Builder(
@@ -60,7 +61,8 @@ class MyMapboxMap(
                 mapViewCallback(it)
                 it.compass.addCompassClickListener(onCompassClicked)
                 it.compass.marginTop = 200f
-                it.scalebar.marginTop = 1800f
+                it.scalebar.enabled = false
+
                 it.gestures.addOnMoveListener(getOnMoveListener())
             }
         }

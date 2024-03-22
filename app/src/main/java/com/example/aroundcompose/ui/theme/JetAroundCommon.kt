@@ -30,6 +30,10 @@ data class JetAroundShape(
     val maxRoundedCornerShape: RoundedCornerShape
 )
 
+data class JetAroundShadow(
+    val mapElementsShadow: Dp,
+)
+
 object JetAroundTheme {
     internal val colors: JetAroundColors
         @Composable get() = LocalJetAroundColors.current
@@ -39,6 +43,9 @@ object JetAroundTheme {
 
     internal val shapes: JetAroundShape
         @Composable get() = LocalJetAroundShape.current
+
+    internal val shadows: JetAroundShadow
+        @Composable get() = LocalJetAroundShadow.current
 }
 
 enum class JetAroundStyle {
@@ -58,5 +65,9 @@ internal val LocalJetAroundTypography = staticCompositionLocalOf<JetAroundTypogr
 }
 
 internal val LocalJetAroundShape = staticCompositionLocalOf<JetAroundShape> {
+    error("No shapes provided")
+}
+
+internal val LocalJetAroundShadow = staticCompositionLocalOf<JetAroundShadow> {
     error("No shapes provided")
 }

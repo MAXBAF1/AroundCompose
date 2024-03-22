@@ -67,7 +67,6 @@ class MapScreen(private val viewModel: MapViewModel) {
             viewModel.obtainEvent(MapEvent.Init)
         }, onCameraPositionChanged = {
             removeCameraFollow(mapView, positionChangedListener)
-            scaleBarValue = mapView?.scalebar?.distancePerPixel
             viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
         }, onCompassClicked = { onCompassClick(mapView, positionChangedListener) }).Create()
 
@@ -90,13 +89,14 @@ class MapScreen(private val viewModel: MapViewModel) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 28.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.End
             ) {
-                MyScaleBar(scaleBarValue ?: 0f)
+                //MyScaleBar(scaleBarValue ?: 0f)
                 Column(
                     modifier = Modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
+                    Spacer(modifier = Modifier.size(width = 0.dp, height = 0.dp))
                     Column {
                         Spacer(modifier = Modifier.size(width = 0.dp, height = 60.dp))
                         MapBtn(iconId = R.drawable.ic_plus) { viewModel.obtainEvent(MapEvent.ZoomLevelPlus) }

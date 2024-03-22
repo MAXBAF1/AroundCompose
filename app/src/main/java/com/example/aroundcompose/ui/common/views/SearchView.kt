@@ -33,7 +33,7 @@ fun SearchView(modifier: Modifier, restoredValue: String, onValueChange: (String
     Card(
         modifier = modifier,
         shape = JetAroundTheme.shapes.mapElementsShape,
-        elevation = CardDefaults.cardElevation(10.dp)
+        elevation = CardDefaults.cardElevation(JetAroundTheme.shadows.mapElementsShadow)
     ) {
         BasicTextField(
             value = value,
@@ -60,7 +60,6 @@ private fun DecorationBox(
     trailingIconId: Int?,
     innerTextField: @Composable () -> Unit,
 ) {
-
     Row(
         modifier = Modifier
             .background(color = JetAroundTheme.colors.primaryBackground)

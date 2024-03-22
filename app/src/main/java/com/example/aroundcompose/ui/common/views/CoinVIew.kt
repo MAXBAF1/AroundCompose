@@ -24,7 +24,7 @@ fun CoinView(modifier: Modifier, value: Int) {
     Card(
         modifier = modifier,
         shape = JetAroundTheme.shapes.mapElementsShape,
-        elevation = CardDefaults.cardElevation(10.dp)
+        elevation = CardDefaults.cardElevation(JetAroundTheme.shadows.mapElementsShadow)
     ) {
         Row(
             modifier = Modifier.background(JetAroundTheme.colors.primaryBackground).padding(10.dp),
