@@ -30,8 +30,7 @@ import com.example.aroundcompose.ui.screens.map.models.MapEvent
 import com.example.aroundcompose.ui.screens.map.models.MapViewState
 import com.example.aroundcompose.ui.screens.map.views.MapBtn
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap
-import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap.MapConstante
-import com.example.aroundcompose.ui.screens.map.views.MyScaleBar
+import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap.MapConstant
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
@@ -45,7 +44,6 @@ import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
-import com.mapbox.maps.plugin.scalebar.scalebar
 
 class MapScreen(private val viewModel: MapViewModel) {
     private var animatorListener: Animator.AnimatorListener? = null
@@ -60,7 +58,6 @@ class MapScreen(private val viewModel: MapViewModel) {
         var positionChangedListener by remember {
             mutableStateOf(OnIndicatorPositionChangedListener {})
         }
-        var scaleBarValue by remember { mutableStateOf(mapView?.scalebar?.height) }
 
         MyMapboxMap(mapViewCallback = {
             mapView = it
@@ -68,7 +65,11 @@ class MapScreen(private val viewModel: MapViewModel) {
         }, onCameraPositionChanged = {
             removeCameraFollow(mapView, positionChangedListener)
             viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
-        }, onCompassClicked = { onCompassClick(mapView, positionChangedListener) }).Create()
+        }, onCompassClicked = {
+            onCompassClick(mapView, positionChangedListener, onZoomChanged = {
+                viewModel.obtainEvent(MapEvent.UpdateCameraPosition(mapView?.getMapboxMap()?.cameraState!!))
+            })
+        }).Create()
 
         Column(
             modifier = Modifier
@@ -103,9 +104,9 @@ class MapScreen(private val viewModel: MapViewModel) {
                         Spacer(modifier = Modifier.size(width = 0.dp, height = 12.dp))
                         MapBtn(iconId = R.drawable.ic_minus) { viewModel.obtainEvent(MapEvent.ZoomLevelMinus) }
                     }
-                    MapBtn(iconId = R.drawable.ic_navigate) {
+                    Spacer(modifier = Modifier.size(width = 0.dp, height = 47.dp))/*MapBtn(iconId = R.drawable.ic_navigate) {
                         onCompassClick(mapView, positionChangedListener)
-                    }
+                    }*/
                 }
             }
         }
@@ -137,7 +138,7 @@ class MapScreen(private val viewModel: MapViewModel) {
     }
 
     private fun initMap(mapView: MapView?, lastLocation: Point?) {
-        val zoomLevel = if (lastLocation == null) 0.0 else MapConstante.ZOOM_LEVEL
+        val zoomLevel = if (lastLocation == null) 0.0 else MapConstant.ZOOM_LEVEL
 
         mapView?.getMapboxMap()?.setCamera(
             CameraOptions.Builder().zoom(zoomLevel).pitch(0.0).bearing(0.0).center(
@@ -159,19 +160,19 @@ class MapScreen(private val viewModel: MapViewModel) {
         val unpaintedCellsFilter = Expression.not(paintedCellsFilter)
 
         mapboxMap?.getStyle {
-            it.removeStyleLayer(MapConstante.PAINTED_CELLS_LAYER_ID)
-            it.removeStyleLayer(MapConstante.ALL_CELLS_LAYER_ID)
+            it.removeStyleLayer(MapConstant.PAINTED_CELLS_LAYER_ID)
+            it.removeStyleLayer(MapConstant.ALL_CELLS_LAYER_ID)
 
-            it.addLayer(fillLayer(MapConstante.PAINTED_CELLS_LAYER_ID, MapConstante.SOURCE_ID) {
-                sourceLayer(MapConstante.TILE_ID)
+            it.addLayer(fillLayer(MapConstant.PAINTED_CELLS_LAYER_ID, MapConstant.SOURCE_ID) {
+                sourceLayer(MapConstant.TILE_ID)
                 filter(paintedCellsFilter)
                 fillOpacity(0.2)
                 fillColor(rgb(0.0, 176.0, 255.0))
                 fillOutlineColor(Color.TRANSPARENT)
             })
 
-            it.addLayer(fillLayer(MapConstante.ALL_CELLS_LAYER_ID, MapConstante.SOURCE_ID) {
-                sourceLayer(MapConstante.TILE_ID)
+            it.addLayer(fillLayer(MapConstant.ALL_CELLS_LAYER_ID, MapConstant.SOURCE_ID) {
+                sourceLayer(MapConstant.TILE_ID)
                 filter(unpaintedCellsFilter)
                 fillOpacity(0.05)
                 fillColor(Color.TRANSPARENT)
@@ -183,11 +184,13 @@ class MapScreen(private val viewModel: MapViewModel) {
     private fun onCompassClick(
         mapView: MapView?,
         positionChangedListener: OnIndicatorPositionChangedListener,
+        onZoomChanged: () -> Unit,
     ) {
         animatorListener = animatorListener ?: object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator) {}
             override fun onAnimationEnd(p0: Animator) {
                 cameraFollow(mapView, positionChangedListener)
+                onZoomChanged()
             }
 
             override fun onAnimationCancel(p0: Animator) {}
@@ -197,9 +200,9 @@ class MapScreen(private val viewModel: MapViewModel) {
         val mapboxMap = mapView?.getMapboxMap()
 
         if (mapboxMap?.cameraState?.bearing == 0.0 && mapboxMap.cameraState.pitch == 0.0) {
-            mapboxMap.flyTo(
+            mapboxMap.easeTo(
                 cameraOptions = CameraOptions.Builder().center(LocationService.lastLocation)
-                    .zoom(maxOf(mapboxMap.cameraState.zoom, MapConstante.ZOOM_LEVEL)).build(),
+                    .zoom(maxOf(mapboxMap.cameraState.zoom, MapConstant.ZOOM_LEVEL)).build(),
                 animatorListener = animatorListener
             )
         } else {

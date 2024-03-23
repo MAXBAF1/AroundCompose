@@ -1,15 +1,16 @@
 package com.example.aroundcompose.ui.screens.map.views
 
+import android.view.Gravity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
-import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.maps.CameraState
+import com.mapbox.maps.ImageHolder
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxMap
@@ -55,20 +56,27 @@ class MyMapboxMap(
                 mapView = it
                 mapboxMap = it.getMapboxMap()
                 mapboxMap!!.loadStyle(style(styleUri) {
-                    +vectorSource(MapConstante.SOURCE_ID) { url("mapbox://bafi.${MapConstante.TILE_ID}") }
+                    +vectorSource(MapConstant.SOURCE_ID) { url("mapbox://bafi.${MapConstant.TILE_ID}") }
                 })
 
                 mapViewCallback(it)
-                it.compass.addCompassClickListener(onCompassClicked)
-                it.compass.marginTop = 200f
-                it.scalebar.enabled = false
+                setupCompass(it)
 
                 it.gestures.addOnMoveListener(getOnMoveListener())
             }
         }
     }
 
-    object MapConstante {
+    private fun setupCompass(mapView: MapView) {
+        mapView.compass.addCompassClickListener(onCompassClicked)
+        mapView.scalebar.enabled = false
+        mapView.compass.image = ImageHolder.Companion.from(R.drawable.ic_compass)
+        mapView.compass.position = Gravity.BOTTOM + Gravity.END
+        mapView.compass.marginBottom = 50.dp.value
+        mapView.compass.marginRight = 30.dp.value
+    }
+
+    object MapConstant {
         const val ALL_CELLS_LAYER_ID = "allCells"
         const val PAINTED_CELLS_LAYER_ID = "coloredCells"
         const val TILE_ID = "hexEKB0511"

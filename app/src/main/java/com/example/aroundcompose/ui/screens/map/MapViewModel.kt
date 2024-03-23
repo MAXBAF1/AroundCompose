@@ -6,7 +6,7 @@ import com.example.aroundcompose.ui.screens.map.location_service.LocationService
 import com.example.aroundcompose.ui.screens.map.models.MapEvent
 import com.example.aroundcompose.ui.screens.map.models.MapViewState
 import com.example.aroundcompose.ui.screens.map.models.MutableCameraState
-import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap.MapConstante
+import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap.MapConstant
 import com.example.aroundcompose.utils.toMutable
 import com.mapbox.geojson.Point
 import com.uber.h3core.H3Core
@@ -42,9 +42,9 @@ class MapViewModel @Inject constructor(private val sharedPreferences: SharedPref
 
     private fun updateZoomLevel(zoomLevelUpdateEvent: MapEvent) {
         if (zoomLevelUpdateEvent == MapEvent.ZoomLevelMinus) {
-            cameraState.zoom -= MapConstante.ZOOM_LEVEL_DELTA
+            cameraState.zoom -= MapConstant.ZOOM_LEVEL_DELTA
         } else if (zoomLevelUpdateEvent == MapEvent.ZoomLevelPlus) {
-            cameraState.zoom += (MapConstante.ZOOM_LEVEL_DELTA)
+            cameraState.zoom += (MapConstant.ZOOM_LEVEL_DELTA)
         }
         viewState.update { MapViewState.ZoomLevelUpdated(cameraState.zoom) }
     }
@@ -61,7 +61,7 @@ class MapViewModel @Inject constructor(private val sharedPreferences: SharedPref
 
         LocationService.onLocationResult = {
             val newCell =
-                h3.latLngToCellAddress(it.latitude, it.longitude, MapConstante.H3_RESOLUTION)
+                h3.latLngToCellAddress(it.latitude, it.longitude, MapConstant.H3_RESOLUTION)
 
             if (!paintedCells.contains(newCell)) {
                 val neighborsCells = h3.gridDisk(newCell, 2)

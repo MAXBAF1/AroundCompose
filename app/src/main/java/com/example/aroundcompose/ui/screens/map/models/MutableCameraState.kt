@@ -7,7 +7,7 @@ import com.mapbox.maps.EdgeInsets
 data class MutableCameraState(
     var center: Point? = null,
     val padding: EdgeInsets? = null,
-    var zoom: Double = MyMapboxMap.MapConstante.ZOOM_LEVEL,
+    var zoom: Double = MyMapboxMap.MapConstant.ZOOM_LEVEL,
     val bearing: Double = 0.0,
     val pitch: Double = 0.0,
 )
