@@ -1,9 +1,9 @@
 package com.example.aroundcompose.ui.screens.authorization.models
 
-import com.example.aroundcompose.ui.common.enums.InputType
+import com.example.aroundcompose.ui.common.enums.FieldType
 
 sealed class AuthorizationEvent {
-    data class InputTextChange(val type: InputType, val text: String) : AuthorizationEvent()
+    data class InputTextChange(val type: FieldType, val text: String) : AuthorizationEvent()
     object RestoreInputs : AuthorizationEvent()
 
     object ClickLoginBtn : AuthorizationEvent()

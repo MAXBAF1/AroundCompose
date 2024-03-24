@@ -12,6 +12,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.aroundcompose.screens.ProfileScreen
 import com.example.aroundcompose.screens.SkillsScreen
+import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
+import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
 import com.example.aroundcompose.ui.screens.map.MapScreen
 import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.splash.SplashScreen
@@ -22,9 +24,15 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
     val mapViewModel = hiltViewModel<MapViewModel>()
     NavHost(
         navController = navController,
-        startDestination = Screen.SPLASH_ROUTE,
+        startDestination = Screen.AUTHORIZATION_ROUTE,
         modifier = Modifier.padding(innerPaddings)
     ) {
+        composable(Screen.AUTHORIZATION_ROUTE) {
+            AuthorizationScreen(
+                viewModel = AuthorizationViewModel(),
+                onLoginClicked = { navController.navigate(Screen.MAP_ROUTE) }
+            ).Create()
+        }
         composable(Screen.SPLASH_ROUTE) {
             SplashScreen(exit = { activity?.finish() }, onNextScreen = {
                 navController.popBackStack()

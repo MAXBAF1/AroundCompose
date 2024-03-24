@@ -1,9 +1,9 @@
 package com.example.aroundcompose.ui.screens.authorization.models
 
-import com.example.aroundcompose.ui.common.enums.InputType
+import com.example.aroundcompose.ui.common.enums.FieldType
 
 sealed class AuthorizationViewState {
-    data class RestoreInputsData(val inputsText: Map<InputType, String> = mapOf()) :
+    data class RestoreInputsData(val inputsText: Map<FieldType, String> = mapOf()) :
         AuthorizationViewState()
 
     object EnableLoginBtn : AuthorizationViewState()

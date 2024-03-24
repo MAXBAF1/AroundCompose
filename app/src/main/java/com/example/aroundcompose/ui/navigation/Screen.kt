@@ -19,5 +19,8 @@ sealed class Screen(val titleId: Int, val iconId: Int, val route: String) {
         const val MAP_ROUTE = "MAP_ROUTE"
         const val SKILLS_ROUTE = "SKILLS_ROUTE";
         const val PROFILE_ROUTE = "PROFILE_ROUTE"
+        const val AUTHORIZATION_ROUTE = "AUTHORIZATION_ROUTE"
+        const val REGISTRATION_ROUTE = "REGISTRATION_ROUTE"
+        const val TEAMS_ROUTE = "TEAMS_ROUTE"
     }
 }
