@@ -40,7 +40,6 @@ import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.fillLayer
 import com.mapbox.maps.plugin.animation.easeTo
-import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -112,11 +111,10 @@ class MapScreen(private val viewModel: MapViewModel) {
         }
 
 
-        when (viewState) {
+        when (val state = viewState) {
             is MapViewState.Init -> {
-                val initViewState = (viewState as MapViewState.Init)
-                searchText = initViewState.searchText
-                initMap(mapView, initViewState.lastLocation)
+                searchText = state.searchText
+                initMap(mapView, state.lastLocation)
                 positionChangedListener = OnIndicatorPositionChangedListener {
                     mapView?.getMapboxMap()?.setCamera(CameraOptions.Builder().center(it).build())
                 }
@@ -125,13 +123,13 @@ class MapScreen(private val viewModel: MapViewModel) {
             }
 
             is MapViewState.CellsCaptured -> {
-                paintCells(mapView, (viewState as MapViewState.CellsCaptured).paintedCells)
+                paintCells(mapView, state.paintedCells)
             }
 
             is MapViewState.ZoomLevelUpdated -> {
                 mapView?.getMapboxMap()?.easeTo(
                     cameraOptions = CameraOptions.Builder().center(LocationService.lastLocation)
-                        .zoom((viewState as MapViewState.ZoomLevelUpdated).zoomLevel).build()
+                        .zoom(state.zoomLevel).build()
                 )
             }
         }
