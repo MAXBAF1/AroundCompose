@@ -28,12 +28,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.theme.JetAroundTheme
+import com.example.aroundcompose.utils.clearFocusOnKeyboardDismiss
 
 @Composable
 fun SearchView(modifier: Modifier, restoredValue: String, onValueChange: (String) -> Unit) {
     var value by remember { mutableStateOf(restoredValue) }
-    var isFocused by remember { mutableStateOf(false) }
-    val focusManager = LocalFocusManager.current
     LaunchedEffect(key1 = restoredValue) { value = restoredValue }
 
     Card(
@@ -42,9 +41,7 @@ fun SearchView(modifier: Modifier, restoredValue: String, onValueChange: (String
         elevation = CardDefaults.cardElevation(JetAroundTheme.shadows.mapElementsShadow)
     ) {
         BasicTextField(
-            modifier = Modifier.onFocusChanged {
-                isFocused = it.isFocused
-            },
+            modifier = Modifier.clearFocusOnKeyboardDismiss(),
             value = value,
             onValueChange = {
                 value = it
@@ -52,10 +49,6 @@ fun SearchView(modifier: Modifier, restoredValue: String, onValueChange: (String
             },
             singleLine = true,
             textStyle = JetAroundTheme.typography.search.copy(color = JetAroundTheme.colors.textColor),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Previous),
-            keyboardActions = KeyboardActions(onAny = {
-                focusManager.clearFocus()
-            })
         ) { innerTextField ->
             DecorationBox(
                 textValue = value,
@@ -63,10 +56,6 @@ fun SearchView(modifier: Modifier, restoredValue: String, onValueChange: (String
                 innerTextField = innerTextField
             )
         }
-    }
-
-    if (!isFocused) {
-        focusManager.clearFocus()
     }
 }
 
