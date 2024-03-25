@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -78,6 +79,7 @@ class MapScreen(private val viewModel: MapViewModel) {
             Row {
                 SearchView(
                     modifier = Modifier
+                        .clickable {  }
                         .weight(1f)
                         .padding(end = 10.dp), restoredValue = searchText
                 ) {
@@ -111,11 +113,10 @@ class MapScreen(private val viewModel: MapViewModel) {
         }
 
 
-        when (viewState) {
+        when (val state = viewState) {
             is MapViewState.Init -> {
-                val initViewState = (viewState as MapViewState.Init)
-                searchText = initViewState.searchText
-                initMap(mapView, initViewState.lastLocation)
+                searchText = state.searchText
+                initMap(mapView, state.lastLocation)
                 positionChangedListener = OnIndicatorPositionChangedListener {
                     mapView?.getMapboxMap()?.setCamera(CameraOptions.Builder().center(it).build())
                 }
@@ -124,13 +125,13 @@ class MapScreen(private val viewModel: MapViewModel) {
             }
 
             is MapViewState.CellsCaptured -> {
-                paintCells(mapView, (viewState as MapViewState.CellsCaptured).paintedCells)
+                paintCells(mapView, state.paintedCells)
             }
 
             is MapViewState.ZoomLevelUpdated -> {
                 mapView?.getMapboxMap()?.easeTo(
                     cameraOptions = CameraOptions.Builder().center(LocationService.lastLocation)
-                        .zoom((viewState as MapViewState.ZoomLevelUpdated).zoomLevel).build()
+                        .zoom(state.zoomLevel).build()
                 )
             }
         }
@@ -144,7 +145,6 @@ class MapScreen(private val viewModel: MapViewModel) {
                 lastLocation
             ).build()
         )
-        mapView?.compass?.fadeWhenFacingNorth = false
     }
 
     private fun startService(context: Context) {
@@ -214,7 +214,6 @@ class MapScreen(private val viewModel: MapViewModel) {
         positionChangedListener: OnIndicatorPositionChangedListener,
     ) {
         mapView?.location?.addOnIndicatorPositionChangedListener(positionChangedListener)
-        mapView?.compass?.fadeWhenFacingNorth = true
     }
 
     private fun removeCameraFollow(
@@ -222,6 +221,5 @@ class MapScreen(private val viewModel: MapViewModel) {
         positionChangedListener: OnIndicatorPositionChangedListener,
     ) {
         mapView?.location?.removeOnIndicatorPositionChangedListener(positionChangedListener)
-        mapView?.compass?.fadeWhenFacingNorth = false
     }
 }

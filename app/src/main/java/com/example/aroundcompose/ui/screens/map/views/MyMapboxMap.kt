@@ -74,6 +74,7 @@ class MyMapboxMap(
         mapView.compass.position = Gravity.BOTTOM + Gravity.END
         mapView.compass.marginBottom = 50.dp.value
         mapView.compass.marginRight = 30.dp.value
+        mapView.compass.fadeWhenFacingNorth = false
     }
 
     object MapConstant {
