@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".App"
+        android:name=".di.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -29,11 +29,11 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".screens.map.location_service.LocationService"
+            android:name=".ui.screens.map.location_service.LocationService"
             android:foregroundServiceType="location"
             android:enabled="true" />
         <receiver
-            android:name=".screens.map.location_service.StopServiceReceiver"
+            android:name=".ui.screens.map.location_service.StopServiceReceiver"
             android:enabled="true">
         </receiver>
     </application>

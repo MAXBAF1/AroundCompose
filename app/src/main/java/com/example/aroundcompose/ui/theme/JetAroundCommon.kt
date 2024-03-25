@@ -1,5 +1,6 @@
 package com.example.aroundcompose.ui.theme
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
@@ -8,39 +9,43 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 
 data class JetAroundColors(
-    val primaryText: Color,
     val primaryBackground: Color,
-    val secondaryText: Color,
-    val secondaryBackground: Color,
-    val tintColor: Color,
-    val controlColor: Color,
-    val errorColor: Color,
+    val mapSearchInactive: Color,
+    val mapBtnBg: Color,
+    val mapElements: Color,
+    val searchHint: Color,
+    val textColor: Color,
 )
 
 data class JetAroundTypography(
+    val appName: TextStyle,
     val heading: TextStyle,
-    val body: TextStyle,
-    val toolbar: TextStyle,
-    val caption: TextStyle
+    val coin: TextStyle,
+    val search: TextStyle,
+    val scaleBar: TextStyle,
 )
 
 data class JetAroundShape(
-    val padding: Dp,
-    val cornersStyle: Shape
+    val mapElementsShape: RoundedCornerShape,
+    val maxRoundedCornerShape: RoundedCornerShape
+)
+
+data class JetAroundShadow(
+    val mapElementsShadow: Dp,
 )
 
 object JetAroundTheme {
     internal val colors: JetAroundColors
-        @Composable
-        internal get() = LocalJetAroundColors.current
+        @Composable get() = LocalJetAroundColors.current
 
     internal val typography: JetAroundTypography
-        @Composable
-        internal get() = LocalJetAroundTypography.current
+        @Composable get() = LocalJetAroundTypography.current
 
     internal val shapes: JetAroundShape
-        @Composable
-        internal get() = LocalJetAroundShape.current
+        @Composable get() = LocalJetAroundShape.current
+
+    internal val shadows: JetAroundShadow
+        @Composable get() = LocalJetAroundShadow.current
 }
 
 enum class JetAroundStyle {
@@ -60,5 +65,9 @@ internal val LocalJetAroundTypography = staticCompositionLocalOf<JetAroundTypogr
 }
 
 internal val LocalJetAroundShape = staticCompositionLocalOf<JetAroundShape> {
+    error("No shapes provided")
+}
+
+internal val LocalJetAroundShadow = staticCompositionLocalOf<JetAroundShadow> {
     error("No shapes provided")
 }
