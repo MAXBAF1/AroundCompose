@@ -40,7 +40,6 @@ import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.fillLayer
 import com.mapbox.maps.plugin.animation.easeTo
-import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
