@@ -66,7 +66,7 @@ fun TextFieldView(
             singleLine = true,
             modifier = Modifier
                 .padding(top = 4.dp)
-                .background(JetAroundTheme.colors.primaryBackground)
+                .background(JetAroundTheme.colors.primaryBackground.copy(alpha = 0f))
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
                     isFocused = focusState.isFocused

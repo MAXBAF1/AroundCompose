@@ -26,7 +26,7 @@ internal class MainActivity : ComponentActivity() {
 
             AroundComposeTheme {
                 Scaffold(bottomBar = {
-                    if (currentRoute != null && currentRoute != Screen.SPLASH_ROUTE) {
+                    if (currentRoute != null && currentRoute != Screen.SPLASH_ROUTE && currentRoute != Screen.AUTHORIZATION_ROUTE) {
                         BottomNavigation(navController = navController, currentRoute = currentRoute)
                     }
                 }) { innerPaddings ->

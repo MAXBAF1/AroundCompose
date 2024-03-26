@@ -17,4 +17,18 @@
 
     <!--Map screen-->
     <string name="search_hint">поиск</string>
+
+    <!--Authorization screen-->
+    <string name="heading">добрый день!</string>
+    <string name="label">введите свою почту и пароль, чтобы войти</string>
+    <string name="hint_name">Имя</string>
+    <string name="hint_email">Электронная почта</string>
+    <string name="hint_password">Пароль</string>
+    <string name="hint_confirm_password">Подтверждение пароля</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="login_btn">Войти</string>
+    <string name="google_btn">Google</string>
+    <string name="vk_btn">ВКонтакте</string>
+    <string name="or">или</string>
+    <string name="registration">Нет аккаунта? Зарегистрируйтесь</string>
 </resources>

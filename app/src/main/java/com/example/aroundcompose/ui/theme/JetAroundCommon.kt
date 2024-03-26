@@ -21,6 +21,7 @@ data class JetAroundColors(
 data class JetAroundTypography(
     val appName: TextStyle,
     val heading: TextStyle,
+    val headingLogin: TextStyle,
     val coin: TextStyle,
     val search: TextStyle,
     val textField: TextStyle,
