@@ -17,6 +17,10 @@ data class JetAroundColors(
     val onFocusedColor: Color,
     val notActiveColor: Color,
     val textColor: Color,
+    val blue: Color,
+    val purple: Color,
+    val yellow: Color,
+    val light_blue: Color,
 )
 
 data class JetAroundTypography(
@@ -35,6 +39,7 @@ data class JetAroundTypography(
 data class JetAroundShape(
     val textFieldShape: RoundedCornerShape,
     val mapElementsShape: RoundedCornerShape,
+    val teamShape: RoundedCornerShape,
     val maxRoundedCornerShape: RoundedCornerShape
 )
 

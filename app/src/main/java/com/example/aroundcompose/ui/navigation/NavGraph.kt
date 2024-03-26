@@ -16,7 +16,11 @@ import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
 import com.example.aroundcompose.ui.screens.map.MapScreen
 import com.example.aroundcompose.ui.screens.map.MapViewModel
+import com.example.aroundcompose.ui.screens.registration.RegistrationScreen
+import com.example.aroundcompose.ui.screens.registration.RegistrationViewModel
 import com.example.aroundcompose.ui.screens.splash.SplashScreen
+import com.example.aroundcompose.ui.screens.teams.TeamsScreen
+import com.example.aroundcompose.ui.screens.teams.TeamsViewModel
 
 @Composable
 fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
@@ -30,7 +34,21 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
         composable(Screen.AUTHORIZATION_ROUTE) {
             AuthorizationScreen(
                 viewModel = AuthorizationViewModel(),
-                onLoginClicked = { navController.navigate(Screen.MAP_ROUTE) }
+                onLoginClicked = { navController.navigate(Screen.MAP_ROUTE) },
+                onRegistrationClicked = { navController.navigate(Screen.REGISTRATION_ROUTE) }
+            ).Create()
+        }
+        composable(Screen.REGISTRATION_ROUTE) {
+            RegistrationScreen(
+                viewModel = RegistrationViewModel(),
+                onNextClicked = { navController.navigate(Screen.TEAMS_ROUTE) },
+                onBackClicked = { navController.popBackStack() }
+            ).Create()
+        }
+        composable(Screen.TEAMS_ROUTE) {
+            TeamsScreen(
+                viewModel = TeamsViewModel(),
+                onNextClicked = { navController.navigate(Screen.MAP_ROUTE) }
             ).Create()
         }
         composable(Screen.SPLASH_ROUTE) {

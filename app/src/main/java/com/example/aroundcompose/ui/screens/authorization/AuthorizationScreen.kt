@@ -32,12 +32,13 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 class AuthorizationScreen(
     private val viewModel: AuthorizationViewModel,
     private val onLoginClicked: () -> Unit,
+    private val onRegistrationClicked: () -> Unit,
 ) {
     @Composable
     fun Create() {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .paint(
                     painterResource(id = R.drawable.background),
                     contentScale = ContentScale.Fit
@@ -183,12 +184,12 @@ class AuthorizationScreen(
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-                    text = stringResource(id = R.string.registration),
+                    text = stringResource(id = R.string.registration_click),
                     style = JetAroundTheme.typography.textRegistration,
                     color = JetAroundTheme.colors.onFocusedColor,
                     modifier = Modifier
                         .clickable {
-                            /* Переход на экран регистрации */
+                            onRegistrationClicked()
                         }
                 )
             }

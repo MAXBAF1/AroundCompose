@@ -12,6 +12,10 @@ internal val baseLightPalette = JetAroundColors(
     onFocusedColor = Color(0xFF555EF6),
     notActiveColor = Color(0xFF9E9FAC),
     textColor = Color(0xFF1D1D1D),
+    blue = Color(0xFF555EF6),
+    purple = Color(0xFFB26BE9),
+    yellow = Color(0xFFFEB700),
+    light_blue = Color(0xFF88DDFF),
 )
 
 internal val baseDarkPalette = JetAroundColors(
@@ -24,4 +28,8 @@ internal val baseDarkPalette = JetAroundColors(
     onFocusedColor = Color(0xFF555EF6),
     notActiveColor = Color(0xFF9E9FAC),
     textColor = Color(0xFF1D1D1D),
+    blue = Color(0xFF555EF6),
+    purple = Color(0xFFB26BE9),
+    yellow = Color(0xFFFEB700),
+    light_blue = Color(0xFF88DDFF),
 )
