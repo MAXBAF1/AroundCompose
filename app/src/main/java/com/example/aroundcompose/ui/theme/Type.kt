@@ -13,6 +13,8 @@ val typography = JetAroundTypography(
     coin = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     search = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     textField = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
+    textBtn = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
+    textRegistration = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
     informationText = TextStyle(fontSize = 12.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     scaleBar = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
 )

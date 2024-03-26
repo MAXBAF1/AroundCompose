@@ -15,6 +15,7 @@ data class JetAroundColors(
     val searchHint: Color,
     val textFieldHint: Color,
     val onFocusedColor: Color,
+    val notActiveColor: Color,
     val textColor: Color,
 )
 
@@ -25,6 +26,8 @@ data class JetAroundTypography(
     val coin: TextStyle,
     val search: TextStyle,
     val textField: TextStyle,
+    val textBtn: TextStyle,
+    val textRegistration: TextStyle,
     val informationText: TextStyle,
     val scaleBar: TextStyle,
 )
@@ -37,6 +40,7 @@ data class JetAroundShape(
 
 data class JetAroundShadow(
     val mapElementsShadow: Dp,
+    val loginUsingShadow: Dp
 )
 
 object JetAroundTheme {

@@ -137,7 +137,8 @@ private fun DecorationBox(
                 width = if (isFocused) 3.dp else 2.dp,
                 color = if (isFocused) {
                     JetAroundTheme.colors.onFocusedColor
-                } else tint, shape = JetAroundTheme.shapes.textFieldShape
+                } else tint,
+                shape = JetAroundTheme.shapes.textFieldShape
             )
             .padding(vertical = 12.dp, horizontal = 24.dp) // Inner padding
     ) {

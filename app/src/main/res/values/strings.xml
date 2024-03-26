@@ -26,9 +26,10 @@
     <string name="hint_password">Пароль</string>
     <string name="hint_confirm_password">Подтверждение пароля</string>
     <string name="forgot_password">Забыли пароль?</string>
-    <string name="login_btn">Войти</string>
+    <string name="login_btn">ВОЙТИ</string>
     <string name="google_btn">Google</string>
     <string name="vk_btn">ВКонтакте</string>
     <string name="or">или</string>
-    <string name="registration">Нет аккаунта? Зарегистрируйтесь</string>
+    <string name="is_have_not_account">Нет аккаунта?</string>
+    <string name="registration">Зарегистрируйтесь</string>
 </resources>
