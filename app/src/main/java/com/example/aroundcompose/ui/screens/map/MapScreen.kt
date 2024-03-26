@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,9 +28,11 @@ import com.example.aroundcompose.ui.common.views.SearchView
 import com.example.aroundcompose.ui.screens.map.location_service.LocationService
 import com.example.aroundcompose.ui.screens.map.models.MapEvent
 import com.example.aroundcompose.ui.screens.map.models.MapViewState
+import com.example.aroundcompose.ui.screens.map.views.EventBottomSheet
 import com.example.aroundcompose.ui.screens.map.views.MapBtn
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap.MapConstant
+import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
@@ -41,7 +42,6 @@ import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.fillLayer
 import com.mapbox.maps.plugin.animation.easeTo
-import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
 
@@ -58,6 +58,7 @@ class MapScreen(private val viewModel: MapViewModel) {
         var positionChangedListener by remember {
             mutableStateOf(OnIndicatorPositionChangedListener {})
         }
+        var isEventSheetShowed by remember { mutableStateOf(false) }
 
         MyMapboxMap(mapViewCallback = {
             mapView = it
@@ -74,15 +75,17 @@ class MapScreen(private val viewModel: MapViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp),
+                .padding(JetAroundTheme.margins.mapScreenMargin),
         ) {
             Row {
                 SearchView(
                     modifier = Modifier
-                        .clickable {  }
-                        .weight(1f)
-                        .padding(end = 10.dp), restoredValue = searchText
-                ) {
+                    .weight(1f)
+                    .padding(end = 10.dp),
+                    restoredValue = searchText,
+                    onClick = {
+                        isEventSheetShowed = true
+                    }) {
                     viewModel.obtainEvent(MapEvent.EditSearchText(it))
                 }
                 CoinView(modifier = Modifier, value = coins.intValue)
@@ -105,12 +108,12 @@ class MapScreen(private val viewModel: MapViewModel) {
                         Spacer(modifier = Modifier.size(width = 0.dp, height = 12.dp))
                         MapBtn(iconId = R.drawable.ic_minus) { viewModel.obtainEvent(MapEvent.ZoomLevelMinus) }
                     }
-                    Spacer(modifier = Modifier.size(width = 0.dp, height = 47.dp))/*MapBtn(iconId = R.drawable.ic_navigate) {
-                        onCompassClick(mapView, positionChangedListener)
-                    }*/
+                    Spacer(modifier = Modifier.size(width = 0.dp, height = 47.dp))
                 }
             }
         }
+
+        if (isEventSheetShowed) EventBottomSheet { isEventSheetShowed = false }
 
 
         when (val state = viewState) {

@@ -34,6 +34,11 @@ data class JetAroundShadow(
     val mapElementsShadow: Dp,
 )
 
+data class JetAroundMargin(
+    val mainMargin: Dp,
+    val mapScreenMargin: Dp,
+)
+
 object JetAroundTheme {
     internal val colors: JetAroundColors
         @Composable get() = LocalJetAroundColors.current
@@ -46,15 +51,15 @@ object JetAroundTheme {
 
     internal val shadows: JetAroundShadow
         @Composable get() = LocalJetAroundShadow.current
+
+    internal val margins: JetAroundMargin
+        @Composable get() = LocalJetAroundMargin.current
 }
 
 enum class JetAroundStyle {
     Base
 }
 
-enum class JetAroundCorners {
-    Flat, Rounded
-}
 
 internal val LocalJetAroundColors = staticCompositionLocalOf<JetAroundColors> {
     error("No colors provided")
@@ -69,5 +74,9 @@ internal val LocalJetAroundShape = staticCompositionLocalOf<JetAroundShape> {
 }
 
 internal val LocalJetAroundShadow = staticCompositionLocalOf<JetAroundShadow> {
-    error("No shapes provided")
+    error("No shadows provided")
+}
+
+internal val LocalJetAroundMargin = staticCompositionLocalOf<JetAroundMargin> {
+    error("No margins provided")
 }
