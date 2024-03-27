@@ -4,6 +4,8 @@ import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,10 +31,10 @@ import com.example.aroundcompose.ui.common.views.SearchView
 import com.example.aroundcompose.ui.screens.map.location_service.LocationService
 import com.example.aroundcompose.ui.screens.map.models.MapEvent
 import com.example.aroundcompose.ui.screens.map.models.MapViewState
-import com.example.aroundcompose.ui.screens.map.views.EventBottomSheet
 import com.example.aroundcompose.ui.screens.map.views.MapBtn
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap.MapConstant
+import com.example.aroundcompose.ui.screens.map.views.event_bottom_sheet_views.EventBottomSheet
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
@@ -44,6 +47,7 @@ import com.mapbox.maps.extension.style.layers.generated.fillLayer
 import com.mapbox.maps.plugin.animation.easeTo
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
+import kotlinx.coroutines.launch
 
 class MapScreen(private val viewModel: MapViewModel) {
     private var animatorListener: Animator.AnimatorListener? = null
@@ -59,17 +63,19 @@ class MapScreen(private val viewModel: MapViewModel) {
             mutableStateOf(OnIndicatorPositionChangedListener {})
         }
         var isEventSheetShowed by remember { mutableStateOf(false) }
+        val animatedRotation = remember { Animatable(0F) }
+        val scope = rememberCoroutineScope()
+        var compassIconId by remember { mutableIntStateOf(R.drawable.ic_navigate) }
 
         MyMapboxMap(mapViewCallback = {
             mapView = it
             viewModel.obtainEvent(MapEvent.Init)
-        }, onCameraPositionChanged = {
+        }, onMoveListener = {
             removeCameraFollow(mapView, positionChangedListener)
             viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
-        }, onCompassClicked = {
-            onCompassClick(mapView, positionChangedListener, onZoomChanged = {
-                viewModel.obtainEvent(MapEvent.UpdateCameraPosition(mapView?.getMapboxMap()?.cameraState!!))
-            })
+        }, onRotate = {
+            compassIconId = R.drawable.ic_compass
+            scope.launch { animatedRotation.animateTo(it, tween(0)) }
         }).Create()
 
         Column(
@@ -78,8 +84,7 @@ class MapScreen(private val viewModel: MapViewModel) {
                 .padding(JetAroundTheme.margins.mapScreenMargin),
         ) {
             Row {
-                SearchView(
-                    modifier = Modifier
+                SearchView(modifier = Modifier
                     .weight(1f)
                     .padding(end = 10.dp),
                     restoredValue = searchText,
@@ -108,10 +113,20 @@ class MapScreen(private val viewModel: MapViewModel) {
                         Spacer(modifier = Modifier.size(width = 0.dp, height = 12.dp))
                         MapBtn(iconId = R.drawable.ic_minus) { viewModel.obtainEvent(MapEvent.ZoomLevelMinus) }
                     }
-                    Spacer(modifier = Modifier.size(width = 0.dp, height = 47.dp))
+                    MapBtn(iconId = compassIconId, rotation = animatedRotation.value) {
+                        onCompassClick(mapView, positionChangedListener, onNorthFaced = {
+                            scope.launch { animatedRotation.animateTo(0F) }
+                            compassIconId = R.drawable.ic_navigate
+                        }, onZoomChanged = {
+                            viewModel.obtainEvent(
+                                MapEvent.UpdateCameraPosition(mapView?.getMapboxMap()?.cameraState!!)
+                            )
+                        })
+                    }
                 }
             }
         }
+
 
         if (isEventSheetShowed) EventBottomSheet { isEventSheetShowed = false }
 
@@ -186,6 +201,7 @@ class MapScreen(private val viewModel: MapViewModel) {
     private fun onCompassClick(
         mapView: MapView?,
         positionChangedListener: OnIndicatorPositionChangedListener,
+        onNorthFaced: () -> Unit,
         onZoomChanged: () -> Unit,
     ) {
         animatorListener = animatorListener ?: object : Animator.AnimatorListener {
@@ -201,14 +217,16 @@ class MapScreen(private val viewModel: MapViewModel) {
 
         val mapboxMap = mapView?.getMapboxMap()
 
-        if (mapboxMap?.cameraState?.bearing == 0.0 && mapboxMap.cameraState.pitch == 0.0) {
+        if (mapboxMap?.cameraState?.bearing != 0.0 || mapboxMap.cameraState.pitch != 0.0) {
+            mapboxMap?.easeTo(CameraOptions.Builder().bearing(0.0).pitch(0.0).build())
+            onNorthFaced()
+
+        } else {
             mapboxMap.easeTo(
                 cameraOptions = CameraOptions.Builder().center(LocationService.lastLocation)
                     .zoom(maxOf(mapboxMap.cameraState.zoom, MapConstant.ZOOM_LEVEL)).build(),
                 animatorListener = animatorListener
             )
-        } else {
-            mapboxMap?.easeTo(CameraOptions.Builder().bearing(0.0).pitch(0.0).build())
         }
     }
 

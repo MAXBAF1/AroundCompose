@@ -4,7 +4,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 
@@ -15,14 +14,16 @@ data class JetAroundColors(
     val mapElements: Color,
     val searchHint: Color,
     val textColor: Color,
+    val primary: Color
 )
 
 data class JetAroundTypography(
     val appName: TextStyle,
     val heading: TextStyle,
     val coin: TextStyle,
-    val search: TextStyle,
+    val medium: TextStyle,
     val scaleBar: TextStyle,
+    val title: TextStyle
 )
 
 data class JetAroundShape(

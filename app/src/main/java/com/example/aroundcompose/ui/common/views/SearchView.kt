@@ -2,11 +2,13 @@ package com.example.aroundcompose.ui.common.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -53,11 +55,15 @@ fun SearchView(
             },
             enabled = enabled,
             singleLine = true,
-            textStyle = JetAroundTheme.typography.search.copy(color = JetAroundTheme.colors.textColor),
+            textStyle = JetAroundTheme.typography.medium.copy(color = JetAroundTheme.colors.textColor),
         ) { innerTextField ->
             DecorationBox(
                 textValue = value,
-                modifier = if (enabled) Modifier else Modifier.clickable { onClick!!() },
+                modifier = if (enabled) Modifier else Modifier.clickable(
+                    onClick = onClick!!,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = JetAroundTheme.colors.textColor)
+                ),
                 enabled = enabled,
                 trailingIconId = R.drawable.ic_search,
                 innerTextField = innerTextField,
@@ -89,7 +95,7 @@ private fun DecorationBox(
             if (textValue.isEmpty()) {
                 Text(
                     text = stringResource(id = R.string.search_hint),
-                    style = JetAroundTheme.typography.search,
+                    style = JetAroundTheme.typography.medium,
                     color = JetAroundTheme.colors.searchHint
                 )
             }

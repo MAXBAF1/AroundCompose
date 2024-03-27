@@ -9,6 +9,7 @@ internal val baseLightPalette = JetAroundColors(
     mapSearchInactive = Color(0xFFBDBDBD),
     searchHint = Color(0xFF929292),
     textColor = Color(0xFF1D1D1D),
+    primary = Color(0xFF555EF6),
 )
 
 internal val baseDarkPalette = JetAroundColors(
@@ -18,4 +19,5 @@ internal val baseDarkPalette = JetAroundColors(
     mapSearchInactive = Color(0xFFBDBDBD),
     searchHint = Color(0xFF929292),
     textColor = Color(0xFF1D1D1D),
+    primary = Color(0xFF555EF6),
 )
