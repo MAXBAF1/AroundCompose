@@ -9,6 +9,4 @@ sealed class AuthorizationEvent {
     object ClickLoginBtn : AuthorizationEvent()
     object ClickLoginGoogleBtn : AuthorizationEvent()
     object ClickLoginVkBtn : AuthorizationEvent()
-    object ClickRegistrationBtn : AuthorizationEvent()
-    object ClickForgotPasswordBtn : AuthorizationEvent()
 }

@@ -16,6 +16,7 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,8 @@ fun TextFieldView(
     onValueChange: (value: String) -> Unit,
 ) {
     var textValue by remember { mutableStateOf(restoredValue) }
+    LaunchedEffect(key1 = restoredValue) { textValue = restoredValue }
+
     var isFocused by remember { mutableStateOf(false) }
     val passwordVisible =
         if (textFieldType == FieldType.EMAIL || textFieldType == FieldType.LOGIN) {

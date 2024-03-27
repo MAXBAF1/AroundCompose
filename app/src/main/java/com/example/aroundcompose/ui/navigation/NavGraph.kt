@@ -26,6 +26,8 @@ import com.example.aroundcompose.ui.screens.teams.TeamsViewModel
 fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
     val activity = (LocalContext.current as? Activity)
     val mapViewModel = hiltViewModel<MapViewModel>()
+    val authorizationViewModel = hiltViewModel<AuthorizationViewModel>()
+
     NavHost(
         navController = navController,
         startDestination = Screen.AUTHORIZATION_ROUTE,
@@ -33,7 +35,7 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
     ) {
         composable(Screen.AUTHORIZATION_ROUTE) {
             AuthorizationScreen(
-                viewModel = AuthorizationViewModel(),
+                viewModel = authorizationViewModel,
                 onLoginClicked = { navController.navigate(Screen.MAP_ROUTE) },
                 onRegistrationClicked = { navController.navigate(Screen.REGISTRATION_ROUTE) },
                 onForgotPasswordClicked = { navController.navigate(Screen.RESTORE_PASSWORD_ROUTE) }
