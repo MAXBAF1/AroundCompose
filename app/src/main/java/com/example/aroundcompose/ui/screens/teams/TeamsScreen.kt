@@ -26,42 +26,55 @@ class TeamsScreen(
     @Composable
     fun Create() {
         Column(
-            horizontalAlignment = Alignment.End,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .background(JetAroundTheme.colors.primaryBackground)
                 .padding(start = 30.dp, top = 125.dp, end = 30.dp)
         ) {
-            Text(
-                text = stringResource(id = R.string.choose_team),
-                style = JetAroundTheme.typography.heading,
-                color = JetAroundTheme.colors.textColor,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+            Title()
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            GridLayoutTeams()
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            NextButtonView(
+                enabled = true,
+                onClick = onNextClicked,
+                modifier = Modifier.align(Alignment.End)
             )
+        }
+    }
 
-            Spacer(modifier = Modifier.height(40.dp))
+    @Composable
+    private fun Title() {
+        Text(
+            text = stringResource(id = R.string.choose_team).uppercase(),
+            style = JetAroundTheme.typography.heading,
+            color = JetAroundTheme.colors.textColor
+        )
+    }
 
-            Row {
-                TeamView(containerColor = JetAroundTheme.colors.blue)
+    @Composable
+    private fun GridLayoutTeams() {
+        Row {
+            TeamView(containerColor = JetAroundTheme.colors.blue)
 
-                Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
-                TeamView(containerColor = JetAroundTheme.colors.purple)
-            }
+            TeamView(containerColor = JetAroundTheme.colors.purple)
+        }
 
-            Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-            Row {
-                TeamView(containerColor = JetAroundTheme.colors.yellow)
+        Row {
+            TeamView(containerColor = JetAroundTheme.colors.yellow)
 
-                Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
-                TeamView(containerColor = JetAroundTheme.colors.light_blue)
-            }
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            NextButtonView(onClick = onNextClicked)
+            TeamView(containerColor = JetAroundTheme.colors.light_blue)
         }
     }
 }

@@ -35,7 +35,8 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
             AuthorizationScreen(
                 viewModel = AuthorizationViewModel(),
                 onLoginClicked = { navController.navigate(Screen.MAP_ROUTE) },
-                onRegistrationClicked = { navController.navigate(Screen.REGISTRATION_ROUTE) }
+                onRegistrationClicked = { navController.navigate(Screen.REGISTRATION_ROUTE) },
+                onForgotPasswordClicked = { navController.navigate(Screen.RESTORE_PASSWORD_ROUTE) }
             ).Create()
         }
         composable(Screen.REGISTRATION_ROUTE) {

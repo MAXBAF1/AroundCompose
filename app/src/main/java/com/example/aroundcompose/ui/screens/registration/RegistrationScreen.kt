@@ -31,61 +31,50 @@ class RegistrationScreen(
     @Composable
     fun Create() {
         Column(
-            horizontalAlignment = Alignment.End,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .background(JetAroundTheme.colors.primaryBackground)
                 .padding(start = 30.dp, top = 30.dp, end = 30.dp)
         ) {
-            NavBackView(R.drawable.ic_arrow_left, onBackClicked)
+            NavBackView(R.string.registration, onBackClicked)
 
             Spacer(modifier = Modifier.height(28.dp))
 
-            TextFieldView(
-                textFieldType = FieldType.LOGIN,
-                restoredValue = "",
-                hint = stringResource(id = R.string.hint_name),
-                leadingIcon = painterResource(id = R.drawable.ic_user_octagon)
-            ) {
-
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            TextFieldView(
-                textFieldType = FieldType.EMAIL,
-                restoredValue = "",
-                hint = stringResource(id = R.string.hint_email),
-                leadingIcon = painterResource(id = R.drawable.ic_email)
-            ) {
-
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            TextFieldView(
-                textFieldType = FieldType.PASSWORD,
-                restoredValue = "",
-                hint = stringResource(id = R.string.hint_password),
-                leadingIcon = painterResource(id = R.drawable.ic_lock)
-            ) {
-
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            TextFieldView(
-                textFieldType = FieldType.CONFIRM_PASSWORD,
-                restoredValue = "",
-                hint = stringResource(id = R.string.hint_confirm_password),
-                leadingIcon = painterResource(id = R.drawable.ic_lock)
-            ) {
-
-            }
+            TextFields()
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            NextButtonView(onClick = onNextClicked)
+            NextButtonView(
+                enabled = true,
+                onClick = onNextClicked,
+                modifier = Modifier.align(Alignment.End)
+            )
+        }
+    }
+
+    @Composable
+    private fun TextFields() {
+        FieldType.values().forEach { value ->
+            TextFieldView(
+                textFieldType = value,
+                restoredValue = "",
+                hint = when (value) {
+                    FieldType.LOGIN -> stringResource(id = R.string.hint_name)
+                    FieldType.EMAIL -> stringResource(id = R.string.hint_email)
+                    FieldType.PASSWORD -> stringResource(id = R.string.hint_password)
+                    FieldType.CONFIRM_PASSWORD -> stringResource(id = R.string.hint_confirm_password)
+                },
+                leadingIcon = when (value) {
+                    FieldType.LOGIN -> painterResource(id = R.drawable.ic_user_octagon)
+                    FieldType.EMAIL -> painterResource(id = R.drawable.ic_email)
+                    else -> painterResource(id = R.drawable.ic_lock)
+                }
+            ) {
+
+            }
+
+            if (value != FieldType.CONFIRM_PASSWORD) Spacer(modifier = Modifier.height(14.dp))
         }
     }
 }

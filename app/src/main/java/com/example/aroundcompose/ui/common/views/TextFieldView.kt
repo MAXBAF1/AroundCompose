@@ -3,13 +3,16 @@ package com.example.aroundcompose.ui.common.views
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
@@ -58,7 +62,8 @@ fun TextFieldView(
         }
 
     Box {
-        BasicTextField(value = textValue,
+        BasicTextField(
+            value = textValue,
             onValueChange = {
                 textValue = it
                 onValueChange(it)
@@ -127,6 +132,14 @@ private fun DecorationBox(
         JetAroundTheme.colors.textFieldHint
     } else JetAroundTheme.colors.textColor
 
+    var verticalPadding = 12.dp
+    var horizontalPadding = 24.dp
+
+    if (passwordVisible != null) {
+        verticalPadding = 4.dp
+        horizontalPadding = 16.dp
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically, modifier = Modifier
             .background(
@@ -140,7 +153,12 @@ private fun DecorationBox(
                 } else tint,
                 shape = JetAroundTheme.shapes.textFieldShape
             )
-            .padding(vertical = 12.dp, horizontal = 24.dp) // Inner padding
+            .padding(
+                top = verticalPadding,
+                bottom = verticalPadding,
+                start = 24.dp,
+                end = horizontalPadding
+            ) // Inner padding
     ) {
         Icon(
             painter = leadingIcon,
@@ -171,11 +189,14 @@ private fun DecorationBox(
             tint = tint,
             modifier = Modifier
                 .wrapContentWidth(align = Alignment.End)
-                .padding(start = 8.dp)
+                .clip(shape = RoundedCornerShape(100))
                 .align(Alignment.CenterVertically)
-                .clickable {
-                    passwordVisible.value = !passwordVisible.value
-                }
+                .clickable(
+                    onClick = { passwordVisible.value = !passwordVisible.value },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = JetAroundTheme.colors.textColor)
+                )
+                .padding(8.dp)
         )
     }
 }

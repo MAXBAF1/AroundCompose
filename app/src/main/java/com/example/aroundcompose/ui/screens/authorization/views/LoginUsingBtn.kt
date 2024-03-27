@@ -5,8 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -23,7 +23,8 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 fun LoginUsingBtn(
     painterId: Int,
     stringId: Int,
-    onClick: () -> Unit,
+    modifier: Modifier,
+    onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
@@ -38,11 +39,12 @@ fun LoginUsingBtn(
             disabledContainerColor = JetAroundTheme.colors.primaryBackground,
             disabledContentColor = JetAroundTheme.colors.textFieldHint
         ),
-        modifier = Modifier.width(157.dp)
+        modifier = modifier
+            .fillMaxWidth()
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Image(painter = painterResource(id = painterId), contentDescription = "icon")
             Text(
