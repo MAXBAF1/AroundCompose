@@ -44,7 +44,10 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
         composable(Screen.REGISTRATION_ROUTE) {
             RegistrationScreen(
                 viewModel = RegistrationViewModel(),
-                onNextClicked = { navController.navigate(Screen.TEAMS_ROUTE) },
+                onNextClicked = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.TEAMS_ROUTE)
+                },
                 onBackClicked = { navController.popBackStack() }
             ).Create()
         }

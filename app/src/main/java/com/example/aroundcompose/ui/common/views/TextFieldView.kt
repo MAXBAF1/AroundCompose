@@ -43,6 +43,7 @@ fun TextFieldView(
     textFieldType: FieldType,
     restoredValue: String,
     hint: String,
+    imeAction: ImeAction = ImeAction.Next,
     leadingIcon: Painter,
     onValueChange: (value: String) -> Unit,
 ) {
@@ -88,11 +89,7 @@ fun TextFieldView(
                     FieldType.PASSWORD -> KeyboardType.Password
                     FieldType.CONFIRM_PASSWORD -> KeyboardType.Password
                 },
-                imeAction = if (
-                    textFieldType == FieldType.CONFIRM_PASSWORD || textFieldType == FieldType.EMAIL
-                ) {
-                    ImeAction.Done
-                } else ImeAction.Next
+                imeAction = imeAction
             ),
             visualTransformation = visualTransformation,
             decorationBox = { innerTextField ->
@@ -139,8 +136,8 @@ private fun DecorationBox(
     var horizontalPadding = 24.dp
 
     if (passwordVisible != null) {
-        verticalPadding = 4.dp
-        horizontalPadding = 16.dp
+        verticalPadding = 6.dp
+        horizontalPadding = 18.dp
     }
 
     Row(
@@ -199,7 +196,7 @@ private fun DecorationBox(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(color = JetAroundTheme.colors.textColor)
                 )
-                .padding(8.dp)
+                .padding(6.dp)
         )
     }
 }

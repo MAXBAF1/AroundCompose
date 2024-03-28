@@ -2,9 +2,7 @@ package com.example.aroundcompose
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -21,11 +19,12 @@ internal class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(
-                android.graphics.Color.TRANSPARENT
-            )
-        )
+        /* Transparent InfoBar */
+//        enableEdgeToEdge(
+//            statusBarStyle = SystemBarStyle.dark(
+//                android.graphics.Color.TRANSPARENT
+//            )
+//        )
 
         setContent {
             val navController = rememberNavController()
@@ -39,7 +38,7 @@ internal class MainActivity : ComponentActivity() {
                         currentRoute != Screen.AUTHORIZATION_ROUTE &&
                         currentRoute != Screen.REGISTRATION_ROUTE &&
                         currentRoute != Screen.TEAMS_ROUTE
-                        ) {
+                    ) {
                         BottomNavigation(navController = navController, currentRoute = currentRoute)
                     }
                 }) { innerPaddings ->

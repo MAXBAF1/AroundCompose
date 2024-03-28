@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -28,10 +29,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
@@ -42,7 +45,6 @@ import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationVi
 import com.example.aroundcompose.ui.screens.authorization.views.LoginUsingBtn
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.update
 
 class AuthorizationScreen(
     private val viewModel: AuthorizationViewModel,
@@ -51,8 +53,8 @@ class AuthorizationScreen(
     private val onForgotPasswordClicked: () -> Unit,
 ) {
     private var fieldsText: Map<FieldType, MutableState<String>> = mapOf(
-            FieldType.EMAIL to mutableStateOf(""),
-            FieldType.PASSWORD to mutableStateOf("")
+        FieldType.EMAIL to mutableStateOf(""),
+        FieldType.PASSWORD to mutableStateOf("")
     )
     private val isEnabledLoginBtn = mutableStateOf(false)
 
@@ -169,6 +171,7 @@ class AuthorizationScreen(
             textFieldType = FieldType.PASSWORD,
             restoredValue = fieldsText[FieldType.PASSWORD]?.value ?: "",
             hint = stringResource(id = R.string.hint_password),
+            imeAction = ImeAction.Done,
             leadingIcon = painterResource(id = R.drawable.ic_lock),
             onValueChange = { onValueChange(FieldType.PASSWORD, it) }
         )
@@ -234,12 +237,14 @@ class AuthorizationScreen(
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
         ) {
-            Spacer(
+            Box(
                 modifier = Modifier
-                    .width(117.dp)
+                    .fillMaxWidth()
                     .height(1.dp)
+                    .clip(shape = CircleShape)
+                    .weight(1f)
                     .background(JetAroundTheme.colors.textFieldHint)
             )
 
@@ -250,10 +255,12 @@ class AuthorizationScreen(
                 modifier = Modifier.padding(horizontal = 22.dp)
             )
 
-            Spacer(
+            Box(
                 modifier = Modifier
-                    .width(117.dp)
+                    .fillMaxWidth()
                     .height(1.dp)
+                    .clip(shape = CircleShape)
+                    .weight(1f)
                     .background(JetAroundTheme.colors.textFieldHint)
             )
         }
@@ -291,7 +298,7 @@ class AuthorizationScreen(
             verticalAlignment = Alignment.Bottom,
             modifier = modifier
                 .fillMaxSize()
-                .padding(bottom = 25.dp)
+                .padding(bottom = 24.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.is_have_not_account),
