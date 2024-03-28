@@ -26,10 +26,10 @@ class MapViewModel @Inject constructor(private val sharedPreferences: SharedPref
     override fun obtainEvent(viewEvent: MapEvent) {
         when (viewEvent) {
             is MapEvent.Init -> init()
-            MapEvent.StartService -> startService()
+            MapEvent.SetupService -> setupService()
             is MapEvent.EditSearchText -> searchText = viewEvent.text
-            MapEvent.ZoomLevelMinus -> updateZoomLevel(viewEvent)
-            MapEvent.ZoomLevelPlus -> updateZoomLevel(viewEvent)
+            MapEvent.MinusZoomLevel -> updateZoomLevel(viewEvent)
+            MapEvent.PlusZoomLevel -> updateZoomLevel(viewEvent)
             is MapEvent.UpdateCameraPosition -> cameraState = viewEvent.cameraState.toMutable()
         }
     }
@@ -41,9 +41,9 @@ class MapViewModel @Inject constructor(private val sharedPreferences: SharedPref
     }
 
     private fun updateZoomLevel(zoomLevelUpdateEvent: MapEvent) {
-        if (zoomLevelUpdateEvent == MapEvent.ZoomLevelMinus) {
+        if (zoomLevelUpdateEvent == MapEvent.MinusZoomLevel) {
             cameraState.zoom -= MapConstant.ZOOM_LEVEL_DELTA
-        } else if (zoomLevelUpdateEvent == MapEvent.ZoomLevelPlus) {
+        } else if (zoomLevelUpdateEvent == MapEvent.PlusZoomLevel) {
             cameraState.zoom += (MapConstant.ZOOM_LEVEL_DELTA)
         }
         viewState.update { MapViewState.ZoomLevelUpdated(cameraState.zoom) }
@@ -55,7 +55,7 @@ class MapViewModel @Inject constructor(private val sharedPreferences: SharedPref
         )
     }
 
-    private fun startService() {
+    private fun setupService() {
         viewState.update { MapViewState.CellsCaptured(paintedCells.toList()) }
         val h3 = H3Core.newSystemInstance()
 
