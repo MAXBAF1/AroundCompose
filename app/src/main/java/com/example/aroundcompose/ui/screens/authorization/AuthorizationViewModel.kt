@@ -11,14 +11,14 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthorizationViewModel @Inject constructor() :
     BaseViewModel<AuthorizationViewState, AuthorizationEvent>(
-        initialState = AuthorizationViewState.RestoreFieldsData()
+        initialState = AuthorizationViewState.RestoreData()
     ) {
     private val fieldsText = hashMapOf(FieldType.EMAIL to "", FieldType.PASSWORD to "")
 
     override fun obtainEvent(viewEvent: AuthorizationEvent) {
         when (viewEvent) {
             AuthorizationEvent.RestoreInputs -> {
-                viewState.update { AuthorizationViewState.RestoreFieldsData(fieldsText) }
+                viewState.update { AuthorizationViewState.RestoreData(fieldsText) }
             }
 
             is AuthorizationEvent.InputTextChange -> {

@@ -42,6 +42,7 @@ import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationVi
 import com.example.aroundcompose.ui.screens.authorization.views.LoginUsingBtn
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.update
 
 class AuthorizationScreen(
     private val viewModel: AuthorizationViewModel,
@@ -58,10 +59,6 @@ class AuthorizationScreen(
     @Composable
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
-
-        LaunchedEffect(key1 = Unit) {
-            viewModel.obtainEvent(AuthorizationEvent.RestoreInputs)
-        }
 
         Box {
             Image(
@@ -102,8 +99,12 @@ class AuthorizationScreen(
             }
         }
 
+        LaunchedEffect(key1 = 1) {
+            viewModel.obtainEvent(AuthorizationEvent.RestoreInputs)
+        }
+
         when (val currentState = viewState) {
-            is AuthorizationViewState.RestoreFieldsData -> {
+            is AuthorizationViewState.RestoreData -> {
                 updateFields(
                     fieldType = FieldType.EMAIL,
                     fieldText = currentState.fieldsText[FieldType.EMAIL]
@@ -113,9 +114,15 @@ class AuthorizationScreen(
                     fieldType = FieldType.PASSWORD,
                     fieldText = currentState.fieldsText[FieldType.PASSWORD]
                 )
+
+                if (isAllFieldsValid(currentState.fieldsText)) {
+                    isEnabledLoginBtn.value = true
+                }
             }
 
-            AuthorizationViewState.EnableLoginBtn -> isEnabledLoginBtn.value = true
+            AuthorizationViewState.EnableLoginBtn -> {
+                isEnabledLoginBtn.value = true
+            }
 
             AuthorizationViewState.Errors.EmailNotExist -> TODO()
             AuthorizationViewState.Errors.ServiceUnavailable -> TODO()
@@ -321,5 +328,12 @@ class AuthorizationScreen(
         if (fieldText != "") {
             fieldsText[fieldType]?.value = fieldText ?: ""
         }
+    }
+
+    private fun isAllFieldsValid(fieldsText: Map<FieldType, String>): Boolean {
+        fieldsText.values.forEach { text ->
+            if (text == "") return false
+        }
+        return true
     }
 }

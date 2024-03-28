@@ -3,7 +3,7 @@ package com.example.aroundcompose.ui.screens.authorization.models
 import com.example.aroundcompose.ui.common.enums.FieldType
 
 sealed class AuthorizationViewState {
-    data class RestoreFieldsData(
+    data class RestoreData(
         val fieldsText: Map<FieldType, String> = mapOf(
             FieldType.EMAIL to "",
             FieldType.PASSWORD to ""
