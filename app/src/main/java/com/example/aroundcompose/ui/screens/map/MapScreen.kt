@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,8 +65,7 @@ class MapScreen(
             })
         }
         var isEventSheetShowed by remember { mutableStateOf(false) }
-        val animatedRotation = remember { Animatable(0F) }
-        val scope = rememberCoroutineScope()
+        var rotation by remember { mutableFloatStateOf(0F) }
         var compassIconId by remember { mutableIntStateOf(R.drawable.ic_navigate) }
 
         MyMapboxMap(mapViewCallback = { mv ->
@@ -76,7 +76,7 @@ class MapScreen(
             onMoveListener(it)
         }, onRotate = {
             compassIconId = R.drawable.ic_compass
-            scope.launch { animatedRotation.animateTo(it, tween(0)) }
+            rotation = it
         }).Create()
 
         Column(
@@ -112,9 +112,9 @@ class MapScreen(
                         Spacer(modifier = Modifier.size(width = 0.dp, height = 12.dp))
                         MapBtn(iconId = R.drawable.ic_minus, onClick = onMinusZoomLevel)
                     }
-                    MapBtn(iconId = compassIconId, rotation = animatedRotation.value) {
+                    MapBtn(iconId = compassIconId, rotation = rotation) {
                         onCompassClick(mapView, positionChangedListener, onNorthFaced = {
-                            scope.launch { animatedRotation.animateTo(0F) }
+                            rotation = 0F
                             compassIconId = R.drawable.ic_navigate
                         }, onZoomChanged = {
                             mapView?.getMapboxMap()?.cameraState?.let { onZoomChanged(it) }
