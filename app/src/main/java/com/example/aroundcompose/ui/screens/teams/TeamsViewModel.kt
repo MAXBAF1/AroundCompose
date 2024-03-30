@@ -1,6 +1,6 @@
 package com.example.aroundcompose.ui.screens.teams
 
-import com.example.aroundcompose.models.BaseViewModel
+import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.screens.teams.models.TeamsEvent
 import com.example.aroundcompose.ui.screens.teams.models.TeamsViewState
 import dagger.hilt.android.lifecycle.HiltViewModel

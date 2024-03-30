@@ -43,6 +43,7 @@ import com.mapbox.maps.plugin.animation.easeTo
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
+import kotlinx.coroutines.Dispatchers
 
 class MapScreen(private val viewModel: MapViewModel) {
     private var animatorListener: Animator.AnimatorListener? = null
@@ -50,7 +51,7 @@ class MapScreen(private val viewModel: MapViewModel) {
 
     @Composable
     fun Create() {
-        val viewState by viewModel.getViewState().collectAsState()
+        val viewState by viewModel.getViewState().collectAsState(Dispatchers.Main.immediate)
         val context = LocalContext.current
         var mapView: MapView? by remember { mutableStateOf(null) }
         var searchText by remember { mutableStateOf("") }

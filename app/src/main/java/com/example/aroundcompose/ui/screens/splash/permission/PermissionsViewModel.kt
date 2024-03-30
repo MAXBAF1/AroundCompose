@@ -1,6 +1,6 @@
 package com.example.aroundcompose.ui.screens.splash.permission
 
-import com.example.aroundcompose.models.BaseViewModel
+import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.screens.splash.permission.models.PermissionsEvent
 import com.example.aroundcompose.ui.screens.splash.permission.models.PermissionsViewState
 import dagger.hilt.android.lifecycle.HiltViewModel

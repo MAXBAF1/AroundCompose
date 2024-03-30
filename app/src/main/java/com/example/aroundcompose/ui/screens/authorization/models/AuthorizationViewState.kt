@@ -10,10 +10,16 @@ sealed class AuthorizationViewState {
         )
     ) : AuthorizationViewState()
 
+    data class FieldsTextChanged(
+        val fieldsText: Map<FieldType, String> = mapOf(
+            FieldType.EMAIL to "",
+            FieldType.PASSWORD to ""
+        )
+    ) : AuthorizationViewState()
+
     object EnableLoginBtn : AuthorizationViewState()
     sealed class Errors {
         object EmailNotExist : AuthorizationViewState()
         object ServiceUnavailable : AuthorizationViewState()
-        data class ValidateErrors(val type: FieldType, val text: String) : AuthorizationViewState()
     }
 }

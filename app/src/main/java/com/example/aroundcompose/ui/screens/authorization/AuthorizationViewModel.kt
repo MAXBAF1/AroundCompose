@@ -1,35 +1,30 @@
 package com.example.aroundcompose.ui.screens.authorization
 
-import com.example.aroundcompose.models.BaseViewModel
 import com.example.aroundcompose.ui.common.enums.FieldType
+import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationEvent
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthorizationViewModel @Inject constructor() :
-    BaseViewModel<AuthorizationViewState, AuthorizationEvent>(
-        initialState = AuthorizationViewState.RestoreData()
-    ) {
+    BaseViewModel<AuthorizationViewState, AuthorizationEvent>(AuthorizationViewState.RestoreData()) {
     private val fieldsText = hashMapOf(FieldType.EMAIL to "", FieldType.PASSWORD to "")
 
     override fun obtainEvent(viewEvent: AuthorizationEvent) {
         when (viewEvent) {
             AuthorizationEvent.RestoreInputs -> {
-                viewState.update { AuthorizationViewState.RestoreData(fieldsText) }
+                viewState.value = AuthorizationViewState.RestoreData(fieldsText)
             }
 
             is AuthorizationEvent.InputTextChange -> {
                 fieldsText[viewEvent.type] = viewEvent.text
 
                 if (isAllFieldsValid(fieldsText)) {
-                    viewState.update { AuthorizationViewState.EnableLoginBtn }
+                    viewState.value = AuthorizationViewState.EnableLoginBtn
                 } else {
-                    viewState.update {
-                        AuthorizationViewState.Errors.ValidateErrors(viewEvent.type, viewEvent.text)
-                    }
+                    viewState.value = AuthorizationViewState.FieldsTextChanged(fieldsText)
                 }
             }
 

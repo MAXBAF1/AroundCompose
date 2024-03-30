@@ -16,7 +16,6 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,14 +40,15 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 @Composable
 fun TextFieldView(
     textFieldType: FieldType,
-    restoredValue: String,
+    textValue: String,
     hint: String,
-    imeAction: ImeAction = ImeAction.Next,
     leadingIcon: Painter,
+    modifier: Modifier = Modifier,
+    imeAction: ImeAction = ImeAction.Next,
     onValueChange: (value: String) -> Unit,
 ) {
-    var textValue by remember { mutableStateOf(restoredValue) }
-    LaunchedEffect(key1 = restoredValue) { textValue = restoredValue }
+    //var textValue by remember { mutableStateOf(restoredValue) }
+    //LaunchedEffect(key1 = restoredValue) { textValue = restoredValue }
 
     var isFocused by remember { mutableStateOf(false) }
     val passwordVisible =
@@ -69,11 +69,11 @@ fun TextFieldView(
         BasicTextField(
             value = textValue,
             onValueChange = {
-                textValue = it
+                //textValue = it
                 onValueChange(it)
             },
             singleLine = true,
-            modifier = Modifier
+            modifier = modifier
                 .padding(top = 4.dp)
                 .background(JetAroundTheme.colors.primaryBackground.copy(alpha = 0f))
                 .fillMaxWidth()
@@ -95,7 +95,7 @@ fun TextFieldView(
             decorationBox = { innerTextField ->
                 DecorationBox(
                     hint = hint,
-                    textValue = textValue,
+                    isEmpty = textValue.isEmpty(),
                     isFocused = isFocused,
                     passwordVisible = passwordVisible,
                     leadingIcon = leadingIcon,
@@ -122,13 +122,13 @@ fun TextFieldView(
 @Composable
 private fun DecorationBox(
     hint: String,
-    textValue: String,
+    isEmpty: Boolean,
     isFocused: Boolean,
     passwordVisible: MutableState<Boolean>?,
     leadingIcon: Painter,
     innerTextField: @Composable () -> Unit,
 ) {
-    val tint = if (textValue.isEmpty()) {
+    val tint = if (isEmpty) {
         JetAroundTheme.colors.textFieldHint
     } else JetAroundTheme.colors.textColor
 
@@ -173,7 +173,7 @@ private fun DecorationBox(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            if (textValue.isEmpty()) {
+            if (isEmpty) {
                 Text(text = hint, color = JetAroundTheme.colors.textFieldHint)
             }
             innerTextField()

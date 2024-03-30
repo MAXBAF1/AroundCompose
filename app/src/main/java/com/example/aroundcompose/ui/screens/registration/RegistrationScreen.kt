@@ -43,33 +43,28 @@ class RegistrationScreen(
             Spacer(modifier = Modifier.height(40.dp))
 
             NextButtonView(
-                enabled = true,
-                onClick = onNextClicked,
-                modifier = Modifier.align(Alignment.End)
+                enabled = true, onClick = onNextClicked, modifier = Modifier.align(Alignment.End)
             )
         }
     }
 
     @Composable
     private fun TextFields() {
-        FieldType.values().forEach { value ->
+        FieldType.values().forEachIndexed { i, value ->
             TextFieldView(
-                textFieldType = value,
-                restoredValue = "",
-                hint = when (value) {
+                textFieldType = value, textValue = "", hint = when (value) {
                     FieldType.LOGIN -> stringResource(id = R.string.hint_name)
                     FieldType.EMAIL -> stringResource(id = R.string.hint_email)
                     FieldType.PASSWORD -> stringResource(id = R.string.hint_password)
                     FieldType.CONFIRM_PASSWORD -> stringResource(id = R.string.hint_confirm_password)
-                },
-                imeAction = when (value) {
-                    FieldType.CONFIRM_PASSWORD -> ImeAction.Done
-                    else -> ImeAction.Next
-                },
-                leadingIcon = when (value) {
+                }, leadingIcon = when (value) {
                     FieldType.LOGIN -> painterResource(id = R.drawable.ic_user_octagon)
                     FieldType.EMAIL -> painterResource(id = R.drawable.ic_email)
                     else -> painterResource(id = R.drawable.ic_lock)
+                }, imeAction = if (i == FieldType.values().size - 1) {
+                    ImeAction.Done
+                } else {
+                    ImeAction.Next
                 }
             ) {
 

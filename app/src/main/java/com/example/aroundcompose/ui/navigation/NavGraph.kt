@@ -27,6 +27,7 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
     val activity = (LocalContext.current as? Activity)
     val mapViewModel = hiltViewModel<MapViewModel>()
     val authorizationViewModel = hiltViewModel<AuthorizationViewModel>()
+    val registrationViewModel = hiltViewModel<RegistrationViewModel>()
 
     NavHost(
         navController = navController,
@@ -43,9 +44,9 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
         }
         composable(Screen.REGISTRATION_ROUTE) {
             RegistrationScreen(
-                viewModel = RegistrationViewModel(),
+                viewModel = registrationViewModel,
                 onNextClicked = {
-                    navController.popBackStack()
+                    //navController.clearBackStack(Screen.TEAMS_ROUTE)
                     navController.navigate(Screen.TEAMS_ROUTE)
                 },
                 onBackClicked = { navController.popBackStack() }
