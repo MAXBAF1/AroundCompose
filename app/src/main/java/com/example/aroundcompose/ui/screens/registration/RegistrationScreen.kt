@@ -61,14 +61,14 @@ class RegistrationScreen(
                     FieldType.LOGIN -> painterResource(id = R.drawable.ic_user_octagon)
                     FieldType.EMAIL -> painterResource(id = R.drawable.ic_email)
                     else -> painterResource(id = R.drawable.ic_lock)
+                }, {
+
                 }, imeAction = if (i == FieldType.values().size - 1) {
                     ImeAction.Done
                 } else {
                     ImeAction.Next
                 }
-            ) {
-
-            }
+            )
 
             if (value != FieldType.CONFIRM_PASSWORD) Spacer(modifier = Modifier.height(14.dp))
         }

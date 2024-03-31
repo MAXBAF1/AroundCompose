@@ -1,6 +1,5 @@
 package com.example.aroundcompose.ui.screens.authorization
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,10 +19,8 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,7 +42,6 @@ import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationEv
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationViewState
 import com.example.aroundcompose.ui.screens.authorization.views.LoginUsingBtn
 import com.example.aroundcompose.ui.theme.JetAroundTheme
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 
 class AuthorizationScreen(
@@ -54,16 +50,9 @@ class AuthorizationScreen(
     private val onRegistrationClicked: () -> Unit,
     private val onForgotPasswordClicked: () -> Unit,
 ) {
-    private val fieldsText: Map<FieldType, MutableState<String>> = mapOf(
-        FieldType.EMAIL to mutableStateOf(""), FieldType.PASSWORD to mutableStateOf("")
-    )
-    private val emailText = mutableStateOf("")
-    private val passwordText = mutableStateOf("")
-    private val isEnabledLoginBtn = mutableStateOf(false)
-
     @Composable
     fun Create() {
-        val viewState by viewModel.getViewState().collectAsStateWithLifecycle(Dispatchers.Main.immediate)
+        val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
         Box {
             Image(
@@ -85,44 +74,21 @@ class AuthorizationScreen(
                         .fillMaxSize()
                 )
                 Title(Modifier.padding(bottom = 40.dp))
-                TextFields(modifier = Modifier.padding(bottom = 14.dp),
+                TextFields(
+                    emailValue = viewState.emailValue,
+                    passwordValue = viewState.passwordValue,
                     onValueChange = { fieldType, value ->
                         viewModel.obtainEvent(AuthorizationEvent.InputTextChange(fieldType, value))
-                    })
+                    },
+                    modifier = Modifier.padding(bottom = 14.dp),)
                 ForgotPassword(
                     onFocusedColor,
                     Modifier
                         .align(Alignment.End)
                         .padding(bottom = 40.dp)
                 )
-                LoginButtons(isEnabledLoginBtn.value)
+                LoginButtons(viewState.isEnabledLoginBtn)
                 IfNotHaveAccount(onFocusedColor, modifier = Modifier.weight(1f))
-            }
-        }
-
-        LaunchedEffect(key1 = 1) {
-            viewModel.obtainEvent(AuthorizationEvent.RestoreInputs)
-        }
-
-        when (val currentState = viewState) {
-            is AuthorizationViewState.RestoreData -> {
-                updateFields(currentState.fieldsText)
-
-                if (isAllFieldsValid(currentState.fieldsText)) {
-                    isEnabledLoginBtn.value = true
-                }
-            }
-
-            AuthorizationViewState.EnableLoginBtn -> {
-                isEnabledLoginBtn.value = true
-            }
-
-            AuthorizationViewState.Errors.EmailNotExist -> TODO()
-            AuthorizationViewState.Errors.ServiceUnavailable -> TODO()
-
-            is AuthorizationViewState.FieldsTextChanged -> {
-                updateFields(currentState.fieldsText)
-                isEnabledLoginBtn.value = false
             }
         }
     }
@@ -147,30 +113,31 @@ class AuthorizationScreen(
 
     @Composable
     private fun TextFields(
-        modifier: Modifier,
         onValueChange: (fieldType: FieldType, value: String) -> Unit,
+        emailValue: String,
+        passwordValue: String,
+        modifier: Modifier,
     ) {
         Column(modifier = modifier) {
-            TextField(value = emailText.value ?: "", onValueChange = {
-                onValueChange(FieldType.EMAIL, it)
-            })
-            /*TextFieldView(
+            TextFieldView(
                 textFieldType = FieldType.EMAIL,
-                textValue = fieldsText[FieldType.EMAIL]?.value ?: "",
+                textValue = emailValue,
                 hint = stringResource(id = R.string.hint_email),
                 leadingIcon = painterResource(id = R.drawable.ic_email),
+                {
+                    onValueChange(FieldType.EMAIL, it)
+                },
                 modifier = Modifier.padding(bottom = 14.dp)
-            ) {
-                onValueChange(FieldType.EMAIL, it)
-            }*/
+            )
 
             TextFieldView(
                 textFieldType = FieldType.PASSWORD,
-                textValue = passwordText.value ?: "",
+                textValue = passwordValue,
                 hint = stringResource(id = R.string.hint_password),
                 leadingIcon = painterResource(id = R.drawable.ic_lock),
+                { onValueChange(FieldType.PASSWORD, it) },
                 imeAction = ImeAction.Done
-            ) { onValueChange(FieldType.PASSWORD, it) }
+            )
         }
     }
 
@@ -187,13 +154,6 @@ class AuthorizationScreen(
         ) {
             forgotPasswordColor = Color.DarkGray
             onForgotPasswordClicked()
-        }
-
-        if (forgotPasswordColor == Color.DarkGray) {
-            LaunchedEffect(key1 = Unit) {
-                delay(100)
-                forgotPasswordColor = onFocusedColor
-            }
         }
     }
 
@@ -322,26 +282,5 @@ class AuthorizationScreen(
                 }
             }
         }
-    }
-
-    @SuppressLint("ComposableNaming")
-    @Composable
-    private fun updateFields(fieldsText: Map<FieldType, String>) {
-        fieldsText.keys.forEach {
-            when (it) {
-                FieldType.LOGIN -> TODO()
-                FieldType.EMAIL -> emailText.value = fieldsText[it] ?: ""
-                FieldType.PASSWORD -> passwordText.value = fieldsText[it] ?: ""
-                FieldType.CONFIRM_PASSWORD -> TODO()
-            }
-            //this.fieldsText[it]?.value = fieldsText[it] ?: ""
-        }
-    }
-
-    private fun isAllFieldsValid(fieldsText: Map<FieldType, String>): Boolean {
-        fieldsText.values.forEach { text ->
-            if (text == "") return false
-        }
-        return true
     }
 }

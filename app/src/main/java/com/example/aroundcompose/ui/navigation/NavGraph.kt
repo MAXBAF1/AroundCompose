@@ -35,28 +35,25 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
         modifier = Modifier.padding(innerPaddings)
     ) {
         composable(Screen.AUTHORIZATION_ROUTE) {
-            AuthorizationScreen(
-                viewModel = authorizationViewModel,
+            AuthorizationScreen(viewModel = authorizationViewModel,
                 onLoginClicked = { navController.navigate(Screen.MAP_ROUTE) },
                 onRegistrationClicked = { navController.navigate(Screen.REGISTRATION_ROUTE) },
-                onForgotPasswordClicked = { navController.navigate(Screen.RESTORE_PASSWORD_ROUTE) }
-            ).Create()
+                onForgotPasswordClicked = { navController.navigate(Screen.RESTORE_PASSWORD_ROUTE) }).Create()
         }
         composable(Screen.REGISTRATION_ROUTE) {
-            RegistrationScreen(
-                viewModel = registrationViewModel,
-                onNextClicked = {
-                    //navController.clearBackStack(Screen.TEAMS_ROUTE)
-                    navController.navigate(Screen.TEAMS_ROUTE)
-                },
-                onBackClicked = { navController.popBackStack() }
-            ).Create()
+            RegistrationScreen(viewModel = registrationViewModel, onNextClicked = {
+                navController.navigate(Screen.TEAMS_ROUTE) {
+                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    launchSingleTop = true
+                }
+            }, onBackClicked = { navController.popBackStack() }).Create()
         }
         composable(Screen.TEAMS_ROUTE) {
-            TeamsScreen(
-                viewModel = TeamsViewModel(),
-                onNextClicked = { navController.navigate(Screen.MAP_ROUTE) }
-            ).Create()
+            TeamsScreen(viewModel = TeamsViewModel(), onNextClicked = {
+                navController.navigate(Screen.MAP_ROUTE) {
+                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                }
+            }).Create()
         }
         composable(Screen.SPLASH_ROUTE) {
             SplashScreen(exit = { activity?.finish() }, onNextScreen = {

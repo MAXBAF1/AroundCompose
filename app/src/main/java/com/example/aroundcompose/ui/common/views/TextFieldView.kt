@@ -43,35 +43,27 @@ fun TextFieldView(
     textValue: String,
     hint: String,
     leadingIcon: Painter,
+    onValueChange: (value: String) -> Unit,
     modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Next,
-    onValueChange: (value: String) -> Unit,
 ) {
-    //var textValue by remember { mutableStateOf(restoredValue) }
-    //LaunchedEffect(key1 = restoredValue) { textValue = restoredValue }
-
     var isFocused by remember { mutableStateOf(false) }
     val passwordVisible =
         if (textFieldType == FieldType.EMAIL || textFieldType == FieldType.LOGIN) {
             null
         } else remember { mutableStateOf(false) }
 
-    val visualTransformation =
-        if (passwordVisible == null) {
+    val visualTransformation = if (passwordVisible == null) {
+        VisualTransformation.None
+    } else {
+        if (passwordVisible.value) {
             VisualTransformation.None
-        } else {
-            if (passwordVisible.value) {
-                VisualTransformation.None
-            } else PasswordVisualTransformation()
-        }
+        } else PasswordVisualTransformation()
+    }
 
     Box {
-        BasicTextField(
-            value = textValue,
-            onValueChange = {
-                //textValue = it
-                onValueChange(it)
-            },
+        BasicTextField(value = textValue,
+            onValueChange = onValueChange,
             singleLine = true,
             modifier = modifier
                 .padding(top = 4.dp)
@@ -88,8 +80,7 @@ fun TextFieldView(
                     FieldType.EMAIL -> KeyboardType.Email
                     FieldType.PASSWORD -> KeyboardType.Password
                     FieldType.CONFIRM_PASSWORD -> KeyboardType.Password
-                },
-                imeAction = imeAction
+                }, imeAction = imeAction
             ),
             visualTransformation = visualTransformation,
             decorationBox = { innerTextField ->
@@ -147,11 +138,9 @@ private fun DecorationBox(
                 shape = JetAroundTheme.shapes.textFieldShape
             )
             .border(
-                width = if (isFocused) 3.dp else 2.dp,
-                color = if (isFocused) {
+                width = if (isFocused) 3.dp else 2.dp, color = if (isFocused) {
                     JetAroundTheme.colors.onFocusedColor
-                } else tint,
-                shape = JetAroundTheme.shapes.textFieldShape
+                } else tint, shape = JetAroundTheme.shapes.textFieldShape
             )
             .padding(
                 top = verticalPadding,
@@ -164,8 +153,7 @@ private fun DecorationBox(
             painter = leadingIcon,
             contentDescription = "",
             tint = tint,
-            modifier = Modifier
-                .padding(end = 16.dp)
+            modifier = Modifier.padding(end = 16.dp)
         )
 
         Box(
