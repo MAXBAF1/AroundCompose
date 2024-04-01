@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
@@ -34,24 +33,25 @@ fun ClosestEventCard(eventData: EventData, modifier: Modifier = Modifier) {
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-            .clickable(interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(),
-                onClick = {})
-            .padding(12.dp)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                .clickable(interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(),
+                    onClick = {})
+                .padding(12.dp)
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.event_image_example_2),
                 contentDescription = "event image",
                 modifier = Modifier
                     .size(56.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .padding(end = 12.dp),
+                    .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
             Column(
                 modifier = Modifier
+                    .padding(horizontal = 12.dp)
                     .weight(1F)
-                    .padding(end = 12.dp)
             ) {
                 EventTitleText(eventData.title, modifier = Modifier.padding(bottom = 4.dp))
                 PlaceTextRow(eventData.place, modifier = Modifier.padding(bottom = 10.dp))
@@ -60,7 +60,7 @@ fun ClosestEventCard(eventData: EventData, modifier: Modifier = Modifier) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_go_to),
                 contentDescription = "icon",
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier,
                 tint = JetAroundTheme.colors.lightTint
             )
         }
