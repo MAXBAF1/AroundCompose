@@ -13,4 +13,7 @@ val typography = JetAroundTypography(
     medium = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     scaleBar = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
     title = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
+    eventCardTitle = TextStyle(fontSize = 12.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
+    eventCardPlaceAndBtn = TextStyle(fontSize = 10.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
+    eventCardKm = TextStyle(fontSize = 12.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
 )

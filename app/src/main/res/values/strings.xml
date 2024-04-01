@@ -22,4 +22,6 @@
     <string name="popular">Популярное</string>
     <string name="closest">Ближе всего к вам</string>
     <string name="all">Все</string>
+    <string name="km">Км</string>
+    <string name="read">Читать...</string>
 </resources>

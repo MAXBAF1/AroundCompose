@@ -9,12 +9,13 @@ import androidx.compose.ui.unit.Dp
 
 data class JetAroundColors(
     val primaryBackground: Color,
-    val mapSearchInactive: Color,
+    val lightTint: Color,
     val mapBtnBg: Color,
     val mapElements: Color,
     val searchHint: Color,
     val textColor: Color,
-    val primary: Color
+    val primary: Color,
+    val eventCardText: Color
 )
 
 data class JetAroundTypography(
@@ -23,7 +24,10 @@ data class JetAroundTypography(
     val coin: TextStyle,
     val medium: TextStyle,
     val scaleBar: TextStyle,
-    val title: TextStyle
+    val title: TextStyle,
+    val eventCardTitle: TextStyle,
+    val eventCardPlaceAndBtn: TextStyle,
+    val eventCardKm: TextStyle
 )
 
 data class JetAroundShape(
