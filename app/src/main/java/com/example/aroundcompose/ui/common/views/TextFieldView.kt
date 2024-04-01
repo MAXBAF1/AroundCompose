@@ -53,13 +53,9 @@ fun TextFieldView(
             null
         } else remember { mutableStateOf(false) }
 
-    val visualTransformation = if (passwordVisible == null) {
+    val visualTransformation = if (passwordVisible == null || passwordVisible.value) {
         VisualTransformation.None
-    } else {
-        if (passwordVisible.value) {
-            VisualTransformation.None
-        } else PasswordVisualTransformation()
-    }
+    } else PasswordVisualTransformation()
 
     Box {
         BasicTextField(value = textValue,
