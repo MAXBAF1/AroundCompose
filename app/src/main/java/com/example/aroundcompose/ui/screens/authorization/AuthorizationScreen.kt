@@ -39,7 +39,6 @@ import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.views.TextFieldView
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationEvent
-import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationViewState
 import com.example.aroundcompose.ui.screens.authorization.views.LoginUsingBtn
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import kotlinx.coroutines.delay
@@ -68,26 +67,33 @@ class AuthorizationScreen(
                     .padding(horizontal = 30.dp)
             ) {
                 val onFocusedColor = JetAroundTheme.colors.onFocusedColor
+
                 Spacer(
                     modifier = Modifier
                         .weight(1.25f)
                         .fillMaxSize()
                 )
+
                 Title(Modifier.padding(bottom = 40.dp))
+
                 TextFields(
                     emailValue = viewState.emailValue,
                     passwordValue = viewState.passwordValue,
                     onValueChange = { fieldType, value ->
                         viewModel.obtainEvent(AuthorizationEvent.InputTextChange(fieldType, value))
                     },
-                    modifier = Modifier.padding(bottom = 14.dp),)
+                    modifier = Modifier.padding(bottom = 14.dp)
+                )
+
                 ForgotPassword(
                     onFocusedColor,
                     Modifier
                         .align(Alignment.End)
                         .padding(bottom = 40.dp)
                 )
+
                 LoginButtons(viewState.isEnabledLoginBtn)
+
                 IfNotHaveAccount(onFocusedColor, modifier = Modifier.weight(1f))
             }
         }
@@ -124,9 +130,7 @@ class AuthorizationScreen(
                 textValue = emailValue,
                 hint = stringResource(id = R.string.hint_email),
                 leadingIcon = painterResource(id = R.drawable.ic_email),
-                {
-                    onValueChange(FieldType.EMAIL, it)
-                },
+                onValueChange = { onValueChange(FieldType.EMAIL, it) },
                 modifier = Modifier.padding(bottom = 14.dp)
             )
 
@@ -135,7 +139,7 @@ class AuthorizationScreen(
                 textValue = passwordValue,
                 hint = stringResource(id = R.string.hint_password),
                 leadingIcon = painterResource(id = R.drawable.ic_lock),
-                { onValueChange(FieldType.PASSWORD, it) },
+                onValueChange = { onValueChange(FieldType.PASSWORD, it) },
                 imeAction = ImeAction.Done
             )
         }

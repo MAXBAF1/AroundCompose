@@ -30,7 +30,6 @@ class AuthorizationViewModel @Inject constructor() :
                         isEnabledLoginBtn = emailValue.isNotEmpty() && passwordValue.isNotEmpty()
                     )
                 }
-
             }
 
             AuthorizationEvent.ClickLoginBtn -> {}
