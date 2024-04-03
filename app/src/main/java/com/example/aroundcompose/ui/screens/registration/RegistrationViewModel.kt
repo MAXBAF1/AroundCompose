@@ -2,6 +2,7 @@ package com.example.aroundcompose.ui.screens.registration
 
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.models.BaseViewModel
+import com.example.aroundcompose.ui.common.models.FieldData
 import com.example.aroundcompose.ui.screens.registration.models.RegistrationEvent
 import com.example.aroundcompose.ui.screens.registration.models.RegistrationViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,32 +14,25 @@ class RegistrationViewModel @Inject constructor() :
     BaseViewModel<RegistrationViewState, RegistrationEvent>(
         initialState = RegistrationViewState()
     ) {
-    private var loginValue = ""
-    private var emailValue = ""
-    private var passwordValue = ""
-    private var confirmPasswordValue = ""
+    private val mapOfFields: HashMap<FieldType, FieldData> = hashMapOf(
+        FieldType.LOGIN to FieldData(),
+        FieldType.EMAIL to FieldData(),
+        FieldType.PASSWORD to FieldData(),
+        FieldType.CONFIRM_PASSWORD to FieldData()
+    )
 
     override fun obtainEvent(viewEvent: RegistrationEvent) {
         when (viewEvent) {
             is RegistrationEvent.ChangeFieldText -> {
-                when (viewEvent.type) {
-                    FieldType.LOGIN -> loginValue = viewEvent.text
-                    FieldType.EMAIL -> emailValue = viewEvent.text
-                    FieldType.PASSWORD -> passwordValue = viewEvent.text
-                    FieldType.CONFIRM_PASSWORD -> confirmPasswordValue = viewEvent.text
-                }
-
+                mapOfFields[viewEvent.type]?.fieldText = viewEvent.text
+                
                 viewState.update {
                     it.copy(
-                        loginValue = loginValue,
-                        emailValue = emailValue,
-                        passwordValue = passwordValue,
-                        confirmPasswordValue = confirmPasswordValue,
-                        isEnabledNextBtn =
-                                loginValue.isNotEmpty() &&
-                                emailValue.isNotEmpty() &&
-                                passwordValue.isNotEmpty() &&
-                                confirmPasswordValue.isNotEmpty()
+                        mapOfFields = mapOfFields.toMap(),
+                        isEnabledNextBtn = mapOfFields.values.all { fieldData ->
+                            fieldData.fieldText.isNotEmpty() &&
+                            fieldData.textError == null
+                        }
                     )
                 }
             }

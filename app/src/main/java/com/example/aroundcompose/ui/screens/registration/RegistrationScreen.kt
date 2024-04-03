@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -43,12 +44,9 @@ class RegistrationScreen(
             NavBackView(R.string.registration, onBackClicked)
 
             TextFields(
-                loginValue = viewState.loginValue,
-                emailValue = viewState.emailValue,
-                passwordValue = viewState.passwordValue,
-                confirmPasswordValue = viewState.confirmPasswordValue,
-                onValueChange = { fieldType, value ->
-                    viewModel.obtainEvent(RegistrationEvent.ChangeFieldText(fieldType, value))
+                mapOfFields = viewState.mapOfFields,
+                onValueChange = { fieldType, text ->
+                    viewModel.obtainEvent(RegistrationEvent.ChangeFieldText(fieldType, text))
                 },
                 modifier = Modifier.padding(top = 28.dp)
             )
@@ -65,44 +63,45 @@ class RegistrationScreen(
 
     @Composable
     private fun TextFields(
-        onValueChange: (fieldType: FieldType, value: String) -> Unit,
-        loginValue: String,
-        emailValue: String,
-        passwordValue: String,
-        confirmPasswordValue: String,
+        onValueChange: (fieldType: FieldType, text: String) -> Unit,
+        mapOfFields: Map<FieldType, FieldData>,
         modifier: Modifier,
     ) {
         Column(modifier) {
-            FieldType.values().forEachIndexed { i, value ->
+            FieldType.values().forEachIndexed { index, fieldType ->
                 TextFieldView(
-                    textFieldType = value,
-                    textField = when (value) {
-                        FieldType.LOGIN -> loginValue
-                        FieldType.EMAIL -> emailValue
-                        FieldType.PASSWORD -> passwordValue
-                        FieldType.CONFIRM_PASSWORD -> confirmPasswordValue
-                    },
-                    textError = null,
-                    hint = when (value) {
+                    textFieldType = fieldType,
+                    textValue = mapOfFields[fieldType]?.fieldText ?: "",
+                    hint = when (fieldType) {
                         FieldType.LOGIN -> stringResource(id = R.string.hint_name)
                         FieldType.EMAIL -> stringResource(id = R.string.hint_email)
                         FieldType.PASSWORD -> stringResource(id = R.string.hint_password)
                         FieldType.CONFIRM_PASSWORD -> stringResource(id = R.string.hint_confirm_password)
                     },
-                    leadingIcon = when (value) {
+                    leadingIcon = when (fieldType) {
                         FieldType.LOGIN -> painterResource(id = R.drawable.ic_user_octagon)
                         FieldType.EMAIL -> painterResource(id = R.drawable.ic_email)
                         else -> painterResource(id = R.drawable.ic_lock)
                     },
-                    imeAction = if (i == FieldType.values().size - 1) {
+                    imeAction = if (index == FieldType.values().size - 1) {
                         ImeAction.Done
                     } else {
                         ImeAction.Next
                     },
-                    onValueChange = { onValueChange(value, it) }
+                    onValueChange = { onValueChange(fieldType, it) }
                 )
 
-                if (value != FieldType.CONFIRM_PASSWORD) Spacer(modifier = Modifier.height(14.dp))
+
+                mapOfFields[fieldType]?.textError?.let {
+                    Text(
+                        text = it,
+                        modifier = Modifier.padding(start = 24.dp, top = 8.dp),
+                        style = JetAroundTheme.typography.informationText,
+                        color = JetAroundTheme.colors.errorColor
+                    )
+                }
+
+                if (fieldType != FieldType.CONFIRM_PASSWORD) Spacer(modifier = Modifier.height(14.dp))
             }
         }
     }

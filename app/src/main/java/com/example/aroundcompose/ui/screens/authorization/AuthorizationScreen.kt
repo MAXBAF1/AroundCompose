@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.FieldType
+import com.example.aroundcompose.ui.common.models.FieldData
 import com.example.aroundcompose.ui.common.views.TextFieldView
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationEvent
 import com.example.aroundcompose.ui.screens.authorization.views.LoginUsingBtn
@@ -77,10 +78,9 @@ class AuthorizationScreen(
                 Title(Modifier.padding(bottom = 40.dp))
 
                 TextFields(
-                    emailValue = viewState.emailValue,
-                    passwordValue = viewState.passwordValue,
+                    mapOfFields = viewState.mapOfFields,
                     onValueChange = { fieldType, value ->
-                        viewModel.obtainEvent(AuthorizationEvent.InputTextChange(fieldType, value))
+                        viewModel.obtainEvent(AuthorizationEvent.ChangeFieldText(fieldType, value))
                     },
                     modifier = Modifier.padding(bottom = 14.dp)
                 )
@@ -120,14 +120,13 @@ class AuthorizationScreen(
     @Composable
     private fun TextFields(
         onValueChange: (fieldType: FieldType, value: String) -> Unit,
-        emailValue: String,
-        passwordValue: String,
+        mapOfFields: Map<FieldType, FieldData>,
         modifier: Modifier,
     ) {
         Column(modifier = modifier) {
             TextFieldView(
                 textFieldType = FieldType.EMAIL,
-                textValue = emailValue,
+                textValue = mapOfFields[FieldType.EMAIL]?.fieldText ?: "",
                 hint = stringResource(id = R.string.hint_email),
                 leadingIcon = painterResource(id = R.drawable.ic_email),
                 onValueChange = { onValueChange(FieldType.EMAIL, it) },
@@ -136,7 +135,7 @@ class AuthorizationScreen(
 
             TextFieldView(
                 textFieldType = FieldType.PASSWORD,
-                textValue = passwordValue,
+                textValue = mapOfFields[FieldType.PASSWORD]?.fieldText ?: "",
                 hint = stringResource(id = R.string.hint_password),
                 leadingIcon = painterResource(id = R.drawable.ic_lock),
                 onValueChange = { onValueChange(FieldType.PASSWORD, it) },
