@@ -20,7 +20,8 @@ data class JetAroundColors(
     val blue: Color,
     val purple: Color,
     val yellow: Color,
-    val light_blue: Color,
+    val lightBlue: Color,
+    val errorColor: Color
 )
 
 data class JetAroundTypography(

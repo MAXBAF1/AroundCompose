@@ -7,17 +7,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.FieldType
+import com.example.aroundcompose.ui.common.models.FieldData
 import com.example.aroundcompose.ui.common.views.NavBackView
 import com.example.aroundcompose.ui.common.views.NextButtonView
 import com.example.aroundcompose.ui.common.views.TextFieldView
+import com.example.aroundcompose.ui.screens.registration.models.RegistrationEvent
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 class RegistrationScreen(
@@ -27,6 +31,8 @@ class RegistrationScreen(
 ) {
     @Composable
     fun Create() {
+        val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -36,41 +42,68 @@ class RegistrationScreen(
         ) {
             NavBackView(R.string.registration, onBackClicked)
 
-            Spacer(modifier = Modifier.height(28.dp))
-
-            TextFields()
-
-            Spacer(modifier = Modifier.height(40.dp))
+            TextFields(
+                loginValue = viewState.loginValue,
+                emailValue = viewState.emailValue,
+                passwordValue = viewState.passwordValue,
+                confirmPasswordValue = viewState.confirmPasswordValue,
+                onValueChange = { fieldType, value ->
+                    viewModel.obtainEvent(RegistrationEvent.ChangeFieldText(fieldType, value))
+                },
+                modifier = Modifier.padding(top = 28.dp)
+            )
 
             NextButtonView(
-                enabled = true, onClick = onNextClicked, modifier = Modifier.align(Alignment.End)
+                enabled = viewState.isEnabledNextBtn,
+                onClick = onNextClicked,
+                modifier = Modifier
+                    .padding(top = 40.dp)
+                    .align(Alignment.End)
             )
         }
     }
 
     @Composable
-    private fun TextFields() {
-        FieldType.values().forEachIndexed { i, value ->
-            TextFieldView(
-                textFieldType = value, textValue = "", hint = when (value) {
-                    FieldType.LOGIN -> stringResource(id = R.string.hint_name)
-                    FieldType.EMAIL -> stringResource(id = R.string.hint_email)
-                    FieldType.PASSWORD -> stringResource(id = R.string.hint_password)
-                    FieldType.CONFIRM_PASSWORD -> stringResource(id = R.string.hint_confirm_password)
-                }, leadingIcon = when (value) {
-                    FieldType.LOGIN -> painterResource(id = R.drawable.ic_user_octagon)
-                    FieldType.EMAIL -> painterResource(id = R.drawable.ic_email)
-                    else -> painterResource(id = R.drawable.ic_lock)
-                }, {
+    private fun TextFields(
+        onValueChange: (fieldType: FieldType, value: String) -> Unit,
+        loginValue: String,
+        emailValue: String,
+        passwordValue: String,
+        confirmPasswordValue: String,
+        modifier: Modifier,
+    ) {
+        Column(modifier) {
+            FieldType.values().forEachIndexed { i, value ->
+                TextFieldView(
+                    textFieldType = value,
+                    textField = when (value) {
+                        FieldType.LOGIN -> loginValue
+                        FieldType.EMAIL -> emailValue
+                        FieldType.PASSWORD -> passwordValue
+                        FieldType.CONFIRM_PASSWORD -> confirmPasswordValue
+                    },
+                    textError = null,
+                    hint = when (value) {
+                        FieldType.LOGIN -> stringResource(id = R.string.hint_name)
+                        FieldType.EMAIL -> stringResource(id = R.string.hint_email)
+                        FieldType.PASSWORD -> stringResource(id = R.string.hint_password)
+                        FieldType.CONFIRM_PASSWORD -> stringResource(id = R.string.hint_confirm_password)
+                    },
+                    leadingIcon = when (value) {
+                        FieldType.LOGIN -> painterResource(id = R.drawable.ic_user_octagon)
+                        FieldType.EMAIL -> painterResource(id = R.drawable.ic_email)
+                        else -> painterResource(id = R.drawable.ic_lock)
+                    },
+                    imeAction = if (i == FieldType.values().size - 1) {
+                        ImeAction.Done
+                    } else {
+                        ImeAction.Next
+                    },
+                    onValueChange = { onValueChange(value, it) }
+                )
 
-                }, imeAction = if (i == FieldType.values().size - 1) {
-                    ImeAction.Done
-                } else {
-                    ImeAction.Next
-                }
-            )
-
-            if (value != FieldType.CONFIRM_PASSWORD) Spacer(modifier = Modifier.height(14.dp))
+                if (value != FieldType.CONFIRM_PASSWORD) Spacer(modifier = Modifier.height(14.dp))
+            }
         }
     }
 }

@@ -40,7 +40,8 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 @Composable
 fun TextFieldView(
     textFieldType: FieldType,
-    textValue: String,
+    textField: String,
+    textError: String?,
     hint: String,
     leadingIcon: Painter,
     onValueChange: (value: String) -> Unit,
@@ -58,7 +59,8 @@ fun TextFieldView(
     } else PasswordVisualTransformation()
 
     Box {
-        BasicTextField(value = textValue,
+        BasicTextField(
+            value = textField,
             onValueChange = onValueChange,
             singleLine = true,
             modifier = modifier
@@ -82,28 +84,36 @@ fun TextFieldView(
             decorationBox = { innerTextField ->
                 DecorationBox(
                     hint = hint,
-                    isEmpty = textValue.isEmpty(),
+                    isEmpty = textField.isEmpty(),
                     isFocused = isFocused,
+                    textError = textError,
                     passwordVisible = passwordVisible,
                     leadingIcon = leadingIcon,
                     innerTextField = innerTextField
                 )
             })
 
-        if (textValue.isNotEmpty()) {
-            Text(
-                text = hint,
-                color = if (isFocused) {
-                    JetAroundTheme.colors.onFocusedColor
-                } else JetAroundTheme.colors.textColor,
-                style = JetAroundTheme.typography.informationText,
-                modifier = Modifier
-                    .padding(start = 20.dp)
-                    .background(JetAroundTheme.colors.primaryBackground)
-                    .padding(horizontal = 4.dp)
-            )
+        if (textField.isNotEmpty()) {
+            InformationText(hint, isFocused, textError)
         }
     }
+}
+
+@Composable
+private fun InformationText(hint: String, isFocused: Boolean, textError: String?) {
+    Text(
+        text = hint,
+        color = if (textError == null) {
+            if (isFocused) {
+                JetAroundTheme.colors.onFocusedColor
+            } else JetAroundTheme.colors.textColor
+        } else JetAroundTheme.colors.errorColor,
+        style = JetAroundTheme.typography.informationText,
+        modifier = Modifier
+            .padding(start = 20.dp)
+            .background(JetAroundTheme.colors.primaryBackground)
+            .padding(horizontal = 4.dp)
+    )
 }
 
 @Composable
@@ -111,6 +121,7 @@ private fun DecorationBox(
     hint: String,
     isEmpty: Boolean,
     isFocused: Boolean,
+    textError: String?,
     passwordVisible: MutableState<Boolean>?,
     leadingIcon: Painter,
     innerTextField: @Composable () -> Unit,
@@ -134,9 +145,14 @@ private fun DecorationBox(
                 shape = JetAroundTheme.shapes.textFieldShape
             )
             .border(
-                width = if (isFocused) 3.dp else 2.dp, color = if (isFocused) {
-                    JetAroundTheme.colors.onFocusedColor
-                } else tint, shape = JetAroundTheme.shapes.textFieldShape
+                width = if (isFocused) 3.dp else 2.dp,
+                color = when {
+                    textError != null -> JetAroundTheme.colors.errorColor
+                    isFocused -> JetAroundTheme.colors.onFocusedColor
+                    isEmpty -> JetAroundTheme.colors.notActiveColor
+                    else -> JetAroundTheme.colors.textColor
+                },
+                shape = JetAroundTheme.shapes.textFieldShape
             )
             .padding(
                 top = verticalPadding,

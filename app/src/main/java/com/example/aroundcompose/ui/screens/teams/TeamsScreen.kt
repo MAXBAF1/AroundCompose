@@ -98,7 +98,7 @@ class TeamsScreen(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 TeamView(
-                    containerColor = JetAroundTheme.colors.light_blue,
+                    containerColor = JetAroundTheme.colors.lightBlue,
                     isEnable = currentTeam == Teams.LIGHT_BLUE,
                     onClick = { onClick(Teams.LIGHT_BLUE) }
                 )
