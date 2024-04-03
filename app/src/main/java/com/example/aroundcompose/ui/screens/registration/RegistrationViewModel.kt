@@ -24,7 +24,7 @@ class RegistrationViewModel @Inject constructor() :
     override fun obtainEvent(viewEvent: RegistrationEvent) {
         when (viewEvent) {
             is RegistrationEvent.ChangeFieldText -> {
-                mapOfFields[viewEvent.type]?.fieldText = viewEvent.text
+                mapOfFields[viewEvent.type] = FieldData(fieldText = viewEvent.text, textError = "Здесь вызвать метод валидации")
                 
                 viewState.update {
                     it.copy(

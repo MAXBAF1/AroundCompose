@@ -28,7 +28,7 @@ class AuthorizationViewModel @Inject constructor() :
     }
 
     private fun changeFieldText(type: FieldType, text: String) {
-        mapOfFields[type]?.fieldText = text
+        mapOfFields[type] = FieldData(fieldText = text, textError = "Здесь вызвать метод валидации")
 
         viewState.update {
             it.copy(
