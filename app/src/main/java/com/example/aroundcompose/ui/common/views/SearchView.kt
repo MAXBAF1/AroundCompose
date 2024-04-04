@@ -1,13 +1,14 @@
 package com.example.aroundcompose.ui.common.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -20,20 +21,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.example.aroundcompose.utils.clearFocusOnKeyboardDismiss
 
 @Composable
-fun SearchView(modifier: Modifier, restoredValue: String, onValueChange: (String) -> Unit) {
+fun SearchView(
+    modifier: Modifier = Modifier,
+    restoredValue: String,
+    onClick: (() -> Unit)? = null,
+    onValueChange: (String) -> Unit,
+) {
     var value by remember { mutableStateOf(restoredValue) }
     LaunchedEffect(key1 = restoredValue) { value = restoredValue }
+    val enabled = onClick == null
 
     Card(
         modifier = modifier,
@@ -44,16 +48,25 @@ fun SearchView(modifier: Modifier, restoredValue: String, onValueChange: (String
             modifier = Modifier.clearFocusOnKeyboardDismiss(),
             value = value,
             onValueChange = {
-                value = it
-                onValueChange(it)
+                if (enabled) {
+                    value = it
+                    onValueChange(it)
+                }
             },
+            enabled = enabled,
             singleLine = true,
-            textStyle = JetAroundTheme.typography.search.copy(color = JetAroundTheme.colors.textColor),
+            textStyle = JetAroundTheme.typography.medium.copy(color = JetAroundTheme.colors.textColor),
         ) { innerTextField ->
             DecorationBox(
                 textValue = value,
+                modifier = if (enabled) Modifier else Modifier.clickable(
+                    onClick = onClick!!,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = JetAroundTheme.colors.textColor)
+                ),
+                enabled = enabled,
                 trailingIconId = R.drawable.ic_search,
-                innerTextField = innerTextField
+                innerTextField = innerTextField,
             )
         }
     }
@@ -63,11 +76,13 @@ fun SearchView(modifier: Modifier, restoredValue: String, onValueChange: (String
 @Composable
 private fun DecorationBox(
     textValue: String,
-    trailingIconId: Int?,
+    modifier: Modifier,
+    enabled: Boolean = true,
+    trailingIconId: Int? = null,
     innerTextField: @Composable () -> Unit,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .background(color = JetAroundTheme.colors.primaryBackground)
             .padding(vertical = 10.dp, horizontal = 15.dp), // Inner padding
         verticalAlignment = Alignment.CenterVertically
@@ -80,11 +95,11 @@ private fun DecorationBox(
             if (textValue.isEmpty()) {
                 Text(
                     text = stringResource(id = R.string.search_hint),
-                    style = JetAroundTheme.typography.search,
+                    style = JetAroundTheme.typography.medium,
                     color = JetAroundTheme.colors.searchHint
                 )
             }
-            innerTextField()
+            if (enabled) innerTextField()
         }
 
         if (trailingIconId == null) return

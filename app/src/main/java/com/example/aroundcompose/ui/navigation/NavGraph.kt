@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.aroundcompose.screens.ProfileScreen
 import com.example.aroundcompose.screens.SkillsScreen
+import com.example.aroundcompose.ui.screens.map.MapManager
 import com.example.aroundcompose.ui.screens.map.MapScreen
 import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.splash.SplashScreen
@@ -31,7 +32,7 @@ fun NavGraph(navController: NavHostController, innerPaddings: PaddingValues) {
                 navController.navigate(Screen.MAP_ROUTE)
             })
         }
-        composable(Screen.MAP_ROUTE) { MapScreen(mapViewModel).Create() }
+        composable(Screen.MAP_ROUTE) { MapManager(mapViewModel).Create() }
         composable(Screen.SKILLS_ROUTE) { SkillsScreen() }
         composable(Screen.PROFILE_ROUTE) { ProfileScreen() }
     }

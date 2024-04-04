@@ -4,25 +4,30 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 
 data class JetAroundColors(
     val primaryBackground: Color,
-    val mapSearchInactive: Color,
+    val lightTint: Color,
     val mapBtnBg: Color,
     val mapElements: Color,
     val searchHint: Color,
     val textColor: Color,
+    val primary: Color,
+    val eventCardText: Color
 )
 
 data class JetAroundTypography(
     val appName: TextStyle,
     val heading: TextStyle,
     val coin: TextStyle,
-    val search: TextStyle,
+    val medium: TextStyle,
     val scaleBar: TextStyle,
+    val title: TextStyle,
+    val eventCardTitle: TextStyle,
+    val eventCardPlaceAndBtn: TextStyle,
+    val eventCardKm: TextStyle
 )
 
 data class JetAroundShape(
@@ -32,6 +37,11 @@ data class JetAroundShape(
 
 data class JetAroundShadow(
     val mapElementsShadow: Dp,
+)
+
+data class JetAroundMargin(
+    val mainMargin: Dp,
+    val mapScreenMargin: Dp,
 )
 
 object JetAroundTheme {
@@ -46,15 +56,15 @@ object JetAroundTheme {
 
     internal val shadows: JetAroundShadow
         @Composable get() = LocalJetAroundShadow.current
+
+    internal val margins: JetAroundMargin
+        @Composable get() = LocalJetAroundMargin.current
 }
 
 enum class JetAroundStyle {
     Base
 }
 
-enum class JetAroundCorners {
-    Flat, Rounded
-}
 
 internal val LocalJetAroundColors = staticCompositionLocalOf<JetAroundColors> {
     error("No colors provided")
@@ -69,5 +79,9 @@ internal val LocalJetAroundShape = staticCompositionLocalOf<JetAroundShape> {
 }
 
 internal val LocalJetAroundShadow = staticCompositionLocalOf<JetAroundShadow> {
-    error("No shapes provided")
+    error("No shadows provided")
+}
+
+internal val LocalJetAroundMargin = staticCompositionLocalOf<JetAroundMargin> {
+    error("No margins provided")
 }
