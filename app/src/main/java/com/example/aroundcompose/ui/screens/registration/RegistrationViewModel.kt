@@ -24,14 +24,17 @@ class RegistrationViewModel @Inject constructor() :
     override fun obtainEvent(viewEvent: RegistrationEvent) {
         when (viewEvent) {
             is RegistrationEvent.ChangeFieldText -> {
-                mapOfFields[viewEvent.type] = FieldData(fieldText = viewEvent.text, textError = "Здесь вызвать метод валидации")
-                
+                mapOfFields[viewEvent.type] = FieldData(
+                    fieldText = viewEvent.text,
+                    textError = "Здесь вызвать метод валидации"
+                )
+
                 viewState.update {
                     it.copy(
                         mapOfFields = mapOfFields.toMap(),
                         isEnabledNextBtn = mapOfFields.values.all { fieldData ->
                             fieldData.fieldText.isNotEmpty() &&
-                            fieldData.textError == null
+                                    fieldData.textError == null
                         }
                     )
                 }

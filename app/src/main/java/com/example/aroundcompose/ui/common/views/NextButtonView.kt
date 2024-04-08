@@ -16,8 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.toUpperCase
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.theme.JetAroundTheme
@@ -26,7 +24,7 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 fun NextButtonView(enabled: Boolean, onClick: () -> Unit, modifier: Modifier) {
     Button(
         onClick = onClick,
-        enabled = enabled,
+        enabled = false,
         contentPadding = PaddingValues(vertical = 6.dp, horizontal = 16.dp),
         shape = JetAroundTheme.shapes.textFieldShape,
         elevation = ButtonDefaults.buttonElevation(JetAroundTheme.shadows.loginUsingShadow),
@@ -53,7 +51,8 @@ fun NextButtonView(enabled: Boolean, onClick: () -> Unit, modifier: Modifier) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = "nextIcon",
-                modifier = Modifier.size(24.dp))
+                modifier = Modifier.size(24.dp)
+            )
         }
     }
 }
