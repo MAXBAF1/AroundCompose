@@ -2,8 +2,6 @@ package com.example.aroundcompose.ui.screens.map
 
 import android.animation.Animator
 import android.graphics.Color
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +16,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -41,6 +38,8 @@ import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.fillLayer
 import com.mapbox.maps.plugin.animation.easeTo
+import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
+import com.mapbox.maps.plugin.locationcomponent.location
 
 class MapScreen(
     private val onMapInit: (MapView) -> Unit,
@@ -123,7 +122,6 @@ class MapScreen(
 
         if (isEventSheetShowed) EventBottomSheet { isEventSheetShowed = false }
     }
-
 
     fun updateZoomLevel(mapView: MapView?, zoomLevel: Double) {
         mapView?.getMapboxMap()?.easeTo(

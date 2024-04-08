@@ -21,7 +21,7 @@ data class JetAroundColors(
     val purple: Color,
     val yellow: Color,
     val lightBlue: Color,
-    val errorColor: Color
+    val errorColor: Color,
     val primary: Color,
     val eventCardText: Color
 )
@@ -35,7 +35,7 @@ data class JetAroundTypography(
     val textField: TextStyle,
     val textBtn: TextStyle,
     val textRegistration: TextStyle,
-    val informationText: TextSt
+    val informationText: TextStyle,
     val medium: TextStyle,
     val scaleBar: TextStyle,
     val title: TextStyle,

@@ -16,7 +16,7 @@ internal val baseLightPalette = JetAroundColors(
     purple = Color(0xFFB26BE9),
     yellow = Color(0xFFFEB700),
     lightBlue = Color(0xFF88DDFF),
-    errorColor = Color(0xFFF54953)
+    errorColor = Color(0xFFF54953),
     primary = Color(0xFF555EF6),
     eventCardText = Color(0xFF828282),
 )
@@ -35,7 +35,7 @@ internal val baseDarkPalette = JetAroundColors(
     purple = Color(0xFFB26BE9),
     yellow = Color(0xFFFEB700),
     lightBlue = Color(0xFF88DDFF),
-    errorColor = Color(0xFFF54953)
+    errorColor = Color(0xFFF54953),
     primary = Color(0xFF555EF6),
     eventCardText = Color(0xFF828282),
 )

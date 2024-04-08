@@ -37,9 +37,12 @@ internal class MainActivity : ComponentActivity() {
                         currentRoute != Screen.SPLASH_ROUTE &&
                         currentRoute != Screen.AUTHORIZATION_ROUTE &&
                         currentRoute != Screen.REGISTRATION_ROUTE &&
-                        currentRoute != Screen.TEAMS_ROUTE
-                    ) {
-                        BottomNavigation(navController = navController, currentRoute = currentRoute)
+                        currentRoute != Screen.TEAMS_ROUTE) {
+                        BottomNavigation(
+                            navController = navController,
+                            listItems = Screen.getBottomItems(),
+                            currentRoute = currentRoute
+                        )
                     }
                 }) { innerPaddings ->
                     NavGraph(navController = navController, innerPaddings = innerPaddings)
