@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.Dp
 
 data class JetAroundColors(
     val primaryBackground: Color,
-    val mapSearchInactive: Color,
+    val lightTint: Color,
     val mapBtnBg: Color,
     val mapElements: Color,
     val searchHint: Color,
@@ -22,6 +22,8 @@ data class JetAroundColors(
     val yellow: Color,
     val lightBlue: Color,
     val errorColor: Color
+    val primary: Color,
+    val eventCardText: Color
 )
 
 data class JetAroundTypography(
@@ -33,8 +35,13 @@ data class JetAroundTypography(
     val textField: TextStyle,
     val textBtn: TextStyle,
     val textRegistration: TextStyle,
-    val informationText: TextStyle,
+    val informationText: TextSt
+    val medium: TextStyle,
     val scaleBar: TextStyle,
+    val title: TextStyle,
+    val eventCardTitle: TextStyle,
+    val eventCardPlaceAndBtn: TextStyle,
+    val eventCardKm: TextStyle
 )
 
 data class JetAroundShape(
@@ -49,6 +56,11 @@ data class JetAroundShadow(
     val loginUsingShadow: Dp
 )
 
+data class JetAroundMargin(
+    val mainMargin: Dp,
+    val mapScreenMargin: Dp,
+)
+
 object JetAroundTheme {
     internal val colors: JetAroundColors
         @Composable get() = LocalJetAroundColors.current
@@ -61,15 +73,15 @@ object JetAroundTheme {
 
     internal val shadows: JetAroundShadow
         @Composable get() = LocalJetAroundShadow.current
+
+    internal val margins: JetAroundMargin
+        @Composable get() = LocalJetAroundMargin.current
 }
 
 enum class JetAroundStyle {
     Base
 }
 
-enum class JetAroundCorners {
-    Flat, Rounded
-}
 
 internal val LocalJetAroundColors = staticCompositionLocalOf<JetAroundColors> {
     error("No colors provided")
@@ -84,5 +96,9 @@ internal val LocalJetAroundShape = staticCompositionLocalOf<JetAroundShape> {
 }
 
 internal val LocalJetAroundShadow = staticCompositionLocalOf<JetAroundShadow> {
-    error("No shapes provided")
+    error("No shadows provided")
+}
+
+internal val LocalJetAroundMargin = staticCompositionLocalOf<JetAroundMargin> {
+    error("No margins provided")
 }

@@ -4,9 +4,9 @@ import com.mapbox.maps.CameraState
 
 sealed class MapEvent {
     object Init : MapEvent()
-    object StartService : MapEvent()
+    object SetupService : MapEvent()
     data class EditSearchText(val text: String) : MapEvent()
-    object ZoomLevelPlus : MapEvent()
-    object ZoomLevelMinus : MapEvent()
+    object PlusZoomLevel : MapEvent()
+    object MinusZoomLevel : MapEvent()
     data class UpdateCameraPosition(val cameraState: CameraState) : MapEvent()
 }

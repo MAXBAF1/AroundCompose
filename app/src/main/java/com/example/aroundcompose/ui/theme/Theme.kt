@@ -9,7 +9,6 @@ import androidx.compose.ui.unit.dp
 @Composable
 internal fun AroundComposeTheme(
     style: JetAroundStyle = JetAroundStyle.Base,
-    corners: JetAroundCorners = JetAroundCorners.Rounded,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -32,6 +31,7 @@ internal fun AroundComposeTheme(
         LocalJetAroundTypography provides typography,
         LocalJetAroundShape provides shape,
         LocalJetAroundShadow provides shadow,
+        LocalJetAroundMargin provides margin,
         content = content
     )
 }

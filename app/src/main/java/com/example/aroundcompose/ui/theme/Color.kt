@@ -6,7 +6,7 @@ internal val baseLightPalette = JetAroundColors(
     primaryBackground = Color(0xFFFFFFFF),
     mapElements = Color(0xFF5C5C5C),
     mapBtnBg = Color(1f, 1f, 1f, 1f),
-    mapSearchInactive = Color(0xFFBDBDBD),
+    lightTint = Color(0xFFBDBDBD),
     searchHint = Color(0xFF929292),
     textFieldHint = Color(0xFFB4B4B4),
     onFocusedColor = Color(0xFF555EF6),
@@ -17,13 +17,15 @@ internal val baseLightPalette = JetAroundColors(
     yellow = Color(0xFFFEB700),
     lightBlue = Color(0xFF88DDFF),
     errorColor = Color(0xFFF54953)
+    primary = Color(0xFF555EF6),
+    eventCardText = Color(0xFF828282),
 )
 
 internal val baseDarkPalette = JetAroundColors(
     primaryBackground = Color(0xFFFFFFFF),
-    mapElements = Color(0xFF5C5C5C),
+    lightTint = Color(0xFFBDBDBD),
     mapBtnBg = Color(1f, 1f, 1f, 1f),
-    mapSearchInactive = Color(0xFFBDBDBD),
+    mapElements = Color(0xFF5C5C5C),
     searchHint = Color(0xFF929292),
     textFieldHint = Color(0xFFB4B4B4),
     onFocusedColor = Color(0xFF555EF6),
@@ -34,4 +36,6 @@ internal val baseDarkPalette = JetAroundColors(
     yellow = Color(0xFFFEB700),
     lightBlue = Color(0xFF88DDFF),
     errorColor = Color(0xFFF54953)
+    primary = Color(0xFF555EF6),
+    eventCardText = Color(0xFF828282),
 )

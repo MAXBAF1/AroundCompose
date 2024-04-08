@@ -7,12 +7,13 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 @Composable
-fun MapBtn(iconId: Int, onClick: () -> Unit) {
+fun MapBtn(iconId: Int, rotation: Float = 0F, onClick: () -> Unit,) {
     FloatingActionButton(
         onClick = onClick,
         modifier = Modifier.size(47.dp),
@@ -21,9 +22,11 @@ fun MapBtn(iconId: Int, onClick: () -> Unit) {
         elevation = FloatingActionButtonDefaults.elevation(JetAroundTheme.shadows.mapElementsShadow)
     ) {
         Icon(
+            modifier = Modifier.rotate(rotation),
             painter = painterResource(id = iconId),
             contentDescription = "icon",
             tint = JetAroundTheme.colors.mapElements
         )
+
     }
 }
