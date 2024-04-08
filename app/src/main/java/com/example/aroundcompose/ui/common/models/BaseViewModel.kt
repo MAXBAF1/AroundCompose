@@ -1,4 +1,4 @@
-package com.example.aroundcompose.models
+package com.example.aroundcompose.ui.common.models
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

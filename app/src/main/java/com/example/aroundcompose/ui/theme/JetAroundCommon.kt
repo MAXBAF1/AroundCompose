@@ -13,7 +13,15 @@ data class JetAroundColors(
     val mapBtnBg: Color,
     val mapElements: Color,
     val searchHint: Color,
+    val textFieldHint: Color,
+    val onFocusedColor: Color,
+    val notActiveColor: Color,
     val textColor: Color,
+    val blue: Color,
+    val purple: Color,
+    val yellow: Color,
+    val lightBlue: Color,
+    val errorColor: Color
     val primary: Color,
     val eventCardText: Color
 )
@@ -21,7 +29,13 @@ data class JetAroundColors(
 data class JetAroundTypography(
     val appName: TextStyle,
     val heading: TextStyle,
+    val headingLogin: TextStyle,
     val coin: TextStyle,
+    val search: TextStyle,
+    val textField: TextStyle,
+    val textBtn: TextStyle,
+    val textRegistration: TextStyle,
+    val informationText: TextSt
     val medium: TextStyle,
     val scaleBar: TextStyle,
     val title: TextStyle,
@@ -31,12 +45,15 @@ data class JetAroundTypography(
 )
 
 data class JetAroundShape(
+    val textFieldShape: RoundedCornerShape,
     val mapElementsShape: RoundedCornerShape,
+    val teamShape: RoundedCornerShape,
     val maxRoundedCornerShape: RoundedCornerShape
 )
 
 data class JetAroundShadow(
     val mapElementsShadow: Dp,
+    val loginUsingShadow: Dp
 )
 
 data class JetAroundMargin(

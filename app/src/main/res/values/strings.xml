@@ -6,6 +6,10 @@
     <string name="globeKey">mapbox://styles/mapbox/streets-v12</string>
     <string name="globe3dKey">mapbox://styles/bafi/clizk5qjc01bg01pf3q0zgp0y</string>
 
+    <!--Navigation-->
+    <string name="registration">регистрация</string>
+    <string name="next_btn">далее</string>
+
     <!--Bottom menu-->
     <string name="map">Карта</string>
     <string name="skills">Навыки</string>
@@ -17,6 +21,26 @@
 
     <!--Map screen-->
     <string name="search_hint">поиск</string>
+
+    <!--Authorization screen-->
+    <string name="heading">добрый день!</string>
+    <string name="label">введите свою почту и пароль, чтобы войти</string>
+    <string name="hint_email">Электронная почта</string>
+    <string name="hint_password">Пароль</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="login_btn">войти</string>
+    <string name="google_btn">Google</string>
+    <string name="vk_btn">ВКонтакте</string>
+    <string name="or">или</string>
+    <string name="is_have_not_account">Нет аккаунта?</string>
+    <string name="registration_click">Зарегистрируйтесь</string>
+
+    <!--Registration screen-->
+    <string name="hint_name">Имя</string>
+    <string name="hint_confirm_password">Подтверждение пароля</string>
+
+    <!--Teams screen-->
+    <string name="choose_team">выберите команду</string>
 
     <!--Event bottom sheet-->
     <string name="popular">Популярное</string>

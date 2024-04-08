@@ -41,9 +41,6 @@ import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.fillLayer
 import com.mapbox.maps.plugin.animation.easeTo
-import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
-import com.mapbox.maps.plugin.locationcomponent.location
-import kotlinx.coroutines.launch
 
 class MapScreen(
     private val onMapInit: (MapView) -> Unit,
@@ -126,6 +123,7 @@ class MapScreen(
 
         if (isEventSheetShowed) EventBottomSheet { isEventSheetShowed = false }
     }
+
 
     fun updateZoomLevel(mapView: MapView?, zoomLevel: Double) {
         mapView?.getMapboxMap()?.easeTo(

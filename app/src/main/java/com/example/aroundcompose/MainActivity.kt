@@ -19,6 +19,13 @@ internal class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        /* Transparent InfoBar */
+//        enableEdgeToEdge(
+//            statusBarStyle = SystemBarStyle.dark(
+//                android.graphics.Color.TRANSPARENT
+//            )
+//        )
+
         setContent {
             val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -26,12 +33,13 @@ internal class MainActivity : ComponentActivity() {
 
             AroundComposeTheme {
                 Scaffold(bottomBar = {
-                    if (currentRoute != null && currentRoute != Screen.SPLASH_ROUTE) {
-                        BottomNavigation(
-                            navController = navController,
-                            listItems = Screen.getBottomItems(),
-                            currentRoute = currentRoute
-                        )
+                    if (currentRoute != null &&
+                        currentRoute != Screen.SPLASH_ROUTE &&
+                        currentRoute != Screen.AUTHORIZATION_ROUTE &&
+                        currentRoute != Screen.REGISTRATION_ROUTE &&
+                        currentRoute != Screen.TEAMS_ROUTE
+                    ) {
+                        BottomNavigation(navController = navController, currentRoute = currentRoute)
                     }
                 }) { innerPaddings ->
                     NavGraph(navController = navController, innerPaddings = innerPaddings)
