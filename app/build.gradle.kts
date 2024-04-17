@@ -52,6 +52,9 @@ android {
 }
 
 dependencies {
+    // Shapes
+    implementation("androidx.graphics:graphics-shapes:1.0.0-alpha05")
+
     // H3
     implementation("com.uber:h3:4.1.1")
 

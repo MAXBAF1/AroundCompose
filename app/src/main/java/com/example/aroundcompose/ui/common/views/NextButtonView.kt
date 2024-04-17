@@ -24,7 +24,7 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 fun NextButtonView(enabled: Boolean, onClick: () -> Unit, modifier: Modifier) {
     Button(
         onClick = onClick,
-        enabled = false,
+        enabled = enabled,
         contentPadding = PaddingValues(vertical = 6.dp, horizontal = 16.dp),
         shape = JetAroundTheme.shapes.textFieldShape,
         elevation = ButtonDefaults.buttonElevation(JetAroundTheme.shadows.loginUsingShadow),

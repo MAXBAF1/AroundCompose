@@ -45,7 +45,7 @@ internal class MainActivity : ComponentActivity() {
                         )
                     }
                 }) { innerPaddings ->
-                    NavGraph(navController = navController, innerPaddings = innerPaddings)
+                    NavGraph(navController = navController, innerPaddings = innerPaddings).Create()
                 }
             }
         }

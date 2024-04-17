@@ -26,15 +26,14 @@ class RegistrationViewModel @Inject constructor() :
             is RegistrationEvent.ChangeFieldText -> {
                 mapOfFields[viewEvent.type] = FieldData(
                     fieldText = viewEvent.text,
-                    textError = "Здесь вызвать метод валидации"
+                    textError = null//"Здесь вызвать метод валидации"
                 )
 
                 viewState.update {
                     it.copy(
                         mapOfFields = mapOfFields.toMap(),
                         isEnabledNextBtn = mapOfFields.values.all { fieldData ->
-                            fieldData.fieldText.isNotEmpty() &&
-                                    fieldData.textError == null
+                            fieldData.fieldText.isNotEmpty() //&& fieldData.textError == null
                         }
                     )
                 }

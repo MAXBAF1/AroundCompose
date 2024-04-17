@@ -14,6 +14,7 @@
     <string name="map">Карта</string>
     <string name="skills">Навыки</string>
     <string name="profile">Профиль</string>
+    <string name="menu">Меню</string>
 
     <!--PermissionsScreen-->
     <string name="allow_access_to_location">Разреши доступ к геопозиции</string>
@@ -47,5 +48,12 @@
     <string name="closest">Ближе всего к вам</string>
     <string name="all">Все</string>
     <string name="km">Км</string>
-    <string name="read">Читать...</string>
+    <string name="read">Читать…</string>
+
+    <!--Menu screen-->
+    <string name="account">аккаунт</string>
+    <string name="moneys">монеты</string>
+    <string name="events">события</string>
+    <string name="statistic">статистика</string>
+    <string name="friends">друзья</string>
 </resources>
