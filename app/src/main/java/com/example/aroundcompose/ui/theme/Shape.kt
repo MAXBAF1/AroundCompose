@@ -10,8 +10,5 @@ val shape = JetAroundShape(
     textFieldShape = RoundedCornerShape(14.dp),
     mapElementsShape = RoundedCornerShape(12.dp),
     teamShape = RoundedCornerShape(21.dp),
-    maxRoundedCornerShape = RoundedCornerShape(100),
-    hexagonShape = RoundedPolygonShape(
-        RoundedPolygon(numVertices = 6, rounding = CornerRounding(radius = 0.14F))
-    )
+    maxRoundedCornerShape = RoundedCornerShape(100)
 )

@@ -20,9 +20,11 @@ data class JetAroundColors(
     val textColor: Color,
     val textColorInverse: Color,
     val blue: Color,
+    val gray: Color,
     val purple: Color,
     val yellow: Color,
     val lightBlue: Color,
+    val orange: Color,
     val errorColor: Color,
     val primary: Color,
     val eventCardText: Color
@@ -52,7 +54,6 @@ data class JetAroundShape(
     val mapElementsShape: RoundedCornerShape,
     val teamShape: RoundedCornerShape,
     val maxRoundedCornerShape: RoundedCornerShape,
-    val hexagonShape: Shape
 )
 
 data class JetAroundShadow(

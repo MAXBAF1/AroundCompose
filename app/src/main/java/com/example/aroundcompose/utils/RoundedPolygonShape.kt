@@ -9,9 +9,12 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.toPath
+import kotlin.math.cos
 import kotlin.math.max
+import kotlin.math.sin
 
 class RoundedPolygonShape(
     private val polygon: RoundedPolygon,
@@ -38,3 +41,21 @@ class RoundedPolygonShape(
 }
 
 fun RoundedPolygon.getBounds() = calculateBounds().let { Rect(it[0], it[1], it[2], it[3]) }
+
+fun createPolygonPath(cx: Float, cy: Float, sides: Int, radius: Float): Path {
+    val angle = 2.0 * Math.PI / sides
+
+    return Path().apply {
+        moveTo(
+            cx + (radius * cos(0.0)).toFloat(),
+            cy + (radius * sin(0.0)).toFloat()
+        )
+        for (i in 1 until sides) {
+            lineTo(
+                cx + (radius * cos(angle * i)).toFloat(),
+                cy + (radius * sin(angle * i)).toFloat()
+            )
+        }
+        close()
+    }
+}

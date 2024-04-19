@@ -64,7 +64,12 @@ class NavGraph(
 
     @Composable
     private fun CreateMenuScreen() {
-        MenuScreen().Create()
+        MenuScreen(toSettingsScreen = {},
+            toAccountScreen = {},
+            toEventsScreen = {},
+            toMoneysScreen = {},
+            toStatisticScreen = {},
+            toFriendsScreen = {}).Create()
     }
 
     @Composable
