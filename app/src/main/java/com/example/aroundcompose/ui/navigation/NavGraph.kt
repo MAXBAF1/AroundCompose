@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.aroundcompose.screens.ProfileScreen
 import com.example.aroundcompose.screens.SkillsScreen
+import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
 import com.example.aroundcompose.ui.screens.map.MapManager
@@ -37,18 +38,14 @@ class NavGraph(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.MENU_ROUTE,
+            startDestination = Screen.SPLASH_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
             composable(Screen.AUTHORIZATION_ROUTE) {
                 CreateAuthorizationScreen(authorizationViewModel)
             }
-            composable(Screen.REGISTRATION_ROUTE) {
-                CreateRegistrationScreen(registrationViewModel)
-            }
-            composable(Screen.TEAMS_ROUTE) {
-                CreateTeamsScreen()
-            }
+            composable(Screen.REGISTRATION_ROUTE) { CreateRegistrationScreen(registrationViewModel) }
+            composable(Screen.TEAMS_ROUTE) { CreateTeamsScreen() }
             composable(Screen.SPLASH_ROUTE) {
                 SplashScreen(exit = { activity?.finish() }, onNextScreen = {
                     navController.popBackStack()
@@ -59,17 +56,24 @@ class NavGraph(
             composable(Screen.SKILLS_ROUTE) { SkillsScreen() }
             composable(Screen.PROFILE_ROUTE) { ProfileScreen() }
             composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
+            composable(Screen.ACCOUNT_ROUTE) { CreateAccountScreen() }
         }
     }
 
     @Composable
     private fun CreateMenuScreen() {
         MenuScreen(toSettingsScreen = {},
-            toAccountScreen = {},
+            toAccountScreen = { navController.navigate(Screen.ACCOUNT_ROUTE) },
             toEventsScreen = {},
             toMoneysScreen = {},
             toStatisticScreen = {},
             toFriendsScreen = {}).Create()
+    }
+
+    @Composable
+    private fun CreateAccountScreen() {
+        AccountScreen(onBackClick = { navController.popBackStack() },
+            toSettingsScreen = { }).Create()
     }
 
     @Composable

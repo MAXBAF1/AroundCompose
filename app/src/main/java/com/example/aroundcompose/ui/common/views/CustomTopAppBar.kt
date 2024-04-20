@@ -44,7 +44,7 @@ fun CustomTopAppBar(
 
                 Text(
                     text = stringResource(id = textId).uppercase(),
-                    style = JetAroundTheme.typography.heading,
+                    style = JetAroundTheme.typography.bigBold,
                     color = JetAroundTheme.colors.textColor,
                     modifier = Modifier.padding(start = 16.dp)
                 )

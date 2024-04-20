@@ -13,7 +13,7 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 @Composable
 fun BottomNavigation(navController: NavController, listItems: List<Screen>, currentRoute: String, ) {
     NavigationBar(
-        containerColor = JetAroundTheme.colors.primaryBackground
+        containerColor = Color.Transparent
     ) {
         listItems.forEach { item ->
             NavigationBarItem(

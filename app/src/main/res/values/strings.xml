@@ -56,4 +56,10 @@
     <string name="events">события</string>
     <string name="statistic">статистика</string>
     <string name="friends">друзья</string>
+
+    <!--Account screen-->
+    <string name="you_captured">вы захватили</string>
+    <string name="team_captured">захвачено командой</string>
+    <string name="cells">клетки</string>
+    <string name="exit_from_profile">выйти из профиля</string>
 </resources>

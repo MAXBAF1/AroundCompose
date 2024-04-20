@@ -33,16 +33,14 @@ internal class MainActivity : ComponentActivity() {
 
             AroundComposeTheme {
                 Scaffold(bottomBar = {
-                    if (currentRoute != null &&
-                        currentRoute != Screen.SPLASH_ROUTE &&
-                        currentRoute != Screen.AUTHORIZATION_ROUTE &&
-                        currentRoute != Screen.REGISTRATION_ROUTE &&
-                        currentRoute != Screen.TEAMS_ROUTE) {
-                        BottomNavigation(
-                            navController = navController,
-                            listItems = Screen.getBottomItems(),
-                            currentRoute = currentRoute
-                        )
+                    when (currentRoute) {
+                        Screen.MENU_ROUTE, Screen.MAP_ROUTE, Screen.SKILLS_ROUTE -> {
+                            BottomNavigation(
+                                navController = navController,
+                                listItems = Screen.getBottomItems(),
+                                currentRoute = currentRoute
+                            )
+                        }
                     }
                 }) { innerPaddings ->
                     NavGraph(navController = navController, innerPaddings = innerPaddings).Create()

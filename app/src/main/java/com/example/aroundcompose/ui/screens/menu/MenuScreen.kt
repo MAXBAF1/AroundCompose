@@ -1,5 +1,6 @@
 package com.example.aroundcompose.ui.screens.menu
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -40,76 +42,80 @@ class MenuScreen(
     private val toStatisticScreen: () -> Unit,
     private val toFriendsScreen: () -> Unit,
 ) {
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun Create() {
         val main = 370.dp
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            HexagonalButton(
-                onClick = toSettingsScreen,
-                icon = painterResource(id = R.drawable.ic_settings),
-                color = JetAroundTheme.colors.gray,
-                size = 70.dp,
-                modifier = Modifier.offset(x = 130.dp, y = 20.dp),
-                iconTint = JetAroundTheme.colors.textColor
-            )
+        Scaffold {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                HexagonalButton(
+                    onClick = toSettingsScreen,
+                    icon = painterResource(id = R.drawable.ic_settings),
+                    color = JetAroundTheme.colors.gray,
+                    size = 70.dp,
+                    modifier = Modifier.offset(x = 130.dp, y = 20.dp),
+                    iconTint = JetAroundTheme.colors.textColor
+                )
+            }
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                HexagonalButton(
+                    onClick = toAccountScreen,
+                    text = stringResource(id = R.string.account),
+                    icon = painterResource(id = R.drawable.ic_account),
+                    color = JetAroundTheme.colors.yellow,
+                    size = 160.dp,
+                    modifier = Modifier.offset(x = 0.dp, y = main - 267.dp),
+                    orientation = Orientation.Horizontal
+                )
+            }
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                HexagonalButton(
+                    onClick = toEventsScreen,
+                    text = stringResource(id = R.string.events),
+                    icon = painterResource(id = R.drawable.ic_events),
+                    color = JetAroundTheme.colors.purple,
+                    size = 180.dp,
+                    modifier = Modifier.offset(x = (-83).dp, y = main - 144.dp),
+                )
+            }
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                HexagonalButton(
+                    onClick = toMoneysScreen,
+                    text = stringResource(id = R.string.moneys),
+                    icon = painterResource(id = R.drawable.ic_menu_coin),
+                    color = JetAroundTheme.colors.orange,
+                    size = 180.dp,
+                    modifier = Modifier.offset(x = 83.dp, y = main - 144.dp),
+                )
+            }
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                HexagonalButton(
+                    onClick = toStatisticScreen,
+                    text = stringResource(id = R.string.statistic),
+                    icon = painterResource(id = R.drawable.ic_statistic),
+                    color = JetAroundTheme.colors.blue,
+                    size = 210.dp,
+                    modifier = Modifier.offset(x = 0.dp, y = main),
+                )
+            }
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                HexagonalButton(
+                    onClick = toFriendsScreen,
+                    text = stringResource(id = R.string.friends),
+                    icon = painterResource(id = R.drawable.ic_friends),
+                    color = JetAroundTheme.colors.lightBlue,
+                    size = 160.dp,
+                    modifier = Modifier.offset(x = 85.dp, y = main + 173.dp),
+                    orientation = Orientation.Horizontal
+                )
+            }
         }
 
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            HexagonalButton(
-                onClick = toAccountScreen,
-                text = stringResource(id = R.string.account),
-                icon = painterResource(id = R.drawable.ic_account),
-                color = JetAroundTheme.colors.yellow,
-                size = 160.dp,
-                modifier = Modifier.offset(x = 0.dp, y = main - 267.dp),
-                orientation = Orientation.Horizontal
-            )
-        }
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            HexagonalButton(
-                onClick = toEventsScreen,
-                text = stringResource(id = R.string.events),
-                icon = painterResource(id = R.drawable.ic_events),
-                color = JetAroundTheme.colors.purple,
-                size = 180.dp,
-                modifier = Modifier.offset(x = (-83).dp, y = main - 144.dp),
-            )
-        }
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            HexagonalButton(
-                onClick = toMoneysScreen,
-                text = stringResource(id = R.string.moneys),
-                icon = painterResource(id = R.drawable.ic_menu_coin),
-                color = JetAroundTheme.colors.orange,
-                size = 180.dp,
-                modifier = Modifier.offset(x = 83.dp, y = main - 144.dp),
-            )
-        }
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            HexagonalButton(
-                onClick = toStatisticScreen,
-                text = stringResource(id = R.string.statistic),
-                icon = painterResource(id = R.drawable.ic_statistic),
-                color = JetAroundTheme.colors.blue,
-                size = 210.dp,
-                modifier = Modifier.offset(x = 0.dp, y = main),
-            )
-        }
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            HexagonalButton(
-                onClick = toFriendsScreen,
-                text = stringResource(id = R.string.friends),
-                icon = painterResource(id = R.drawable.ic_friends),
-                color = JetAroundTheme.colors.lightBlue,
-                size = 160.dp,
-                modifier = Modifier.offset(x = 85.dp, y = main + 173.dp),
-                orientation = Orientation.Horizontal
-            )
-        }
     }
 
     @Composable
@@ -131,9 +137,11 @@ class MenuScreen(
             modifier = modifier
                 .clip(shape)
                 .size(size)
-                .clickable(interactionSource = remember { MutableInteractionSource() },
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(),
-                    onClick = onClick)
+                    onClick = onClick
+                )
                 .background(color)
         ) {
             if (orientation == Orientation.Vertical) {
@@ -150,7 +158,7 @@ class MenuScreen(
                     if (text != null) {
                         Text(
                             text = text,
-                            style = JetAroundTheme.typography.menuItem,
+                            style = JetAroundTheme.typography.bigMedium,
                             color = JetAroundTheme.colors.textColorInverse,
                         )
                     }
@@ -164,7 +172,7 @@ class MenuScreen(
                     if (text != null) {
                         Text(
                             text = text,
-                            style = JetAroundTheme.typography.menuItem,
+                            style = JetAroundTheme.typography.bigMedium,
                             color = JetAroundTheme.colors.textColorInverse,
                         )
                     }
