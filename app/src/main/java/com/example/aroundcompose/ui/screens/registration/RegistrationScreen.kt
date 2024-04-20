@@ -19,7 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.models.FieldData
-import com.example.aroundcompose.ui.common.views.NavBackView
+import com.example.aroundcompose.ui.common.views.CustomTopAppBar
 import com.example.aroundcompose.ui.common.views.NextButtonView
 import com.example.aroundcompose.ui.common.views.TextFieldView
 import com.example.aroundcompose.ui.screens.registration.models.RegistrationEvent
@@ -41,7 +41,7 @@ class RegistrationScreen(
                 .background(JetAroundTheme.colors.primaryBackground)
                 .padding(start = 30.dp, top = 30.dp, end = 30.dp)
         ) {
-            NavBackView(R.string.registration, onBackClicked)
+            CustomTopAppBar(R.string.registration, onBackClicked)
 
             TextFields(
                 mapOfFields = viewState.mapOfFields,
