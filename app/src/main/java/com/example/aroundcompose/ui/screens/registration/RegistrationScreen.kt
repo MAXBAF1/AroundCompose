@@ -72,6 +72,7 @@ class RegistrationScreen(
                 TextFieldView(
                     textFieldType = fieldType,
                     textValue = mapOfFields[fieldType]?.fieldText ?: "",
+                    textErrorId = mapOfFields[fieldType]?.textErrorId,
                     hint = when (fieldType) {
                         FieldType.LOGIN -> stringResource(id = R.string.hint_name)
                         FieldType.EMAIL -> stringResource(id = R.string.hint_email)
@@ -92,10 +93,10 @@ class RegistrationScreen(
                 )
 
 
-                mapOfFields[fieldType]?.textError?.let {
+                mapOfFields[fieldType]?.textErrorId?.let {
                     Text(
-                        text = it,
-                        modifier = Modifier.padding(start = 24.dp, top = 8.dp),
+                        text = stringResource(id = it),
+                        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp),
                         style = JetAroundTheme.typography.informationText,
                         color = JetAroundTheme.colors.errorColor
                     )

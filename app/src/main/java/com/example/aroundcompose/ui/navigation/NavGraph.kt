@@ -1,6 +1,7 @@
 package com.example.aroundcompose.ui.navigation
 
 import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -38,7 +39,7 @@ class NavGraph(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.SPLASH_ROUTE,
+            startDestination = Screen.AUTHORIZATION_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
             composable(Screen.AUTHORIZATION_ROUTE) {

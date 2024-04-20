@@ -41,10 +41,11 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 fun TextFieldView(
     textFieldType: FieldType,
     textValue: String,
+    modifier: Modifier = Modifier,
+    textErrorId: Int? = null,
     hint: String,
     leadingIcon: Painter,
     onValueChange: (value: String) -> Unit,
-    modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Next,
 ) {
     var isFocused by remember { mutableStateOf(false) }
@@ -84,6 +85,7 @@ fun TextFieldView(
                     hint = hint,
                     isEmpty = textValue.isEmpty(),
                     isFocused = isFocused,
+                    isError = textErrorId != null,
                     passwordVisible = passwordVisible,
                     leadingIcon = leadingIcon,
                     innerTextField = innerTextField
@@ -91,18 +93,20 @@ fun TextFieldView(
             })
 
         if (textValue.isNotEmpty()) {
-            InformationText(hint, isFocused)
+            InformationText(hint, isFocused, textErrorId != null)
         }
     }
 }
 
 @Composable
-private fun InformationText(hint: String, isFocused: Boolean) {
+private fun InformationText(hint: String, isFocused: Boolean, isError: Boolean) {
     Text(
         text = hint,
-        color = if (isFocused) {
-            JetAroundTheme.colors.onFocusedColor
-        } else JetAroundTheme.colors.textColor,
+        color = when {
+            isError -> JetAroundTheme.colors.errorColor
+            isFocused -> JetAroundTheme.colors.onFocusedColor
+            else -> JetAroundTheme.colors.textColor
+        },
         style = JetAroundTheme.typography.informationText,
         modifier = Modifier
             .padding(start = 20.dp)
@@ -116,6 +120,7 @@ private fun DecorationBox(
     hint: String,
     isEmpty: Boolean,
     isFocused: Boolean,
+    isError: Boolean,
     passwordVisible: MutableState<Boolean>?,
     leadingIcon: Painter,
     innerTextField: @Composable () -> Unit,
@@ -139,9 +144,13 @@ private fun DecorationBox(
                 shape = JetAroundTheme.shapes.textFieldShape
             )
             .border(
-                width = if (isFocused) 3.dp else 2.dp, color = if (isFocused) {
-                    JetAroundTheme.colors.onFocusedColor
-                } else tint, shape = JetAroundTheme.shapes.textFieldShape
+                width = if (isFocused) 3.dp else 2.dp,
+                color = when {
+                    isError -> JetAroundTheme.colors.errorColor
+                    isFocused -> JetAroundTheme.colors.onFocusedColor
+                    else -> tint
+                },
+                shape = JetAroundTheme.shapes.textFieldShape
             )
             .padding(
                 top = verticalPadding,

@@ -39,6 +39,13 @@
     <!--Registration screen-->
     <string name="hint_name">Имя</string>
     <string name="hint_confirm_password">Подтверждение пароля</string>
+    <string name="login_error_length">Длина логина от 4 до 15 символов*</string>
+    <string name="login_error_ABC_digit">Логин должен содержать только латинские буквы и цифры*</string>
+    <string name="email_error_domain">Некорректный домен почты*</string>
+    <string name="email_error_exists">Почта уже существует!</string>
+    <string name="password_error_length">Минимальная длина пароля - 8 символов*</string>
+    <string name="password_error_ABC_digit_special">Пароль должен содержать латинские строчные и заглавные буквы, цифры и специальные символы*</string>
+    <string name="password_confirm_error_equals">Пароли не совпадают*</string>
 
     <!--Teams screen-->
     <string name="choose_team">выберите команду</string>
