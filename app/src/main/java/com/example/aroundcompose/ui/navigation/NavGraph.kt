@@ -1,7 +1,6 @@
 package com.example.aroundcompose.ui.navigation
 
 import android.app.Activity
-import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -12,7 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.aroundcompose.screens.ProfileScreen
-import com.example.aroundcompose.screens.SkillsScreen
+import com.example.aroundcompose.ui.screens.skills.SkillsScreen
 import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel

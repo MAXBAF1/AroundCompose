@@ -1,4 +1,4 @@
-package com.example.aroundcompose.screens
+package com.example.aroundcompose.ui.screens.skills
 
 import androidx.compose.runtime.Composable
 

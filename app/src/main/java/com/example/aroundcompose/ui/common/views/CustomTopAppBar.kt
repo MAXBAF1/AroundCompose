@@ -1,5 +1,6 @@
 package com.example.aroundcompose.ui.common.views
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,8 @@ fun CustomTopAppBar(
     textId: Int,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isBackButtonNeeded: Boolean = true,
+    showMoney: Boolean = false,
     trailingIconId: Int? = null,
     onTrailingBtnClick: () -> Unit = {},
 ) {
@@ -35,18 +38,21 @@ fun CustomTopAppBar(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onBackClick) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_arrow_left),
-                        contentDescription = "back icon"
-                    )
+                if (isBackButtonNeeded) {
+                    IconButton(
+                        onClick = onBackClick,
+                        modifier = Modifier.padding(end = 16.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_left),
+                            contentDescription = "back icon"
+                        )
+                    }
                 }
-
                 Text(
                     text = stringResource(id = textId).uppercase(),
                     style = JetAroundTheme.typography.bigBold,
-                    color = JetAroundTheme.colors.textColor,
-                    modifier = Modifier.padding(start = 16.dp)
+                    color = JetAroundTheme.colors.textColor
                 )
             }
             if (trailingIconId != null) {
@@ -56,6 +62,9 @@ fun CustomTopAppBar(
                         contentDescription = "right icon"
                     )
                 }
+            }
+            if (showMoney) {
+                CoinView(modifier, value = 1365)
             }
         }
         HorizontalDivider(thickness = 4.dp, color = JetAroundTheme.colors.textColor)
