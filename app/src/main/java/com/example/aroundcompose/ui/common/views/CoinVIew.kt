@@ -2,7 +2,6 @@ package com.example.aroundcompose.ui.common.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,7 +19,12 @@ import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 @Composable
-fun CoinView(modifier: Modifier, value: Int) {
+fun CoinView(
+    modifier: Modifier,
+    value: Int,
+    backgroundColor: androidx.compose.ui.graphics.Color = JetAroundTheme.colors.primaryBackground,
+    contentColor: androidx.compose.ui.graphics.Color = JetAroundTheme.colors.mapElements
+) {
     Card(
         modifier = modifier,
         shape = JetAroundTheme.shapes.mapElementsShape,
@@ -28,7 +32,7 @@ fun CoinView(modifier: Modifier, value: Int) {
     ) {
         Row(
             modifier = Modifier
-                .background(JetAroundTheme.colors.primaryBackground)
+                .background(backgroundColor)
                 .padding(10.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
@@ -37,14 +41,14 @@ fun CoinView(modifier: Modifier, value: Int) {
                 modifier = Modifier.padding(end = 5.dp),
                 text = value.toString(),
                 style = JetAroundTheme.typography.coin,
-                color = JetAroundTheme.colors.mapElements,
+                color = contentColor,
                 textAlign = TextAlign.Center,
             )
             Icon(
                 modifier = Modifier.size(24.dp),
                 painter = painterResource(id = R.drawable.ic_coin),
                 contentDescription = "ic_coin",
-                tint = JetAroundTheme.colors.mapElements
+                tint = contentColor
             )
         }
     }

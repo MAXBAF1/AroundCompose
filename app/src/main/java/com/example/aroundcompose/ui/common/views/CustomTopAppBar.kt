@@ -1,6 +1,5 @@
 package com.example.aroundcompose.ui.common.views
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -64,7 +63,11 @@ fun CustomTopAppBar(
                 }
             }
             if (showMoney) {
-                CoinView(modifier, value = 1365)
+                CoinView(modifier,
+                    value = 1365,
+                    backgroundColor = JetAroundTheme.colors.primary,
+                    contentColor = JetAroundTheme.colors.primaryBackground
+                )
             }
         }
         HorizontalDivider(thickness = 4.dp, color = JetAroundTheme.colors.textColor)

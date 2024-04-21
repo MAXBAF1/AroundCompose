@@ -20,6 +20,7 @@ import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.menu.MenuScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationViewModel
+import com.example.aroundcompose.ui.screens.skills.SkillsViewModel
 import com.example.aroundcompose.ui.screens.splash.SplashScreen
 import com.example.aroundcompose.ui.screens.teams.TeamsScreen
 import com.example.aroundcompose.ui.screens.teams.TeamsViewModel
@@ -35,6 +36,7 @@ class NavGraph(
         val mapViewModel = hiltViewModel<MapViewModel>()
         val authorizationViewModel = hiltViewModel<AuthorizationViewModel>()
         val registrationViewModel = hiltViewModel<RegistrationViewModel>()
+        val skillsViewModel = hiltViewModel<SkillsViewModel>()
 
         NavHost(
             navController = navController,
@@ -53,7 +55,7 @@ class NavGraph(
                 })
             }
             composable(Screen.MAP_ROUTE) { MapManager(mapViewModel).Create() }
-            composable(Screen.SKILLS_ROUTE) { SkillsScreen() }
+            composable(Screen.SKILLS_ROUTE) { SkillsScreen(skillsViewModel).Create() }
             composable(Screen.PROFILE_ROUTE) { ProfileScreen() }
             composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
             composable(Screen.ACCOUNT_ROUTE) { CreateAccountScreen() }

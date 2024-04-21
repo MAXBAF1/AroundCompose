@@ -69,4 +69,6 @@
     <string name="team_captured">захвачено командой</string>
     <string name="cells">клетки</string>
     <string name="exit_from_profile">выйти из профиля</string>
+
+    <!--Skills screen-->
 </resources>
