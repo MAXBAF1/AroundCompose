@@ -26,7 +26,9 @@ data class JetAroundColors(
     val orange: Color,
     val errorColor: Color,
     val primary: Color,
-    val eventCardText: Color
+    val eventCardText: Color,
+    val backgroundSkillIcon: Color,
+    val informationText: Color,
 )
 
 data class JetAroundTypography(
@@ -41,10 +43,12 @@ data class JetAroundTypography(
     val informationText: TextStyle,
     val medium: TextStyle,
     val mediumSemiBold: TextStyle,
+    val textDesc: TextStyle,
     val title: TextStyle,
     val eventCardTitle: TextStyle,
     val eventCardPlaceAndBtn: TextStyle,
-    val smallSemiBold: TextStyle
+    val smallSemiBold: TextStyle,
+    val levelInformation: TextStyle,
 )
 
 data class JetAroundShape(
@@ -52,11 +56,13 @@ data class JetAroundShape(
     val mapElementsShape: RoundedCornerShape,
     val teamShape: RoundedCornerShape,
     val maxRoundedCornerShape: RoundedCornerShape,
+    val skillShape: RoundedCornerShape,
+    val upgradeShape: RoundedCornerShape,
 )
 
 data class JetAroundShadow(
     val mapElementsShadow: Dp,
-    val loginUsingShadow: Dp
+    val loginUsingShadow: Dp,
 )
 
 data class JetAroundMargin(

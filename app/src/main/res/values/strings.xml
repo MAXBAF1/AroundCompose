@@ -71,4 +71,7 @@
     <string name="exit_from_profile">выйти из профиля</string>
 
     <!--Skills screen-->
+    <string name="price">стоимость</string>
+    <string name="title_square">Площадь закрашивания</string>
+    <string name="desc_square">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
 </resources>
