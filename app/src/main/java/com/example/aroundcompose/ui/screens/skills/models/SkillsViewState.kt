@@ -13,20 +13,20 @@ data class SkillsViewState(
         SkillType.BOMB to SkillData(
             iconId = R.drawable.ic_bomb,
             imageId = R.drawable.image_square,
-            titleId = R.string.title_square,
-            descriptionId = R.string.desc_square,
+            titleId = R.string.title_bomb,
+            descriptionId = R.string.desc_bomb,
         ),
         SkillType.INVISIBLE to SkillData(
             iconId = R.drawable.ic_invisible_user,
             imageId = R.drawable.image_square,
-            titleId = R.string.title_square,
-            descriptionId = R.string.desc_square,
+            titleId = R.string.title_invisible,
+            descriptionId = R.string.desc_invisible,
         ),
         SkillType.MINE to SkillData(
             iconId = R.drawable.ic_mine,
             imageId = R.drawable.image_square,
-            titleId = R.string.title_square,
-            descriptionId = R.string.desc_square,
+            titleId = R.string.title_mine,
+            descriptionId = R.string.desc_mine,
         )
     ),
 )

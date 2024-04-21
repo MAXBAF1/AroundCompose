@@ -73,5 +73,11 @@
     <!--Skills screen-->
     <string name="price">стоимость</string>
     <string name="title_square">Площадь закрашивания</string>
+    <string name="title_bomb">Бомба</string>
+    <string name="title_invisible">Невидимость</string>
+    <string name="title_mine">Мина</string>
     <string name="desc_square">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
+    <string name="desc_bomb">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
+    <string name="desc_invisible">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
+    <string name="desc_mine">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
 </resources>
