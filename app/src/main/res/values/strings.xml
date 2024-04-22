@@ -77,6 +77,11 @@
     <string name="title_invisible">Невидимость</string>
     <string name="title_mine">Мина</string>
     <string name="desc_square">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
+
+    <!--Statistics screen-->
+    <string name="teams">Команды</string>
+    <string name="server">Сервер</string>
+    <string name="currentUser">Вы</string>
     <string name="desc_bomb">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
     <string name="desc_invisible">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
     <string name="desc_mine">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>

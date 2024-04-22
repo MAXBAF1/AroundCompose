@@ -22,6 +22,8 @@ import com.example.aroundcompose.ui.screens.registration.RegistrationViewModel
 import com.example.aroundcompose.ui.screens.skills.SkillsScreen
 import com.example.aroundcompose.ui.screens.skills.SkillsViewModel
 import com.example.aroundcompose.ui.screens.splash.SplashScreen
+import com.example.aroundcompose.ui.screens.statistics.StatisticsScreen
+import com.example.aroundcompose.ui.screens.statistics.StatisticsViewModel
 import com.example.aroundcompose.ui.screens.teams.TeamsScreen
 import com.example.aroundcompose.ui.screens.teams.TeamsViewModel
 
@@ -37,6 +39,7 @@ class NavGraph(
         val authorizationViewModel = hiltViewModel<AuthorizationViewModel>()
         val registrationViewModel = hiltViewModel<RegistrationViewModel>()
         val skillsViewModel = hiltViewModel<SkillsViewModel>()
+        val statisticsViewModel = hiltViewModel<StatisticsViewModel>()
 
         NavHost(
             navController = navController,
@@ -55,13 +58,25 @@ class NavGraph(
                 })
             }
             composable(Screen.MAP_ROUTE) { MapManager(mapViewModel).Create() }
-            composable(Screen.SKILLS_ROUTE) {
-                SkillsScreen(viewModel = skillsViewModel).Create()
-            }
+            composable(Screen.SKILLS_ROUTE) { CreateSkillsScreen(skillsViewModel) }
+            composable(Screen.STATISTICS_ROUTE) { CreateStatisticsScreen(statisticsViewModel) }
             composable(Screen.PROFILE_ROUTE) { ProfileScreen() }
             composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
             composable(Screen.ACCOUNT_ROUTE) { CreateAccountScreen() }
         }
+    }
+
+    @Composable
+    private fun CreateStatisticsScreen(statisticsViewModel: StatisticsViewModel) {
+        StatisticsScreen(
+            viewModel = statisticsViewModel,
+            onBackClicked = { navController.popBackStack() }
+        ).Create()
+    }
+
+    @Composable
+    private fun CreateSkillsScreen(skillsViewModel: SkillsViewModel) {
+        SkillsScreen(viewModel = skillsViewModel).Create()
     }
 
     @Composable
@@ -70,7 +85,7 @@ class NavGraph(
             toAccountScreen = { navController.navigate(Screen.ACCOUNT_ROUTE) },
             toEventsScreen = {},
             toMoneysScreen = {},
-            toStatisticScreen = {},
+            toStatisticScreen = { navController.navigate(Screen.STATISTICS_ROUTE) },
             toFriendsScreen = {}).Create()
     }
 

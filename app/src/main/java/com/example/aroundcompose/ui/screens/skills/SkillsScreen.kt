@@ -63,9 +63,7 @@ class SkillsScreen(
                     onUpgradeClick = { type ->
                         viewModel.obtainEvent(SkillsEvent.ClickUpgradeBtn(type))
                     },
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .verticalScroll(rememberScrollState())
+                    modifier = Modifier.verticalScroll(rememberScrollState())
                 )
             }
         }
@@ -79,11 +77,13 @@ class SkillsScreen(
         modifier: Modifier,
     ) {
         Column(modifier) {
-            SkillType.values().forEach { type ->
+            SkillType.values().forEachIndexed { index, type ->
+
                 CardView(
                     skillData = mapOfSkills[type]!!,
                     onCardClick = { onCardClick(type) },
-                    onUpgradeClick = { onUpgradeClick(type) }
+                    onUpgradeClick = { onUpgradeClick(type) },
+                    modifier = if (index == 0) Modifier.padding(top = 24.dp) else Modifier
                 ).Create()
 
                 if (type != SkillType.MINE) Spacer(modifier = Modifier.height(16.dp))
