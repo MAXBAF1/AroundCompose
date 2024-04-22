@@ -15,6 +15,7 @@ val typography = JetAroundTypography(
     coin = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     percent = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
     medium = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
+    regular = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_regular))),
     mediumSemiBold = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
     textDesc = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_regular))),
     textField = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),

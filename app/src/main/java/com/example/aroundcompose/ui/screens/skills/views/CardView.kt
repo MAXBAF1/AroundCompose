@@ -35,10 +35,11 @@ class CardView(
     private val skillData: SkillData,
     private val onCardClick: () -> Unit,
     private val onUpgradeClick: () -> Unit,
+    private val modifier: Modifier,
 ) {
     @Composable
     fun Create() {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = modifier.fillMaxWidth()) {
             SkillCard()
 
             if (skillData.isCardClicked) {

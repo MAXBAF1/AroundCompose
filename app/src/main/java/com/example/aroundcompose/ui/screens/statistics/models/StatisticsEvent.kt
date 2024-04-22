@@ -1,4 +1,5 @@
 package com.example.aroundcompose.ui.screens.statistics.models
 
-class StatisticsEvent {
+sealed class StatisticsEvent {
+    object OnListBtnClick: StatisticsEvent()
 }

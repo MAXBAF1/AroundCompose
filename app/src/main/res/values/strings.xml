@@ -77,4 +77,6 @@
 
     <!--Statistics screen-->
     <string name="teams">Команды</string>
+    <string name="server">Сервер</string>
+    <string name="currentUser">Вы</string>
 </resources>

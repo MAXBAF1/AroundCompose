@@ -27,7 +27,9 @@ internal val baseLightPalette = JetAroundColors(
     backgroundColorLightBlueTeam = Color(0xFF2E596A),
     backgroundColorYellowTeam = Color(0xFF5F4E26),
     backgroundColorPurpleTeam = Color(0xFF49345A),
-    backgroundColorBlueTeam = Color(0xFF2D2F54)
+    backgroundColorBlueTeam = Color(0xFF2D2F54),
+    userCard = Color(0xFFF2F4F3),
+    imageColor = Color(0xFF59CCF9),
 )
 
 internal val baseDarkPalette = JetAroundColors(
@@ -55,5 +57,7 @@ internal val baseDarkPalette = JetAroundColors(
     backgroundColorLightBlueTeam = Color(0xFF2E596A),
     backgroundColorYellowTeam = Color(0xFF5F4E26),
     backgroundColorPurpleTeam = Color(0xFF49345A),
-    backgroundColorBlueTeam = Color(0xFF2D2F54)
+    backgroundColorBlueTeam = Color(0xFF2D2F54),
+    userCard = Color(0xFFF2F4F3),
+    imageColor = Color(0xFF59CCF9),
 )
