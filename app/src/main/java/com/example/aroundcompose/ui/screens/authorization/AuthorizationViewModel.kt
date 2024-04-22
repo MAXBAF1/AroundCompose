@@ -5,6 +5,7 @@ import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.common.models.FieldData
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationEvent
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationViewState
+import com.example.aroundcompose.utils.TextFieldValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -33,9 +34,7 @@ class AuthorizationViewModel @Inject constructor() :
         viewState.update {
             it.copy(
                 mapOfFields = mapOfFields.toMap(),
-                isEnabledLoginBtn = mapOfFields.values.all { fieldData ->
-                    fieldData.fieldText.isNotEmpty() && fieldData.textError == null
-                }
+                isEnabledLoginBtn = TextFieldValidation.isAllFieldsValid(mapOfFields)
             )
         }
     }

@@ -39,6 +39,13 @@
     <!--Registration screen-->
     <string name="hint_name">Имя</string>
     <string name="hint_confirm_password">Подтверждение пароля</string>
+    <string name="login_error_length">Длина логина от 4 до 15 символов*</string>
+    <string name="login_error_ABC_digit">Логин должен содержать только латинские буквы и цифры*</string>
+    <string name="email_error_domain">Некорректный домен почты*</string>
+    <string name="email_error_exists">Почта уже существует!</string>
+    <string name="password_error_length">Минимальная длина пароля - 8 символов*</string>
+    <string name="password_error_ABC_digit_special">Пароль должен содержать латинские строчные и заглавные буквы, цифры и специальные символы*</string>
+    <string name="password_confirm_error_equals">Пароли не совпадают*</string>
 
     <!--Teams screen-->
     <string name="choose_team">выберите команду</string>
@@ -62,4 +69,15 @@
     <string name="team_captured">захвачено командой</string>
     <string name="cells">клетки</string>
     <string name="exit_from_profile">выйти из профиля</string>
+
+    <!--Skills screen-->
+    <string name="price">стоимость</string>
+    <string name="title_square">Площадь закрашивания</string>
+    <string name="title_bomb">Бомба</string>
+    <string name="title_invisible">Невидимость</string>
+    <string name="title_mine">Мина</string>
+    <string name="desc_square">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
+    <string name="desc_bomb">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
+    <string name="desc_invisible">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
+    <string name="desc_mine">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
 </resources>

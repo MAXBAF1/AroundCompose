@@ -10,9 +10,5 @@ data class RegistrationViewState(
         FieldType.PASSWORD to FieldData(),
         FieldType.CONFIRM_PASSWORD to FieldData()
     ),
-//    val loginValue: String = "",
-//    val emailValue: String = "",
-//    val passwordValue: String = "",
-//    val confirmPasswordValue: String = "",
     val isEnabledNextBtn: Boolean = false
 )
