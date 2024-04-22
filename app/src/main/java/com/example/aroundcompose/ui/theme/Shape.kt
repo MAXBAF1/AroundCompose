@@ -10,6 +10,7 @@ val shape = JetAroundShape(
     textFieldShape = RoundedCornerShape(14.dp),
     mapElementsShape = RoundedCornerShape(12.dp),
     teamShape = RoundedCornerShape(21.dp),
+    teamsStatisticsShape = RoundedCornerShape(24.dp),
     maxRoundedCornerShape = RoundedCornerShape(100),
     skillShape = RoundedCornerShape(15.dp),
     upgradeShape = RoundedCornerShape(10.dp)

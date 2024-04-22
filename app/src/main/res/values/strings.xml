@@ -76,4 +76,5 @@
     <string name="desc_square">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
 
     <!--Statistics screen-->
+    <string name="teams">Команды</string>
 </resources>
