@@ -14,6 +14,8 @@ import com.example.aroundcompose.screens.ProfileScreen
 import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
+import com.example.aroundcompose.ui.screens.friends.FriendsScreen
+import com.example.aroundcompose.ui.screens.friends.FriendsViewModel
 import com.example.aroundcompose.ui.screens.map.MapManager
 import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.menu.MenuScreen
@@ -40,10 +42,11 @@ class NavGraph(
         val registrationViewModel = hiltViewModel<RegistrationViewModel>()
         val skillsViewModel = hiltViewModel<SkillsViewModel>()
         val statisticsViewModel = hiltViewModel<StatisticsViewModel>()
+        val friendsViewModel = hiltViewModel<FriendsViewModel>()
 
         NavHost(
             navController = navController,
-            startDestination = Screen.SPLASH_ROUTE,
+            startDestination = Screen.MAP_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
             composable(Screen.AUTHORIZATION_ROUTE) {
@@ -63,7 +66,17 @@ class NavGraph(
             composable(Screen.PROFILE_ROUTE) { ProfileScreen() }
             composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
             composable(Screen.ACCOUNT_ROUTE) { CreateAccountScreen() }
+            composable(Screen.FRIENDS_ROUTE) { CreateFriendsScreen(friendsViewModel) }
         }
+    }
+
+    @Composable
+    private fun CreateFriendsScreen(friendsViewModel: FriendsViewModel) {
+        FriendsScreen(
+            viewModel = friendsViewModel,
+            onBackClick = { navController.popBackStack() },
+            onMoreInfoClick = { }
+        ).Create()
     }
 
     @Composable
@@ -86,7 +99,7 @@ class NavGraph(
             toEventsScreen = {},
             toMoneysScreen = {},
             toStatisticScreen = { navController.navigate(Screen.STATISTICS_ROUTE) },
-            toFriendsScreen = {}).Create()
+            toFriendsScreen = {navController.navigate(Screen.FRIENDS_ROUTE)}).Create()
     }
 
     @Composable

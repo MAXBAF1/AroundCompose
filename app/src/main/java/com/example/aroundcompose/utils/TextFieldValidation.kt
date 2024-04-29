@@ -9,7 +9,7 @@ object TextFieldValidation {
         if (text.isEmpty()) return ErrorStatus.INITIAL
 
         return if (type == FieldType.LOGIN) {
-            if (text.length in 4..15) ErrorStatus.INITIAL else ErrorStatus.ERROR
+            if (text.length in 1..15) ErrorStatus.INITIAL else ErrorStatus.ERROR
         } else {
             if (text.length >= 8) ErrorStatus.INITIAL else ErrorStatus.ERROR
         }

@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
+import com.example.aroundcompose.ui.common.views.LevelView
 import com.example.aroundcompose.ui.screens.skills.models.SkillData
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
@@ -98,12 +99,9 @@ class CardView(
                     .background(JetAroundTheme.colors.backgroundSkillIcon)
                     .padding(8.dp)
             )
-
-            Text(
-                text = skillData.currentLevel.toString(),
-                style = JetAroundTheme.typography.levelInformation,
-                color = JetAroundTheme.colors.primaryBackground,
-                textAlign = TextAlign.Center,
+            LevelView(
+                level = skillData.currentLevel,
+                textColor = JetAroundTheme.colors.primaryBackground,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(top = 26.dp, start = 26.dp) // Position

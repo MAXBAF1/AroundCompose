@@ -39,7 +39,7 @@
     <!--Registration screen-->
     <string name="hint_name">Имя</string>
     <string name="hint_confirm_password">Подтверждение пароля</string>
-    <string name="login_error_length">Длина логина от 4 до 15 символов*</string>
+    <string name="login_error_length">Длина логина от 1 до 15 символов*</string>
     <string name="login_error_ABC_digit">Логин должен содержать только латинские буквы и цифры*</string>
     <string name="email_error_domain">Некорректный домен почты*</string>
     <string name="email_error_exists">Почта уже существует!</string>

@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
+import com.example.aroundcompose.ui.common.enums.Teams
+import com.example.aroundcompose.ui.common.views.HexagonImage
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 @Composable
@@ -24,8 +26,9 @@ fun UserCard(
     position: Int,
     imageId: Int,
     name: String, score: Int,
+    team: Teams = Teams.NONE,
     isCurrentUser: Boolean = false,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
         colors = CardColors(
@@ -66,7 +69,12 @@ fun UserCard(
                     color = color
                 )
                 if (!isCurrentUser) {
-                    HexagonImage(imageId)
+                    HexagonImage(
+                        imageId = imageId,
+                        team = team,
+                        border = 1.dp,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
                 }
                 Text(
                     text = if (isCurrentUser) {

@@ -26,5 +26,6 @@ sealed class Screen(val titleId: Int, val iconId: Int, val route: String) {
         const val RESTORE_PASSWORD_ROUTE = "RESTORE_PASSWORD_ROUTE"
         const val REGISTRATION_ROUTE = "REGISTRATION_ROUTE"
         const val TEAMS_ROUTE = "TEAMS_ROUTE"
+        const val FRIENDS_ROUTE = "FRIENDS_ROUTE"
     }
 }
