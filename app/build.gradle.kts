@@ -52,6 +52,11 @@ android {
 }
 
 dependencies {
+    // Ktor
+    val ktorVersion = "2.3.10"
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+
     // Shapes
     implementation("androidx.graphics:graphics-shapes:1.0.0-alpha05")
 
