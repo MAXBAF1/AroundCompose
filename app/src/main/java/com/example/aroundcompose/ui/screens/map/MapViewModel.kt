@@ -1,6 +1,7 @@
 package com.example.aroundcompose.ui.screens.map
 
 import android.content.SharedPreferences
+import com.example.aroundcompose.di.NotEncryptedSharedPref
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.screens.map.location_service.LocationService
 import com.example.aroundcompose.ui.screens.map.models.MapEvent
@@ -15,8 +16,9 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class MapViewModel @Inject constructor(private val sharedPreferences: SharedPreferences) :
-    BaseViewModel<MapViewState, MapEvent>(initialState = MapViewState.CellsCaptured()) {
+class MapViewModel @Inject constructor(
+    @NotEncryptedSharedPref private val sharedPreferences: SharedPreferences
+) : BaseViewModel<MapViewState, MapEvent>(initialState = MapViewState.CellsCaptured()) {
 
     private val paintedCells: ArrayList<String> = arrayListOf()
     private val coins = 0

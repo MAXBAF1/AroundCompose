@@ -2,6 +2,7 @@ package com.example.aroundcompose.ui.screens.authorization
 
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.NetworkService
+import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.common.models.FieldData
@@ -15,10 +16,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthorizationViewModel @Inject constructor() :
+class AuthorizationViewModel @Inject constructor(tokenManager: TokenManager) :
     BaseViewModel<AuthorizationViewState, AuthorizationEvent>(AuthorizationViewState()) {
     private val fields = AuthFields()
-    private val networkService = NetworkService()
+    private val networkService = NetworkService(tokenManager)
 
 
     override fun obtainEvent(viewEvent: AuthorizationEvent) {
