@@ -2,6 +2,7 @@ package com.example.aroundcompose.utils
 
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.models.FieldData
+import com.example.aroundcompose.ui.common.models.IFields
 import com.example.aroundcompose.ui.screens.registration.models.validation_data.ErrorStatus
 
 object TextFieldValidation {
@@ -25,8 +26,8 @@ object TextFieldValidation {
         } else ErrorStatus.ERROR
     }
 
-    fun isAllFieldsValid(mapOfFields: Map<FieldType, FieldData>): Boolean {
-        return mapOfFields.values.all { fieldData ->
+    fun isAllFieldsValid(fields: IFields): Boolean {
+        return fields.toList().all { fieldData ->
             fieldData.fieldText.isNotEmpty() && fieldData.textErrorId == null
         }
     }

@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.FieldType
-import com.example.aroundcompose.ui.common.models.FieldData
 import com.example.aroundcompose.ui.common.views.TextFieldView
+import com.example.aroundcompose.ui.screens.authorization.models.AuthFields
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationEvent
 import com.example.aroundcompose.ui.screens.authorization.views.LoginUsingBtn
 import com.example.aroundcompose.ui.theme.JetAroundTheme
@@ -78,7 +78,7 @@ class AuthorizationScreen(
                 Title(Modifier.padding(bottom = 40.dp))
 
                 TextFields(
-                    mapOfFields = viewState.mapOfFields,
+                    fields = viewState.fields,
                     onValueChange = { fieldType, value ->
                         viewModel.obtainEvent(AuthorizationEvent.ChangeFieldText(fieldType, value))
                     },
@@ -92,7 +92,9 @@ class AuthorizationScreen(
                         .padding(bottom = 40.dp)
                 )
 
-                LoginButtons(viewState.isEnabledLoginBtn)
+                LoginButtons(viewState.isEnabledLoginBtn, onLoginClick = {
+                    viewModel.obtainEvent(AuthorizationEvent.ClickLoginBtn)
+                })
 
                 IfNotHaveAccount(onFocusedColor, modifier = Modifier.weight(1f))
             }
@@ -120,13 +122,13 @@ class AuthorizationScreen(
     @Composable
     private fun TextFields(
         onValueChange: (fieldType: FieldType, value: String) -> Unit,
-        mapOfFields: Map<FieldType, FieldData>,
+        fields: AuthFields,
         modifier: Modifier,
     ) {
         Column(modifier = modifier) {
             TextFieldView(
                 textFieldType = FieldType.EMAIL,
-                textValue = mapOfFields[FieldType.EMAIL]?.fieldText ?: "",
+                textValue = fields[FieldType.EMAIL].fieldText,
                 hint = stringResource(id = R.string.hint_email),
                 leadingIcon = painterResource(id = R.drawable.ic_email),
                 onValueChange = { onValueChange(FieldType.EMAIL, it) },
@@ -135,7 +137,7 @@ class AuthorizationScreen(
 
             TextFieldView(
                 textFieldType = FieldType.PASSWORD,
-                textValue = mapOfFields[FieldType.PASSWORD]?.fieldText ?: "",
+                textValue = fields[FieldType.PASSWORD].fieldText,
                 hint = stringResource(id = R.string.hint_password),
                 leadingIcon = painterResource(id = R.drawable.ic_lock),
                 onValueChange = { onValueChange(FieldType.PASSWORD, it) },
@@ -161,8 +163,8 @@ class AuthorizationScreen(
     }
 
     @Composable
-    private fun LoginButtons(enabled: Boolean) {
-        LoginButton(enabled)
+    private fun LoginButtons(enabled: Boolean, onLoginClick: () -> Unit) {
+        LoginButton(enabled, onLoginClick)
         Spacer(modifier = Modifier.height(16.dp))
         TextOr()
         Spacer(modifier = Modifier.height(16.dp))
@@ -170,9 +172,9 @@ class AuthorizationScreen(
     }
 
     @Composable
-    private fun LoginButton(enabled: Boolean) {
+    private fun LoginButton(enabled: Boolean, onClick: () -> Unit) {
         TextButton(
-            onClick = onLoginClicked,
+            onClick = onClick,
             enabled = enabled,
             shape = JetAroundTheme.shapes.textFieldShape,
             elevation = ButtonDefaults.buttonElevation(JetAroundTheme.shadows.loginUsingShadow),

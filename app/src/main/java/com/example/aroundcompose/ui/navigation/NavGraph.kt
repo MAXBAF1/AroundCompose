@@ -54,7 +54,7 @@ class NavGraph(
             composable(Screen.SPLASH_ROUTE) {
                 SplashScreen(exit = { activity?.finish() }, onNextScreen = {
                     navController.popBackStack()
-                    navController.navigate(Screen.MAP_ROUTE)
+                    navController.navigate(Screen.AUTHORIZATION_ROUTE)
                 })
             }
             composable(Screen.MAP_ROUTE) { MapManager(mapViewModel).Create() }

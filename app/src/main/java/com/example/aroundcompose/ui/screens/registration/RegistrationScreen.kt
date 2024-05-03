@@ -18,11 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.FieldType
-import com.example.aroundcompose.ui.common.models.FieldData
 import com.example.aroundcompose.ui.common.views.CustomTopAppBar
 import com.example.aroundcompose.ui.common.views.NextButtonView
 import com.example.aroundcompose.ui.common.views.TextFieldView
 import com.example.aroundcompose.ui.screens.registration.models.RegistrationEvent
+import com.example.aroundcompose.ui.screens.registration.models.RegistrationFields
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 class RegistrationScreen(
@@ -44,7 +44,7 @@ class RegistrationScreen(
             CustomTopAppBar(R.string.registration, onBackClicked)
 
             TextFields(
-                mapOfFields = viewState.mapOfFields,
+                fields = viewState.mapOfFields,
                 onValueChange = { fieldType, text ->
                     viewModel.obtainEvent(RegistrationEvent.ChangeFieldText(fieldType, text))
                 },
@@ -64,15 +64,15 @@ class RegistrationScreen(
     @Composable
     private fun TextFields(
         onValueChange: (fieldType: FieldType, text: String) -> Unit,
-        mapOfFields: Map<FieldType, FieldData>,
+        fields: RegistrationFields,
         modifier: Modifier,
     ) {
         Column(modifier) {
             FieldType.values().forEachIndexed { index, fieldType ->
                 TextFieldView(
                     textFieldType = fieldType,
-                    textValue = mapOfFields[fieldType]?.fieldText ?: "",
-                    textErrorId = mapOfFields[fieldType]?.textErrorId,
+                    textValue = fields[fieldType].fieldText,
+                    textErrorId = fields[fieldType].textErrorId,
                     hint = when (fieldType) {
                         FieldType.LOGIN -> stringResource(id = R.string.hint_name)
                         FieldType.EMAIL -> stringResource(id = R.string.hint_email)
@@ -93,7 +93,7 @@ class RegistrationScreen(
                 )
 
 
-                mapOfFields[fieldType]?.textErrorId?.let {
+                fields[fieldType].textErrorId?.let {
                     Text(
                         text = stringResource(id = it),
                         modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp),
