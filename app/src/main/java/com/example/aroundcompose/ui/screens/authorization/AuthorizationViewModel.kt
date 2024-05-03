@@ -11,6 +11,7 @@ import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationEv
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationViewState
 import com.example.aroundcompose.utils.TextFieldValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,7 +34,12 @@ class AuthorizationViewModel @Inject constructor(tokenManager: TokenManager) :
     }
 
     private fun clickLoginBtn() {
-        viewModelScope.launch { networkService.authenticate(fields) }
+        viewModelScope.launch {
+            when (networkService.authenticate(fields)) {
+                HttpStatusCode.OK -> viewState.update { it.copy(toNextScreen = true) }
+                else -> viewState.update { it.copy(toNextScreen = false) }
+            }
+        }
     }
 
     private fun changeFieldText(type: FieldType, text: String) {

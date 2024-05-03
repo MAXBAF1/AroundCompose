@@ -6,8 +6,8 @@ import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
@@ -20,23 +20,22 @@ class NetworkService(private val tokenManager: TokenManager) {
         }
     }
 
-    suspend fun authenticate(authFields: AuthFields): Int? {
+    suspend fun authenticate(authFields: AuthFields): HttpStatusCode? {
         return withContext(Dispatchers.IO) {
             try {
                 val response = client.post(AroundConfig.LOGIN_ADDRESS.toString()) {
                     contentType(ContentType.Application.Json)
                     setBody(
                         mapOf(
-                            "email" to "password1@gmail.com", //authFields.email.fieldText,
-                            "password" to "Password1!", //authFields.password.fieldText
+                            "email" to authFields.email.fieldText,
+                            "password" to authFields.password.fieldText
                         )
                     )
                 }
-                val gf = response.bodyAsText()
-
-                tokenManager.saveTokens("your_access_token", "your_refresh_token")
-                val f = gf
-                1
+                if (response.status == HttpStatusCode.OK) {
+                    tokenManager.saveTokens("your_access_token", "your_refresh_token")
+                }
+                response.status
             } catch (e: Exception) {
                 e.printStackTrace()
                 null

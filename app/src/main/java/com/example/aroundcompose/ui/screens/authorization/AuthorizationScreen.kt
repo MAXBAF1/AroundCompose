@@ -99,6 +99,8 @@ class AuthorizationScreen(
                 IfNotHaveAccount(onFocusedColor, modifier = Modifier.weight(1f))
             }
         }
+
+        if (viewState.toNextScreen) onLoginClicked()
     }
 
     @Composable
