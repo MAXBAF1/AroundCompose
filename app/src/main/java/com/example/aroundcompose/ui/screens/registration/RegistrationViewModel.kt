@@ -34,7 +34,7 @@ class RegistrationViewModel @Inject constructor() :
 
                 viewState.update {
                     it.copy(
-                        mapOfFields = fields.copy(),
+                        fields = fields.copy(),
                         isEnabledNextBtn = TextFieldValidation.isAllFieldsValid(fields)
                     )
                 }

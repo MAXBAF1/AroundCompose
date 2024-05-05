@@ -2,6 +2,7 @@ package com.example.aroundcompose.data
 
 import com.example.aroundcompose.ui.screens.authorization.models.AuthFields
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
@@ -33,7 +34,8 @@ class NetworkService(private val tokenManager: TokenManager) {
                     )
                 }
                 if (response.status == HttpStatusCode.OK) {
-                    tokenManager.saveTokens("your_access_token", "your_refresh_token")
+                    val tokens = response.body<TokenResponse>()
+                    tokenManager.saveTokens(tokens)
                 }
                 response.status
             } catch (e: Exception) {

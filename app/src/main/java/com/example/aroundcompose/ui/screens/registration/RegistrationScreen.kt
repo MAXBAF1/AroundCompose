@@ -44,7 +44,7 @@ class RegistrationScreen(
             CustomTopAppBar(R.string.registration, onBackClicked)
 
             TextFields(
-                fields = viewState.mapOfFields,
+                fields = viewState.fields,
                 onValueChange = { fieldType, text ->
                     viewModel.obtainEvent(RegistrationEvent.ChangeFieldText(fieldType, text))
                 },

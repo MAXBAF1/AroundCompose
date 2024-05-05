@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -52,6 +53,9 @@ android {
 }
 
 dependencies {
+    // Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
     // EncryptedSharedPreferences
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
 

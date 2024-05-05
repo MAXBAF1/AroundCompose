@@ -8,10 +8,10 @@ class TokenManager @Inject constructor(
     @EncryptedSharedPref private val sharedPref: SharedPreferences
 ) {
 
-    fun saveTokens(accessToken: String, refreshToken: String) {
+    fun saveTokens(tokenResponse: TokenResponse) {
         with(sharedPref.edit()) {
-            putString("access_token", accessToken)
-            putString("refresh_token", refreshToken)
+            putString("access_token", tokenResponse.accessToken)
+            putString("refresh_token", tokenResponse.refreshToken)
             apply()
         }
     }
