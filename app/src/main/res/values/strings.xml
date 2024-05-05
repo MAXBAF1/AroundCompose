@@ -39,7 +39,7 @@
     <!--Registration screen-->
     <string name="hint_name">Имя</string>
     <string name="hint_confirm_password">Подтверждение пароля</string>
-    <string name="login_error_length">Длина логина от 4 до 15 символов*</string>
+    <string name="login_error_length">Длина логина от 1 до 15 символов*</string>
     <string name="login_error_ABC_digit">Логин должен содержать только латинские буквы и цифры*</string>
     <string name="email_error_domain">Некорректный домен почты*</string>
     <string name="email_error_exists">Почта уже существует!</string>
@@ -76,13 +76,13 @@
     <string name="title_bomb">Бомба</string>
     <string name="title_invisible">Невидимость</string>
     <string name="title_mine">Мина</string>
-    <string name="desc_square">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
+    <string name="desc_square">Позволяет захватывать несколько клеток одновременно.</string>
+    <string name="desc_bomb">Позволяет закрасить взрывом большую площадь вокруг игрока.</string>
+    <string name="desc_invisible">На время действия скрывает захваченную территорию от остальных игроков.</string>
+    <string name="desc_mine">Активируется при обнаружении противника в той же клетке и закрашивает карту вокруг себя. Территории, окрашенные миной, блокируются для захвата на 30 минут.</string>
 
     <!--Statistics screen-->
     <string name="teams">Команды</string>
     <string name="server">Сервер</string>
     <string name="currentUser">Вы</string>
-    <string name="desc_bomb">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
-    <string name="desc_invisible">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
-    <string name="desc_mine">Расширяет ваше владение, позволяя захватывать больше клеток каждым маневром.</string>
 </resources>

@@ -11,9 +11,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.aroundcompose.screens.ProfileScreen
+import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
+import com.example.aroundcompose.ui.screens.friends.FriendsScreen
+import com.example.aroundcompose.ui.screens.friends.FriendsViewModel
+import com.example.aroundcompose.ui.screens.greetings.GreetingsScreen
 import com.example.aroundcompose.ui.screens.map.MapManager
 import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.menu.MenuScreen
@@ -40,12 +44,16 @@ class NavGraph(
         val registrationViewModel = hiltViewModel<RegistrationViewModel>()
         val skillsViewModel = hiltViewModel<SkillsViewModel>()
         val statisticsViewModel = hiltViewModel<StatisticsViewModel>()
+        val friendsViewModel = hiltViewModel<FriendsViewModel>()
 
         NavHost(
             navController = navController,
-            startDestination = Screen.SPLASH_ROUTE,
+            startDestination = Screen.GREETINGS_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
+            composable(Screen.GREETINGS_ROUTE) {
+                GreetingsScreen(Teams.YELLOW) { navController.navigate(Screen.MAP_ROUTE) }
+            }
             composable(Screen.AUTHORIZATION_ROUTE) {
                 CreateAuthorizationScreen(authorizationViewModel)
             }
@@ -63,15 +71,22 @@ class NavGraph(
             composable(Screen.PROFILE_ROUTE) { ProfileScreen() }
             composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
             composable(Screen.ACCOUNT_ROUTE) { CreateAccountScreen() }
+            composable(Screen.FRIENDS_ROUTE) { CreateFriendsScreen(friendsViewModel) }
         }
+    }
+
+    @Composable
+    private fun CreateFriendsScreen(friendsViewModel: FriendsViewModel) {
+        FriendsScreen(viewModel = friendsViewModel,
+            onBackClick = { navController.popBackStack() },
+            onMoreInfoClick = { }).Create()
     }
 
     @Composable
     private fun CreateStatisticsScreen(statisticsViewModel: StatisticsViewModel) {
         StatisticsScreen(
             viewModel = statisticsViewModel,
-            onBackClicked = { navController.popBackStack() }
-        ).Create()
+            onBackClicked = { navController.popBackStack() }).Create()
     }
 
     @Composable
@@ -86,7 +101,7 @@ class NavGraph(
             toEventsScreen = {},
             toMoneysScreen = {},
             toStatisticScreen = { navController.navigate(Screen.STATISTICS_ROUTE) },
-            toFriendsScreen = {}).Create()
+            toFriendsScreen = { navController.navigate(Screen.FRIENDS_ROUTE) }).Create()
     }
 
     @Composable

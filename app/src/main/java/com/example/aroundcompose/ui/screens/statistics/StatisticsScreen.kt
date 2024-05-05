@@ -3,7 +3,6 @@ package com.example.aroundcompose.ui.screens.statistics
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -86,7 +85,8 @@ class StatisticsScreen(
 
             StatisticTeamView(
                 currentPercent = 69F,
-                team = Teams.LIGHT_BLUE
+                team = Teams.LIGHT_BLUE,
+                isLeader = true
             ).Create()
 
             StatisticTeamView(
@@ -137,6 +137,7 @@ class StatisticsScreen(
                     imageId = R.drawable.avatar_example,
                     name = "Egor332",
                     score = 694,
+                    team = Teams.LIGHT_BLUE,
                     onClick = {}
                 )
 
@@ -147,6 +148,7 @@ class StatisticsScreen(
                     imageId = R.drawable.avatar_example,
                     name = "Danila",
                     score = 537,
+                    team = Teams.YELLOW,
                     isCurrentUser = true,
                     onClick = {}
                 )
@@ -158,6 +160,7 @@ class StatisticsScreen(
                     imageId = R.drawable.avatar_example,
                     name = "BAF1",
                     score = 356,
+                    team = Teams.PURPLE,
                     onClick = {}
                 )
 
@@ -168,6 +171,7 @@ class StatisticsScreen(
                     imageId = R.drawable.avatar_example,
                     name = "Char32",
                     score = 235,
+                    team = Teams.BLUE,
                     onClick = {}
                 )
 

@@ -13,6 +13,7 @@ sealed class Screen(val titleId: Int, val iconId: Int, val route: String) {
             return listOf(MenuScreen, MapScreen, SkillsScreen)
         }
 
+        const val GREETINGS_ROUTE = "GREETINGS_ROUTE"
         const val SPLASH_ROUTE = "SPLASH_ROUTE"
         const val MAIN_ROUTE = "MAIN_ROUTE"
         const val PERMISSIONS_ROUTE = "PERMISSIONS_ROUTE"
@@ -26,5 +27,6 @@ sealed class Screen(val titleId: Int, val iconId: Int, val route: String) {
         const val RESTORE_PASSWORD_ROUTE = "RESTORE_PASSWORD_ROUTE"
         const val REGISTRATION_ROUTE = "REGISTRATION_ROUTE"
         const val TEAMS_ROUTE = "TEAMS_ROUTE"
+        const val FRIENDS_ROUTE = "FRIENDS_ROUTE"
     }
 }
