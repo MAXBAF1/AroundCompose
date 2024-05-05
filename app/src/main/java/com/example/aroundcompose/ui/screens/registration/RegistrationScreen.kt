@@ -53,12 +53,14 @@ class RegistrationScreen(
 
             NextButtonView(
                 enabled = viewState.isEnabledNextBtn,
-                onClick = onNextClicked,
+                onClick = { viewModel.obtainEvent(RegistrationEvent.ClickNextBtn) },
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .align(Alignment.End)
             )
         }
+
+        if (viewState.toNextScreen) onNextClicked()
     }
 
     @Composable

@@ -37,7 +37,7 @@ class AuthorizationViewModel @Inject constructor(tokenManager: TokenManager) :
         viewModelScope.launch {
             when (networkService.authenticate(fields)) {
                 HttpStatusCode.OK -> viewState.update { it.copy(toNextScreen = true) }
-                else -> viewState.update { it.copy(toNextScreen = false) }
+                else -> viewState.update { it.copy(toNextScreen = false) } // FIXME сделать обработку ошибок
             }
         }
     }

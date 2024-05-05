@@ -1,5 +1,8 @@
 package com.example.aroundcompose.ui.screens.registration
 
+import androidx.lifecycle.viewModelScope
+import com.example.aroundcompose.data.NetworkService
+import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.common.models.FieldData
@@ -12,15 +15,18 @@ import com.example.aroundcompose.ui.screens.registration.models.validation_data.
 import com.example.aroundcompose.utils.TextFieldValidation
 import com.example.aroundcompose.utils.TextFieldValidation.checkPasswordConfirm
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RegistrationViewModel @Inject constructor() :
+class RegistrationViewModel @Inject constructor(tokenManager: TokenManager) :
     BaseViewModel<RegistrationViewState, RegistrationEvent>(
         initialState = RegistrationViewState()
     ) {
     private val fields = RegistrationFields()
+    private val networkService = NetworkService(tokenManager)
 
     override fun obtainEvent(viewEvent: RegistrationEvent) {
         when (viewEvent) {
@@ -28,8 +34,7 @@ class RegistrationViewModel @Inject constructor() :
                 val textErrorId: Int? = checkInputError(viewEvent.type, viewEvent.text)
 
                 fields[viewEvent.type] = FieldData(
-                    fieldText = viewEvent.text,
-                    textErrorId = textErrorId
+                    fieldText = viewEvent.text, textErrorId = textErrorId
                 )
 
                 viewState.update {
@@ -40,7 +45,16 @@ class RegistrationViewModel @Inject constructor() :
                 }
             }
 
-            RegistrationEvent.ClickNextBtn -> {}
+            RegistrationEvent.ClickNextBtn -> clickNextBtn()
+        }
+    }
+
+    private fun clickNextBtn() {
+        viewModelScope.launch {
+            when (networkService.register(fields)) {
+                HttpStatusCode.OK -> viewState.update { it.copy(toNextScreen = true) }
+                else -> viewState.update { it.copy(toNextScreen = false) } // FIXME сделать обработку ошибок
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.aroundcompose.data
+package com.example.aroundcompose.data.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
