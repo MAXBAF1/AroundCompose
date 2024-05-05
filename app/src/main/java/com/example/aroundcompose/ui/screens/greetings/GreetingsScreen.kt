@@ -1,5 +1,7 @@
 package com.example.aroundcompose.ui.screens.greetings
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,7 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -19,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
@@ -30,23 +33,26 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun GreetingsScreen(team: Teams, navigateToNextScreen: () -> Unit) {
-    var progress by remember { mutableFloatStateOf(0f) }
     val shape = RoundedPolygonShape(
         RoundedPolygon(numVertices = 6, rounding = CornerRounding(radius = 0.14F))
     )
     val backgroundColor = when (team) {
-        Teams.NONE -> JetAroundTheme.colors.blue
         Teams.LIGHT_BLUE -> JetAroundTheme.colors.lightBlue
         Teams.YELLOW -> JetAroundTheme.colors.yellow
         Teams.PURPLE -> JetAroundTheme.colors.purple
-        Teams.BLUE -> JetAroundTheme.colors.blue
+        Teams.BLUE, Teams.NONE -> JetAroundTheme.colors.blue
     }
 
-    LaunchedEffect(Unit) { // Переделать
-        repeat(100) {
-            delay(30)
-            progress += 0.0175f
-        }
+    var expanded by remember { mutableStateOf(false) }
+    val height: Dp by animateDpAsState(
+        targetValue = if (expanded) 162.dp else 0.dp,
+        animationSpec = tween(durationMillis = 3000),
+        label = ""
+    )
+
+    LaunchedEffect(Unit) {
+        expanded = true
+        delay(3000)
         navigateToNextScreen()
     }
 
@@ -67,10 +73,9 @@ fun GreetingsScreen(team: Teams, navigateToNextScreen: () -> Unit) {
             Box(
                 modifier = Modifier
                     .width(162.dp)
-                    .height((progress * 100).dp)
+                    .height(height)
                     .background(backgroundColor)
                     .align(Alignment.BottomCenter)
-
             )
         }
         Image(painter = painterResource(id = R.drawable.mascot), contentDescription = "mascot")
