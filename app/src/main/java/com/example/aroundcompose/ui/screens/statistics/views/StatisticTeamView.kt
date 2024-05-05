@@ -1,5 +1,6 @@
 package com.example.aroundcompose.ui.screens.statistics.views
 
+import android.graphics.Paint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,7 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
@@ -76,8 +80,10 @@ class StatisticTeamView(
     fun TeamHexagon(
         backgroundColor: Color,
         foregroundColor: Color,
-        modifier: Modifier
+        modifier: Modifier,
     ) {
+        val height = 126.dp * (currentPercent / 100)
+
         Box(
             contentAlignment = Alignment.BottomCenter,
             modifier = modifier
@@ -85,14 +91,40 @@ class StatisticTeamView(
                 .size(126.dp)
                 .background(backgroundColor)
         ) {
-            val height = 126.dp * (currentPercent / 100)
-
-            Box(
-                modifier = Modifier
-                    .width(126.dp)
-                    .height(height)
-                    .background(foregroundColor)
-            )
+            if (isLeader) {
+                Box(
+                    modifier = Modifier
+                        .width(126.dp)
+                        .height(height)
+                        .drawBehind {
+                            drawContext.canvas.nativeCanvas.apply {
+                                drawRoundRect(
+                                    0f,
+                                    0f,
+                                    126.dp.toPx(),
+                                    height.toPx(),
+                                    0.dp.toPx(), // Box radius
+                                    0.dp.toPx(), // Box radius
+                                    Paint().apply {
+                                        color = foregroundColor.toArgb() // Background color
+                                        setShadowLayer(
+                                            30.dp.toPx(), // Shadow radius
+                                            0.dp.toPx(), 0.dp.toPx(),
+                                            foregroundColor.toArgb() // Shadow color
+                                        )
+                                    }
+                                )
+                            }
+                        }
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .width(126.dp)
+                        .height(height)
+                        .background(foregroundColor)
+                )
+            }
 
             Text(
                 text = "${currentPercent.toInt()}%",

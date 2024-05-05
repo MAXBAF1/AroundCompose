@@ -39,7 +39,7 @@ class FriendCard(
     private val friendData: FriendData,
     private val onMoreInfoClick: () -> Unit,
 ) {
-
+// Кликалось на всю
     @Composable
     fun Create(modifier: Modifier) {
         val shape = RoundedPolygonShape(

@@ -85,7 +85,8 @@ class StatisticsScreen(
 
             StatisticTeamView(
                 currentPercent = 69F,
-                team = Teams.LIGHT_BLUE
+                team = Teams.LIGHT_BLUE,
+                isLeader = true
             ).Create()
 
             StatisticTeamView(

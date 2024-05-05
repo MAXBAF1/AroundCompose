@@ -11,11 +11,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.aroundcompose.screens.ProfileScreen
+import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
 import com.example.aroundcompose.ui.screens.friends.FriendsScreen
 import com.example.aroundcompose.ui.screens.friends.FriendsViewModel
+import com.example.aroundcompose.ui.screens.greetings.GreetingsScreen
 import com.example.aroundcompose.ui.screens.map.MapManager
 import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.menu.MenuScreen
@@ -46,9 +48,12 @@ class NavGraph(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.MAP_ROUTE,
+            startDestination = Screen.GREETINGS_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
+            composable(Screen.GREETINGS_ROUTE) {
+                GreetingsScreen(Teams.YELLOW) { navController.navigate(Screen.MAP_ROUTE) }
+            }
             composable(Screen.AUTHORIZATION_ROUTE) {
                 CreateAuthorizationScreen(authorizationViewModel)
             }
@@ -72,19 +77,16 @@ class NavGraph(
 
     @Composable
     private fun CreateFriendsScreen(friendsViewModel: FriendsViewModel) {
-        FriendsScreen(
-            viewModel = friendsViewModel,
+        FriendsScreen(viewModel = friendsViewModel,
             onBackClick = { navController.popBackStack() },
-            onMoreInfoClick = { }
-        ).Create()
+            onMoreInfoClick = { }).Create()
     }
 
     @Composable
     private fun CreateStatisticsScreen(statisticsViewModel: StatisticsViewModel) {
         StatisticsScreen(
             viewModel = statisticsViewModel,
-            onBackClicked = { navController.popBackStack() }
-        ).Create()
+            onBackClicked = { navController.popBackStack() }).Create()
     }
 
     @Composable
@@ -99,7 +101,7 @@ class NavGraph(
             toEventsScreen = {},
             toMoneysScreen = {},
             toStatisticScreen = { navController.navigate(Screen.STATISTICS_ROUTE) },
-            toFriendsScreen = {navController.navigate(Screen.FRIENDS_ROUTE)}).Create()
+            toFriendsScreen = { navController.navigate(Screen.FRIENDS_ROUTE) }).Create()
     }
 
     @Composable
