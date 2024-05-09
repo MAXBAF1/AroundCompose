@@ -1,5 +1,6 @@
 package com.example.aroundcompose.ui.screens.skills.views
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,7 +43,7 @@ class CardView(
         Column(modifier = modifier.fillMaxWidth()) {
             SkillCard()
 
-            if (skillData.isCardClicked) {
+            AnimatedVisibility(visible = skillData.isCardClicked) {
                 DescriptionCard(
                     imageId = skillData.imageId,
                     descriptionId = skillData.descriptionId

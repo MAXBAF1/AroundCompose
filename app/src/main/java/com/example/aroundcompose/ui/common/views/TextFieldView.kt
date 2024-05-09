@@ -125,9 +125,11 @@ private fun DecorationBox(
     leadingIcon: Painter,
     innerTextField: @Composable () -> Unit,
 ) {
-    val tint = if (isEmpty) {
+    val tint = if (!isEmpty || isFocused) {
+        JetAroundTheme.colors.textColor
+    } else {
         JetAroundTheme.colors.textFieldHint
-    } else JetAroundTheme.colors.textColor
+    }
 
     var verticalPadding = 12.dp
     var horizontalPadding = 24.dp
