@@ -2,6 +2,8 @@ package com.example.aroundcompose.ui.screens.authorization
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -150,18 +152,20 @@ class AuthorizationScreen(
 
     @Composable
     private fun ForgotPassword(onFocusedColor: Color, modifier: Modifier) {
-        var forgotPasswordColor by remember {
-            mutableStateOf(onFocusedColor)
-        }
+        var forgotPasswordColor by remember { mutableStateOf(onFocusedColor) }
 
-        ClickableText(
-            text = AnnotatedString(stringResource(id = R.string.forgot_password)),
+        Text(
+            text = stringResource(id = R.string.forgot_password),
             style = JetAroundTheme.typography.textRegistration.copy(color = forgotPasswordColor),
-            modifier = modifier
-        ) {
-            forgotPasswordColor = Color.DarkGray
-            onForgotPasswordClicked()
-        }
+            modifier = modifier.clickable(
+                onClick = {
+                    forgotPasswordColor = Color.DarkGray
+                    onForgotPasswordClicked()
+                },
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(radius = 0.dp)
+            )
+        )
     }
 
     @Composable
@@ -274,13 +278,18 @@ class AuthorizationScreen(
                 mutableStateOf(onFocusedColor)
             }
 
-            ClickableText(
+            Text(
                 text = AnnotatedString(stringResource(id = R.string.registration_click)),
-                style = JetAroundTheme.typography.textRegistration.copy(color = registrationColor)
-            ) {
-                registrationColor = Color.DarkGray
-                onRegistrationClicked()
-            }
+                style = JetAroundTheme.typography.textRegistration.copy(color = registrationColor),
+                modifier = Modifier.clickable(
+                    onClick = {
+                        registrationColor = Color.DarkGray
+                        onRegistrationClicked()
+                    },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(radius = 0.dp)
+                )
+            )
 
             if (registrationColor == Color.DarkGray) {
                 LaunchedEffect(key1 = Unit) {
