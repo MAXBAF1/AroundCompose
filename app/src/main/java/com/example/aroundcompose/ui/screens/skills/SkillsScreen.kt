@@ -78,7 +78,6 @@ class SkillsScreen(
     ) {
         Column(modifier) {
             SkillType.values().forEachIndexed { index, type ->
-
                 CardView(
                     skillData = mapOfSkills[type]!!,
                     onCardClick = { onCardClick(type) },

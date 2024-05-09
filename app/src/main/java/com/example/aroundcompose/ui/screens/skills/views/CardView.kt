@@ -82,7 +82,14 @@ class CardView(
                     SkillIcon()
                     TextContainer()
                 }
-                if (skillData.currentLevel != skillData.maxLevel) UpgradeButton()
+                if (skillData.currentLevel != skillData.maxLevel) {
+                    UpgradeButton()
+                } else {
+                    Image(
+                        painter = painterResource(id = R.drawable.max_level),
+                        contentDescription = "max level"
+                    )
+                }
             }
         }
     }
