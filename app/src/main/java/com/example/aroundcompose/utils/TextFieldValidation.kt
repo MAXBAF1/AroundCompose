@@ -21,7 +21,7 @@ object TextFieldValidation {
     }
 
     fun checkPasswordConfirm(password: String, confirmPassword: String): ErrorStatus {
-        return if (confirmPassword == password) {
+        return if (confirmPassword == password || confirmPassword.isEmpty()) {
             ErrorStatus.INITIAL
         } else ErrorStatus.ERROR
     }
