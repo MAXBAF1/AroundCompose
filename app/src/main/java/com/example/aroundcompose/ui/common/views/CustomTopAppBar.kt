@@ -6,13 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
@@ -38,15 +35,12 @@ fun CustomTopAppBar(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (isBackButtonNeeded) {
-                    IconButton(
+                    CustomIconButton(
                         onClick = onBackClick,
+                        iconId = R.drawable.ic_arrow_left,
+                        description = "back icon",
                         modifier = Modifier.padding(end = 16.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_left),
-                            contentDescription = "back icon"
-                        )
-                    }
+                    )
                 }
                 Text(
                     text = stringResource(id = textId).uppercase(),
@@ -55,15 +49,15 @@ fun CustomTopAppBar(
                 )
             }
             if (trailingIconId != null) {
-                IconButton(onClick = onTrailingBtnClick) {
-                    Icon(
-                        painter = painterResource(id = trailingIconId),
-                        contentDescription = "right icon"
-                    )
-                }
+                CustomIconButton(
+                    onClick = onTrailingBtnClick,
+                    iconId = trailingIconId,
+                    description = "right icon"
+                )
             }
             if (showMoney) {
-                CoinView(modifier,
+                CoinView(
+                    modifier,
                     value = 1365,
                     backgroundColor = JetAroundTheme.colors.primary,
                     contentColor = JetAroundTheme.colors.primaryBackground

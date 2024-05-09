@@ -107,7 +107,7 @@ private fun InformationText(hint: String, isFocused: Boolean, isError: Boolean) 
             isFocused -> JetAroundTheme.colors.onFocusedColor
             else -> JetAroundTheme.colors.textColor
         },
-        style = JetAroundTheme.typography.informationText,
+        style = JetAroundTheme.typography.smallMedium,
         modifier = Modifier
             .padding(start = 20.dp)
             .background(JetAroundTheme.colors.primaryBackground)

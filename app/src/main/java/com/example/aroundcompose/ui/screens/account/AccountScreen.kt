@@ -1,8 +1,11 @@
 package com.example.aroundcompose.ui.screens.account
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -24,23 +28,34 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
 import com.example.aroundcompose.R
+import com.example.aroundcompose.ui.common.views.CustomIconButton
 import com.example.aroundcompose.ui.common.views.CustomTopAppBar
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.example.aroundcompose.utils.RoundedPolygonShape
 
-class AccountScreen(private val onBackClick: () -> Unit, private val toSettingsScreen: () -> Unit) {
+class AccountScreen(
+    private val onBackClick: () -> Unit,
+    private val toSettingsScreen: () -> Unit,
+    private val toStatisticScreen: () -> Unit,
+    private val toFriendsScreen: () -> Unit,
+    private val toMoneysScreen: () -> Unit
+) {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun Create() {
@@ -68,40 +83,32 @@ class AccountScreen(private val onBackClick: () -> Unit, private val toSettingsS
                     Avatar(modifier = Modifier.padding(bottom = 16.dp))
                     NameAndLevels(modifier = Modifier.padding(bottom = 24.dp))
                     MainButtons()
+                    Id()
                 }
-
-                ExitBtn(onClick = {})
             }
         }
     }
 
     @Composable
-    private fun ExitBtn(onClick: () -> Unit) {
-        Button(
-            modifier = Modifier,
-            onClick = onClick,
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = JetAroundTheme.colors.gray),
-            elevation = ButtonDefaults.buttonElevation(4.dp),
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.exit_from_profile),
-                    color = JetAroundTheme.colors.textColor,
-                    style = JetAroundTheme.typography.medium,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_exit),
-                    contentDescription = "exit icon",
-                    tint = JetAroundTheme.colors.textColor
-                )
-            }
+    private fun Id() {
+        val id = 123234359
+        val clipboardManager = LocalClipboardManager.current
+        val context = LocalContext.current
 
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "id: $id",
+                style = JetAroundTheme.typography.smallMedium,
+                color = JetAroundTheme.colors.textColor
+            )
+            CustomIconButton(onClick = {
+                clipboardManager.setText(AnnotatedString(id.toString()))
+                Toast.makeText(context, R.string.copy, Toast.LENGTH_SHORT).show()
+            }, iconId = R.drawable.ic_copy, description = "copy")
         }
     }
 
@@ -118,11 +125,12 @@ class AccountScreen(private val onBackClick: () -> Unit, private val toSettingsS
                 bgColor = JetAroundTheme.colors.blue,
                 textColor = JetAroundTheme.colors.textColorInverse,
                 decorationId = R.drawable.hex_decoration_2,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp),
+                onClick = toStatisticScreen
             )
             Row {
                 ToOtherScreenBtn(
-                    onClick = {},
+                    onClick = toFriendsScreen,
                     modifier = Modifier.weight(1F),
                     text = stringResource(id = R.string.friends),
                     icon = painterResource(id = R.drawable.ic_friends),
@@ -130,7 +138,7 @@ class AccountScreen(private val onBackClick: () -> Unit, private val toSettingsS
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 ToOtherScreenBtn(
-                    onClick = {},
+                    onClick = toMoneysScreen,
                     modifier = Modifier.weight(1F),
                     text = stringResource(id = R.string.moneys),
                     icon = painterResource(id = R.drawable.ic_menu_coin),
@@ -138,7 +146,6 @@ class AccountScreen(private val onBackClick: () -> Unit, private val toSettingsS
                 )
             }
         }
-
     }
 
     @Composable
@@ -173,7 +180,6 @@ class AccountScreen(private val onBackClick: () -> Unit, private val toSettingsS
                     tint = JetAroundTheme.colors.textColorInverse
                 )
             }
-
         }
     }
 
@@ -182,11 +188,17 @@ class AccountScreen(private val onBackClick: () -> Unit, private val toSettingsS
         titleTextId: Int,
         decorationId: Int,
         modifier: Modifier = Modifier,
+        onClick: (() -> Unit)? = null,
         bgColor: Color = JetAroundTheme.colors.gray,
         textColor: Color = JetAroundTheme.colors.textColor,
     ) {
         Card(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier
+                .fillMaxWidth()
+                .clickable(indication = rememberRipple(),
+                    interactionSource = remember { MutableInteractionSource() },
+                    enabled = onClick != null,
+                    onClick = onClick ?: {}),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(containerColor = bgColor),
             elevation = CardDefaults.cardElevation(4.dp)
@@ -217,9 +229,7 @@ class AccountScreen(private val onBackClick: () -> Unit, private val toSettingsS
                         contentScale = ContentScale.Crop
                     )
                 }
-
             }
-
         }
     }
 

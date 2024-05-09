@@ -23,7 +23,7 @@ import com.example.aroundcompose.ui.screens.teams.models.TeamsEvent
 import com.example.aroundcompose.ui.screens.teams.views.TeamView
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
-class TeamsScreen(
+class SelectTeamScreen(
     private val viewModel: TeamsViewModel,
     private val onNextClicked: () -> Unit,
 ) {

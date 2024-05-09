@@ -99,7 +99,7 @@ class RegistrationScreen(
                     Text(
                         text = stringResource(id = it),
                         modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp),
-                        style = JetAroundTheme.typography.informationText,
+                        style = JetAroundTheme.typography.smallMedium,
                         color = JetAroundTheme.colors.errorColor
                     )
                 }

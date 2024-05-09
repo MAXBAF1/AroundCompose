@@ -69,6 +69,7 @@
     <string name="team_captured">захвачено командой</string>
     <string name="cells">клетки</string>
     <string name="exit_from_profile">выйти из профиля</string>
+    <string name="copy">Скопировано</string>
 
     <!--Skills screen-->
     <string name="price">стоимость</string>
@@ -85,4 +86,7 @@
     <string name="teams">Команды</string>
     <string name="server">Сервер</string>
     <string name="currentUser">Вы</string>
+
+    <!--Settings screen-->
+    <string name="settings">настройки</string>
 </resources>

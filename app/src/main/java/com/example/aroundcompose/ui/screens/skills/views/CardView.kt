@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.views.LevelView
@@ -134,7 +133,7 @@ class CardView(
         Row {
             Text(
                 text = "${stringResource(id = R.string.price)}: ${skillData.price}",
-                style = JetAroundTheme.typography.informationText,
+                style = JetAroundTheme.typography.smallMedium,
                 color = JetAroundTheme.colors.informationText,
                 modifier = modifier
             )

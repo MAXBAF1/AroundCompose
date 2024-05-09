@@ -10,7 +10,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.aroundcompose.screens.ProfileScreen
 import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
@@ -23,12 +22,13 @@ import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.menu.MenuScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationViewModel
+import com.example.aroundcompose.ui.screens.settings.SettingsScreen
 import com.example.aroundcompose.ui.screens.skills.SkillsScreen
 import com.example.aroundcompose.ui.screens.skills.SkillsViewModel
 import com.example.aroundcompose.ui.screens.splash.SplashScreen
 import com.example.aroundcompose.ui.screens.statistics.StatisticsScreen
 import com.example.aroundcompose.ui.screens.statistics.StatisticsViewModel
-import com.example.aroundcompose.ui.screens.teams.TeamsScreen
+import com.example.aroundcompose.ui.screens.teams.SelectTeamScreen
 import com.example.aroundcompose.ui.screens.teams.TeamsViewModel
 
 
@@ -48,11 +48,11 @@ class NavGraph(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.GREETINGS_ROUTE,
+            startDestination = Screen.SPLASH_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
             composable(Screen.GREETINGS_ROUTE) {
-                GreetingsScreen(Teams.YELLOW) { navController.navigate(Screen.MAP_ROUTE) }
+                GreetingsScreen(Teams.YELLOW) { navController.navigate(Screen.AUTHORIZATION_ROUTE) }
             }
             composable(Screen.AUTHORIZATION_ROUTE) {
                 CreateAuthorizationScreen(authorizationViewModel)
@@ -62,17 +62,22 @@ class NavGraph(
             composable(Screen.SPLASH_ROUTE) {
                 SplashScreen(exit = { activity?.finish() }, onNextScreen = {
                     navController.popBackStack()
-                    navController.navigate(Screen.AUTHORIZATION_ROUTE)
+                    navController.navigate(Screen.GREETINGS_ROUTE)
                 })
             }
             composable(Screen.MAP_ROUTE) { MapManager(mapViewModel).Create() }
             composable(Screen.SKILLS_ROUTE) { CreateSkillsScreen(skillsViewModel) }
             composable(Screen.STATISTICS_ROUTE) { CreateStatisticsScreen(statisticsViewModel) }
-            composable(Screen.PROFILE_ROUTE) { ProfileScreen() }
             composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
             composable(Screen.ACCOUNT_ROUTE) { CreateAccountScreen() }
+            composable(Screen.SETTINGS_ROUTE) { CreateSettingsScreen() }
             composable(Screen.FRIENDS_ROUTE) { CreateFriendsScreen(friendsViewModel) }
         }
+    }
+
+    @Composable
+    private fun CreateSettingsScreen() {
+        SettingsScreen(onBackClick = { navController.popBackStack() }).Create()
     }
 
     @Composable
@@ -107,7 +112,11 @@ class NavGraph(
     @Composable
     private fun CreateAccountScreen() {
         AccountScreen(onBackClick = { navController.popBackStack() },
-            toSettingsScreen = { }).Create()
+            toSettingsScreen = { navController.navigate(Screen.SETTINGS_ROUTE) },
+            toStatisticScreen = { navController.navigate(Screen.STATISTICS_ROUTE) },
+            toFriendsScreen = { navController.navigate(Screen.FRIENDS_ROUTE) },
+            toMoneysScreen = { }
+        ).Create()
     }
 
     @Composable
@@ -130,7 +139,7 @@ class NavGraph(
 
     @Composable
     private fun CreateTeamsScreen() {
-        TeamsScreen(viewModel = TeamsViewModel(), onNextClicked = {
+        SelectTeamScreen(viewModel = TeamsViewModel(), onNextClicked = {
             navController.navigate(Screen.MAP_ROUTE) {
                 popUpTo(navController.graph.startDestinationId) { inclusive = true }
             }
