@@ -4,12 +4,16 @@ import android.app.Activity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
@@ -38,7 +42,6 @@ class NavGraph(
 ) {
     @Composable
     fun Create() {
-        val activity = (LocalContext.current as? Activity)
         val mapViewModel = hiltViewModel<MapViewModel>()
         val authorizationViewModel = hiltViewModel<AuthorizationViewModel>()
         val registrationViewModel = hiltViewModel<RegistrationViewModel>()
@@ -48,31 +51,48 @@ class NavGraph(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.SPLASH_ROUTE,
+            startDestination = Screen.MAP_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
-            composable(Screen.GREETINGS_ROUTE) {
-                GreetingsScreen(Teams.YELLOW) { navController.navigate(Screen.AUTHORIZATION_ROUTE) }
-            }
-            composable(Screen.AUTHORIZATION_ROUTE) {
-                CreateAuthorizationScreen(authorizationViewModel)
-            }
+            composable(Screen.SPLASH_ROUTE) { CreateSplashScreen() }
+            composable(Screen.GREETINGS_ROUTE) { CreateGreetingsScreen() }
+            composable(Screen.AUTHORIZATION_ROUTE) { CreateAuthScreen(authorizationViewModel) }
             composable(Screen.REGISTRATION_ROUTE) { CreateRegistrationScreen(registrationViewModel) }
             composable(Screen.TEAMS_ROUTE) { CreateTeamsScreen() }
-            composable(Screen.SPLASH_ROUTE) {
-                SplashScreen(exit = { activity?.finish() }, onNextScreen = {
-                    navController.popBackStack()
-                    navController.navigate(Screen.GREETINGS_ROUTE)
-                })
-            }
             composable(Screen.MAP_ROUTE) { MapManager(mapViewModel).Create() }
-            composable(Screen.SKILLS_ROUTE) { CreateSkillsScreen(skillsViewModel) }
             composable(Screen.STATISTICS_ROUTE) { CreateStatisticsScreen(statisticsViewModel) }
             composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
-            composable(Screen.ACCOUNT_ROUTE) { CreateAccountScreen() }
             composable(Screen.SETTINGS_ROUTE) { CreateSettingsScreen() }
             composable(Screen.FRIENDS_ROUTE) { CreateFriendsScreen(friendsViewModel) }
+            composable(
+                route = "${Screen.SKILLS_ROUTE}?${IS_OTHER_PLAYER_SCREEN}={${IS_OTHER_PLAYER_SCREEN}}",
+                arguments = listOf(navArgument(IS_OTHER_PLAYER_SCREEN) {
+                    type = NavType.BoolType
+                    defaultValue = false
+                })
+            ) { CreateSkillsScreen(skillsViewModel) }
+            composable(
+                route = "${Screen.ACCOUNT_ROUTE}?$IS_OTHER_PLAYER_SCREEN={$IS_OTHER_PLAYER_SCREEN}",
+                arguments = listOf(navArgument(IS_OTHER_PLAYER_SCREEN) {
+                    type = NavType.BoolType
+                    defaultValue = false
+                })
+            ) { CreateAccountScreen() }
         }
+    }
+
+    @Composable
+    private fun CreateSplashScreen() {
+        val activity = (LocalContext.current as? Activity)
+        SplashScreen(exit = { activity?.finish() }, onNextScreen = {
+            navController.popBackStack()
+            navController.navigate(Screen.GREETINGS_ROUTE)
+        })
+    }
+
+    @Composable
+    private fun CreateGreetingsScreen() {
+        GreetingsScreen(Teams.YELLOW) { navController.navigate(Screen.AUTHORIZATION_ROUTE) }
     }
 
     @Composable
@@ -84,7 +104,9 @@ class NavGraph(
     private fun CreateFriendsScreen(friendsViewModel: FriendsViewModel) {
         FriendsScreen(viewModel = friendsViewModel,
             onBackClick = { navController.popBackStack() },
-            onMoreInfoClick = { }).Create()
+            onMoreInfoClick = {
+                navController.navigate("${Screen.ACCOUNT_ROUTE}?$IS_OTHER_PLAYER_SCREEN=true")
+            }).Create()
     }
 
     @Composable
@@ -96,7 +118,15 @@ class NavGraph(
 
     @Composable
     private fun CreateSkillsScreen(skillsViewModel: SkillsViewModel) {
-        SkillsScreen(viewModel = skillsViewModel).Create()
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val arguments = navBackStackEntry?.arguments
+        val isOtherPlayerScreen = arguments?.getBoolean(IS_OTHER_PLAYER_SCREEN) ?: false
+
+        SkillsScreen(
+            viewModel = skillsViewModel,
+            onBackClick = { navController.popBackStack() },
+            isOtherPlayerScreen = isOtherPlayerScreen
+        ).Create()
     }
 
     @Composable
@@ -111,16 +141,22 @@ class NavGraph(
 
     @Composable
     private fun CreateAccountScreen() {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val arguments = navBackStackEntry?.arguments
+        val isOtherPlayerScreen = arguments?.getBoolean(IS_OTHER_PLAYER_SCREEN) ?: false
+
         AccountScreen(onBackClick = { navController.popBackStack() },
             toSettingsScreen = { navController.navigate(Screen.SETTINGS_ROUTE) },
             toStatisticScreen = { navController.navigate(Screen.STATISTICS_ROUTE) },
             toFriendsScreen = { navController.navigate(Screen.FRIENDS_ROUTE) },
-            toMoneysScreen = { }
+            toMoneysScreen = { },
+            toSkillsScreen = { navController.navigate("${Screen.SKILLS_ROUTE}?$IS_OTHER_PLAYER_SCREEN=true") },
+            isOtherPlayerScreen = isOtherPlayerScreen
         ).Create()
     }
 
     @Composable
-    private fun CreateAuthorizationScreen(viewModel: AuthorizationViewModel) {
+    private fun CreateAuthScreen(viewModel: AuthorizationViewModel) {
         AuthorizationScreen(viewModel = viewModel,
             onLoginClicked = { navController.navigate(Screen.MAP_ROUTE) },
             onRegistrationClicked = { navController.navigate(Screen.REGISTRATION_ROUTE) },
@@ -144,5 +180,9 @@ class NavGraph(
                 popUpTo(navController.graph.startDestinationId) { inclusive = true }
             }
         }).Create()
+    }
+
+    companion object {
+        const val IS_OTHER_PLAYER_SCREEN = "isOtherPlayerScreen"
     }
 }

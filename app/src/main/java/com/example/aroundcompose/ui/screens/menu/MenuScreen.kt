@@ -127,7 +127,7 @@ class MenuScreen(
         modifier: Modifier = Modifier,
         text: String? = null,
         orientation: Orientation = Orientation.Vertical,
-        iconTint: Color = JetAroundTheme.colors.textColorInverse
+        iconTint: Color = JetAroundTheme.colors.secondaryBackground
     ) {
         val shape = RoundedPolygonShape(
             RoundedPolygon(numVertices = 6, rounding = CornerRounding(radius = 0.14F))
@@ -159,7 +159,7 @@ class MenuScreen(
                         Text(
                             text = text,
                             style = JetAroundTheme.typography.bigMedium,
-                            color = JetAroundTheme.colors.textColorInverse,
+                            color = JetAroundTheme.colors.secondaryBackground,
                         )
                     }
                 }
@@ -173,7 +173,7 @@ class MenuScreen(
                         Text(
                             text = text,
                             style = JetAroundTheme.typography.bigMedium,
-                            color = JetAroundTheme.colors.textColorInverse,
+                            color = JetAroundTheme.colors.secondaryBackground,
                         )
                     }
                     Icon(

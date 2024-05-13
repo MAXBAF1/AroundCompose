@@ -36,6 +36,7 @@ class CardView(
     private val skillData: SkillData,
     private val onCardClick: () -> Unit,
     private val onUpgradeClick: () -> Unit,
+    private val isUpgradable: Boolean,
     private val modifier: Modifier,
 ) {
     @Composable
@@ -83,13 +84,15 @@ class CardView(
                     SkillIcon()
                     TextContainer()
                 }
-                if (skillData.currentLevel != skillData.maxLevel) {
-                    UpgradeButton()
-                } else {
-                    Image(
-                        painter = painterResource(id = R.drawable.max_level),
-                        contentDescription = "max level"
-                    )
+                if (isUpgradable) {
+                    if (skillData.currentLevel != skillData.maxLevel) {
+                        UpgradeButton()
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.max_level),
+                            contentDescription = "max level"
+                        )
+                    }
                 }
             }
         }

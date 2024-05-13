@@ -11,7 +11,11 @@ import androidx.navigation.NavController
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 @Composable
-fun BottomNavigation(navController: NavController, listItems: List<Screen>, currentRoute: String, ) {
+fun BottomNavigation(
+    navController: NavController,
+    listItems: List<Screen>,
+    currentRoute: String,
+) {
     NavigationBar(
         containerColor = Color.Transparent
     ) {
@@ -21,19 +25,19 @@ fun BottomNavigation(navController: NavController, listItems: List<Screen>, curr
                 onClick = {
                     if (currentRoute == item.route) return@NavigationBarItem
 
-                    if (item.route == Screen.MAP_ROUTE) {
+                    else if (item.route == Screen.MAP_ROUTE) {
                         navController.navigate(item.route) {
                             popUpTo(item.route) { inclusive = true }
                         }
-                    } else navController.navigate(item.route) {
-                        popUpTo(Screen.MAP_ROUTE)
-                    }
+                    } else navController.navigate(item.route) { popUpTo(Screen.MAP_ROUTE) }
                 },
                 icon = {
                     Icon(
                         painter = painterResource(id = item.iconId),
                         contentDescription = "icon",
-                        tint = if (currentRoute == item.route) JetAroundTheme.colors.textColor else JetAroundTheme.colors.lightTint
+                        tint = if (currentRoute == item.route) {
+                            JetAroundTheme.colors.textColor
+                        } else JetAroundTheme.colors.lightTint
                     )
                 },
                 label = { /*Text(text = stringResource(id = item.titleId))*/ },

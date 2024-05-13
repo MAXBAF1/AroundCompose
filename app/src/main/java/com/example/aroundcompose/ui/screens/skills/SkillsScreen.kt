@@ -27,6 +27,8 @@ import com.example.aroundcompose.ui.screens.skills.views.CardView
 
 class SkillsScreen(
     private val viewModel: SkillsViewModel,
+    private val onBackClick: () -> Unit,
+    private val isOtherPlayerScreen: Boolean
 ) {
     @Composable
     fun Create() {
@@ -50,9 +52,9 @@ class SkillsScreen(
             ) {
                 CustomTopAppBar(
                     textId = R.string.skills,
-                    isBackButtonNeeded = false,
-                    showMoney = true,
-                    onBackClick = {}
+                    isBackButtonNeeded = isOtherPlayerScreen,
+                    showMoney = !isOtherPlayerScreen,
+                    onBackClick = onBackClick
                 )
 
                 SkillsContainer(
@@ -82,6 +84,7 @@ class SkillsScreen(
                     skillData = mapOfSkills[type]!!,
                     onCardClick = { onCardClick(type) },
                     onUpgradeClick = { onUpgradeClick(type) },
+                    isUpgradable = !isOtherPlayerScreen,
                     modifier = if (index == 0) Modifier.padding(top = 24.dp) else Modifier
                 ).Create()
 

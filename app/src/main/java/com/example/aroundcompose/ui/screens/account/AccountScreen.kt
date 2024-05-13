@@ -3,6 +3,7 @@ package com.example.aroundcompose.ui.screens.account
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -25,10 +26,15 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,7 +60,9 @@ class AccountScreen(
     private val toSettingsScreen: () -> Unit,
     private val toStatisticScreen: () -> Unit,
     private val toFriendsScreen: () -> Unit,
-    private val toMoneysScreen: () -> Unit
+    private val toMoneysScreen: () -> Unit,
+    private val toSkillsScreen: () -> Unit,
+    private val isOtherPlayerScreen: Boolean
 ) {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
@@ -77,15 +85,70 @@ class AccountScreen(
                         modifier = Modifier.padding(bottom = 24.dp),
                         textId = R.string.account,
                         onBackClick = onBackClick,
-                        trailingIconId = R.drawable.ic_settings,
+                        trailingIconId = if (!isOtherPlayerScreen) R.drawable.ic_settings else null,
                         onTrailingBtnClick = toSettingsScreen
                     )
                     Avatar(modifier = Modifier.padding(bottom = 16.dp))
-                    NameAndLevels(modifier = Modifier.padding(bottom = 24.dp))
+                    Row(
+                        modifier = Modifier.padding(bottom = 24.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        NameAndLevels(modifier = Modifier.padding(end = 20.dp))
+                        if (isOtherPlayerScreen) AddFriendBtn()
+                    }
+
                     MainButtons()
-                    Id()
+                    PlaceId()
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun AddFriendBtn() {
+        val shape = RoundedPolygonShape(
+            RoundedPolygon(numVertices = 6, rounding = CornerRounding(radius = 0.14F))
+        )
+        val size = 54.dp
+        val bgColor = JetAroundTheme.colors.secondaryBackground
+        val shadowColor = JetAroundTheme.colors.blue
+        var checked by remember { mutableStateOf(false) }
+
+        IconToggleButton(
+            checked = checked,
+            onCheckedChange = { checked = !checked },
+            modifier = Modifier
+                .clip(shape)
+                .size(size)
+                .background(bgColor),
+            colors = IconButtonDefaults.iconToggleButtonColors(
+                containerColor = bgColor,
+                contentColor = shadowColor,
+                checkedContainerColor = shadowColor,
+                checkedContentColor = bgColor
+            )
+        ) {
+            Icon(
+                painter = painterResource(id = if (checked) R.drawable.ic_added_friend else R.drawable.ic_add_friend),
+                contentDescription = "add friend",
+            )
+        }
+    }
+
+    @Composable
+    private fun PlaceId() {
+        if (isOtherPlayerScreen) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.Bottom
+            ) { Id() }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+            ) { Id() }
         }
     }
 
@@ -95,11 +158,7 @@ class AccountScreen(
         val clipboardManager = LocalClipboardManager.current
         val context = LocalContext.current
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = "id: $id",
                 style = JetAroundTheme.typography.smallMedium,
@@ -123,27 +182,36 @@ class AccountScreen(
             CellsInfoCard(
                 titleTextId = R.string.team_captured,
                 bgColor = JetAroundTheme.colors.blue,
-                textColor = JetAroundTheme.colors.textColorInverse,
+                textColor = JetAroundTheme.colors.secondaryBackground,
                 decorationId = R.drawable.hex_decoration_2,
                 modifier = Modifier.padding(bottom = 16.dp),
                 onClick = toStatisticScreen
             )
-            Row {
-                ToOtherScreenBtn(
-                    onClick = toFriendsScreen,
-                    modifier = Modifier.weight(1F),
-                    text = stringResource(id = R.string.friends),
-                    icon = painterResource(id = R.drawable.ic_friends),
-                    bgColor = JetAroundTheme.colors.lightBlue
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                ToOtherScreenBtn(
-                    onClick = toMoneysScreen,
-                    modifier = Modifier.weight(1F),
-                    text = stringResource(id = R.string.moneys),
-                    icon = painterResource(id = R.drawable.ic_menu_coin),
-                    bgColor = JetAroundTheme.colors.purple
-                )
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                if (isOtherPlayerScreen) {
+                    ToOtherScreenBtn(
+                        onClick = toSkillsScreen,
+                        text = stringResource(id = R.string.skills),
+                        icon = painterResource(id = R.drawable.ic_skills),
+                        bgColor = JetAroundTheme.colors.purple
+                    )
+                } else {
+                    ToOtherScreenBtn(
+                        onClick = toFriendsScreen,
+                        modifier = Modifier.weight(1F),
+                        text = stringResource(id = R.string.friends),
+                        icon = painterResource(id = R.drawable.ic_friends),
+                        bgColor = JetAroundTheme.colors.lightBlue
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    ToOtherScreenBtn(
+                        onClick = toMoneysScreen,
+                        modifier = Modifier.weight(1F),
+                        text = stringResource(id = R.string.moneys),
+                        icon = painterResource(id = R.drawable.ic_menu_coin),
+                        bgColor = JetAroundTheme.colors.purple
+                    )
+                }
             }
         }
     }
@@ -162,7 +230,7 @@ class AccountScreen(
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = bgColor),
             elevation = ButtonDefaults.buttonElevation(4.dp),
-            contentPadding = PaddingValues(vertical = 8.dp)
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -170,14 +238,14 @@ class AccountScreen(
             ) {
                 Text(
                     text = text,
-                    color = JetAroundTheme.colors.textColorInverse,
+                    color = JetAroundTheme.colors.secondaryBackground,
                     style = JetAroundTheme.typography.bigMedium,
                     modifier = Modifier.padding(end = 8.dp)
                 )
                 Icon(
                     painter = icon,
                     contentDescription = "$text icon",
-                    tint = JetAroundTheme.colors.textColorInverse
+                    tint = JetAroundTheme.colors.secondaryBackground
                 )
             }
         }

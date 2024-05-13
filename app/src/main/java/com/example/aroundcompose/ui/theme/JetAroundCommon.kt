@@ -18,7 +18,7 @@ data class JetAroundColors(
     val notActiveColor: Color,
     val textColor: Color,
     val titleColor: Color,
-    val textColorInverse: Color,
+    val secondaryBackground: Color,
     val blue: Color,
     val gray: Color,
     val purple: Color,
