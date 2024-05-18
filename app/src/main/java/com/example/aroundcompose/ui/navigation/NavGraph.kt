@@ -51,7 +51,7 @@ class NavGraph(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.MAP_ROUTE,
+            startDestination = Screen.FRIENDS_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
             composable(Screen.SPLASH_ROUTE) { CreateSplashScreen() }

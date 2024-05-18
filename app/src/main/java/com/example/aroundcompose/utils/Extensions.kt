@@ -17,7 +17,6 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
-import androidx.lifecycle.Lifecycle
 import com.example.aroundcompose.ui.screens.map.models.MutableCameraState
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraState
@@ -78,4 +77,3 @@ private fun rememberIsKeyboardOpen(): State<Boolean> {
         awaitDispose { viewTreeObserver.removeOnGlobalLayoutListener(listener)  }
     }
 }
-
