@@ -25,7 +25,7 @@ fun MapBtn(iconId: Int, rotation: Float = 0F, onClick: () -> Unit,) {
             modifier = Modifier.rotate(rotation),
             painter = painterResource(id = iconId),
             contentDescription = "icon",
-            tint = JetAroundTheme.colors.mapElements
+            tint = JetAroundTheme.colors.darkGray
         )
 
     }

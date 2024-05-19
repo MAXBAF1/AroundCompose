@@ -21,7 +21,7 @@ import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 @Composable
-fun NextButtonView(enabled: Boolean, onClick: () -> Unit, modifier: Modifier) {
+fun NextButtonView(enabled: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Button(
         onClick = onClick,
         enabled = enabled,

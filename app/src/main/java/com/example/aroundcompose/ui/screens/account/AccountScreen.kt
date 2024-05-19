@@ -71,7 +71,7 @@ class AccountScreen(
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun Create() {
-        Scaffold(containerColor = JetAroundTheme.colors.secondaryBackground) {
+        Scaffold(containerColor = JetAroundTheme.colors.primaryBackground) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -114,7 +114,7 @@ class AccountScreen(
         val polygon = RoundedPolygon(numVertices = 6, rounding = CornerRounding(radius = 0.14F))
         val shape = RoundedPolygonShape(polygon)
         val size = 54.dp
-        val bgColor = JetAroundTheme.colors.secondaryBackground
+        val bgColor = JetAroundTheme.colors.primaryBackground
         val shadowColor = JetAroundTheme.colors.blue
         var checked by remember { mutableStateOf(false) }
 

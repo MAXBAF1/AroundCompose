@@ -121,7 +121,7 @@ private fun TitleAndAll(titleText: String, onAllClick: () -> Unit, modifier: Mod
                 )
                 .padding(6.dp),
             text = stringResource(id = R.string.all),
-            style = JetAroundTheme.typography.medium,
+            style = JetAroundTheme.typography.sixteenMedium,
             color = JetAroundTheme.colors.primary
         )
     }

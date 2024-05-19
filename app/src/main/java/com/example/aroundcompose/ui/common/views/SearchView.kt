@@ -55,7 +55,7 @@ fun SearchView(
             },
             enabled = enabled,
             singleLine = true,
-            textStyle = JetAroundTheme.typography.medium.copy(color = JetAroundTheme.colors.textColor),
+            textStyle = JetAroundTheme.typography.sixteenMedium.copy(color = JetAroundTheme.colors.textColor),
         ) { innerTextField ->
             DecorationBox(
                 textValue = value,
@@ -95,7 +95,7 @@ private fun DecorationBox(
             if (textValue.isEmpty()) {
                 Text(
                     text = stringResource(id = R.string.search_hint),
-                    style = JetAroundTheme.typography.medium,
+                    style = JetAroundTheme.typography.sixteenMedium,
                     color = JetAroundTheme.colors.searchHint
                 )
             }

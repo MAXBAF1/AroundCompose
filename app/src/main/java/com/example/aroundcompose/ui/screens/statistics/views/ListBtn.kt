@@ -5,12 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -38,7 +35,7 @@ fun ListBtn(onClick:() -> Unit) {
     ) {
         Text(
             text = "...",
-            style = JetAroundTheme.typography.regular,
+            style = JetAroundTheme.typography.mediumRegular,
             color = JetAroundTheme.colors.userCard
         )
     }

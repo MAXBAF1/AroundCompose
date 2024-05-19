@@ -89,4 +89,15 @@
 
     <!--Settings screen-->
     <string name="settings">настройки</string>
+    <string name="notifications">Уведомления</string>
+    <string name="language">Язык</string>
+    <string name="russian">Русский</string>
+    <string name="theme">Тема приложения</string>
+    <string name="auto">Авто</string>
+    <string name="name">Имя</string>
+    <string name="mail">Почта</string>
+    <string name="password">Пароль</string>
+    <string name="about_app">о приложении</string>
+    <string name="delete_account">удалить аккаунт</string>
+
 </resources>

@@ -23,7 +23,7 @@ fun CoinView(
     modifier: Modifier,
     value: Int,
     backgroundColor: androidx.compose.ui.graphics.Color = JetAroundTheme.colors.primaryBackground,
-    contentColor: androidx.compose.ui.graphics.Color = JetAroundTheme.colors.mapElements
+    contentColor: androidx.compose.ui.graphics.Color = JetAroundTheme.colors.darkGray
 ) {
     Card(
         modifier = modifier,

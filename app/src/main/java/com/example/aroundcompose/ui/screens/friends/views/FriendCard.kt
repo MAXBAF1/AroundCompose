@@ -78,7 +78,7 @@ class FriendCard(
     private fun ContainerInfo() {
         Text(
             text = "${friendData.position}.",
-            style = JetAroundTheme.typography.semiBold,
+            style = JetAroundTheme.typography.mediumSemiBold,
             color = JetAroundTheme.colors.titleColor
         )
         HexagonImage(

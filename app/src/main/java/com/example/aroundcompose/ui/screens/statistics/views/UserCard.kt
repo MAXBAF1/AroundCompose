@@ -57,7 +57,7 @@ fun UserCard(
                 .padding(horizontal = 10.dp, vertical = 8.dp)
                 .fillMaxWidth()
         ) {
-            val style = JetAroundTheme.typography.regular
+            val style = JetAroundTheme.typography.mediumRegular
             val color = if (isCurrentUser) {
                 JetAroundTheme.colors.textColor
             } else JetAroundTheme.colors.userCard

@@ -69,7 +69,7 @@ fun TextFieldView(
                 .onFocusChanged { focusState ->
                     isFocused = focusState.isFocused
                 },
-            textStyle = JetAroundTheme.typography.textField,
+            textStyle = JetAroundTheme.typography.fourteenMedium,
             cursorBrush = SolidColor(JetAroundTheme.colors.textColor),
             keyboardOptions = KeyboardOptions(
                 keyboardType = when (textFieldType) {

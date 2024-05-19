@@ -7,7 +7,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,10 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.FieldType
+import com.example.aroundcompose.ui.common.views.CustomButton
 import com.example.aroundcompose.ui.common.views.TextFieldView
 import com.example.aroundcompose.ui.screens.authorization.models.AuthFields
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationEvent
@@ -80,11 +77,9 @@ class AuthorizationScreen(
                 Title(Modifier.padding(bottom = 40.dp))
 
                 TextFields(
-                    fields = viewState.fields,
-                    onValueChange = { fieldType, value ->
+                    fields = viewState.fields, onValueChange = { fieldType, value ->
                         viewModel.obtainEvent(AuthorizationEvent.ChangeFieldText(fieldType, value))
-                    },
-                    modifier = Modifier.padding(bottom = 14.dp)
+                    }, modifier = Modifier.padding(bottom = 14.dp)
                 )
 
                 ForgotPassword(
@@ -117,7 +112,7 @@ class AuthorizationScreen(
 
             Text(
                 text = stringResource(id = R.string.label),
-                style = JetAroundTheme.typography.textField,
+                style = JetAroundTheme.typography.fourteenMedium,
                 color = JetAroundTheme.colors.textColor
             )
         }
@@ -157,11 +152,10 @@ class AuthorizationScreen(
         Text(
             text = stringResource(id = R.string.forgot_password),
             style = JetAroundTheme.typography.textRegistration.copy(color = forgotPasswordColor),
-            modifier = modifier.clickable(
-                onClick = {
-                    forgotPasswordColor = Color.DarkGray
-                    onForgotPasswordClicked()
-                },
+            modifier = modifier.clickable(onClick = {
+                forgotPasswordColor = Color.DarkGray
+                onForgotPasswordClicked()
+            },
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(radius = 0.dp)
             )
@@ -170,34 +164,15 @@ class AuthorizationScreen(
 
     @Composable
     private fun LoginButtons(enabled: Boolean, onLoginClick: () -> Unit) {
-        LoginButton(enabled, onLoginClick)
+        CustomButton(
+            text = stringResource(id = R.string.login_btn).uppercase(),
+            enabled = enabled,
+            onClick = onLoginClick
+        )
         Spacer(modifier = Modifier.height(16.dp))
         TextOr()
         Spacer(modifier = Modifier.height(16.dp))
         LoginUsingButtons()
-    }
-
-    @Composable
-    private fun LoginButton(enabled: Boolean, onClick: () -> Unit) {
-        TextButton(
-            onClick = onClick,
-            enabled = enabled,
-            shape = JetAroundTheme.shapes.textFieldShape,
-            elevation = ButtonDefaults.buttonElevation(JetAroundTheme.shadows.loginUsingShadow),
-            colors = ButtonColors(
-                containerColor = JetAroundTheme.colors.onFocusedColor,
-                contentColor = JetAroundTheme.colors.primaryBackground,
-                disabledContainerColor = JetAroundTheme.colors.notActiveColor,
-                disabledContentColor = JetAroundTheme.colors.primaryBackground
-            ),
-            contentPadding = PaddingValues(vertical = 21.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = stringResource(id = R.string.login_btn).uppercase(),
-                style = JetAroundTheme.typography.textBtn
-            )
-        }
     }
 
     @Composable
@@ -220,7 +195,7 @@ class AuthorizationScreen(
 
             Text(
                 text = stringResource(id = R.string.or),
-                style = JetAroundTheme.typography.textField,
+                style = JetAroundTheme.typography.fourteenMedium,
                 color = JetAroundTheme.colors.textFieldHint,
                 modifier = Modifier.padding(horizontal = 22.dp)
             )
@@ -281,11 +256,10 @@ class AuthorizationScreen(
             Text(
                 text = AnnotatedString(stringResource(id = R.string.registration_click)),
                 style = JetAroundTheme.typography.textRegistration.copy(color = registrationColor),
-                modifier = Modifier.clickable(
-                    onClick = {
-                        registrationColor = Color.DarkGray
-                        onRegistrationClicked()
-                    },
+                modifier = Modifier.clickable(onClick = {
+                    registrationColor = Color.DarkGray
+                    onRegistrationClicked()
+                },
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(radius = 0.dp)
                 )

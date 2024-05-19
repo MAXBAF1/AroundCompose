@@ -106,7 +106,7 @@ class CardView(
                 contentDescription = "skill icon",
                 modifier = Modifier
                     .clip(JetAroundTheme.shapes.upgradeShape)
-                    .background(JetAroundTheme.colors.backgroundSkillIcon)
+                    .background(JetAroundTheme.colors.veryLightGray)
                     .padding(8.dp)
             )
             LevelView(
@@ -132,7 +132,7 @@ class CardView(
         ) {
             Text(
                 text = stringResource(id = skillData.titleId),
-                style = JetAroundTheme.typography.medium,
+                style = JetAroundTheme.typography.sixteenMedium,
                 color = JetAroundTheme.colors.textColor
             )
             TextPrice(Modifier.padding(top = 2.dp))

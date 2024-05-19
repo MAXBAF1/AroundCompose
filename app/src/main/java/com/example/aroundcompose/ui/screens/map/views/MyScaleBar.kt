@@ -17,7 +17,7 @@ fun MyScaleBar(value: Float) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier.background(
-                JetAroundTheme.colors.mapElements,
+                JetAroundTheme.colors.darkGray,
                 shape = JetAroundTheme.shapes.maxRoundedCornerShape
             )
         ) {
@@ -26,7 +26,7 @@ fun MyScaleBar(value: Float) {
         Text(
             text = "$value м",
             style = JetAroundTheme.typography.mediumSemiBold,
-            color = JetAroundTheme.colors.mapElements
+            color = JetAroundTheme.colors.darkGray
         )
     }
 }
