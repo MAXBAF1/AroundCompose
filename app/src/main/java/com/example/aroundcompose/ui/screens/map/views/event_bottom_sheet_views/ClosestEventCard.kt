@@ -26,9 +26,15 @@ import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 @Composable
-fun ClosestEventCard(eventData: EventData, modifier: Modifier = Modifier) {
+fun ClosestEventCard(eventData: EventData, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .clickable(
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple()
+            )
+            .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = JetAroundTheme.colors.primaryBackground),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(6.dp)

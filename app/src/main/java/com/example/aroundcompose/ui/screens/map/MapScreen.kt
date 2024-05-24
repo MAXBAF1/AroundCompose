@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
+import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.common.views.CoinView
 import com.example.aroundcompose.ui.common.views.SearchView
 import com.example.aroundcompose.ui.screens.map.location_service.LocationService
@@ -47,6 +48,8 @@ class MapScreen(
     private val onPlusZoomLevel: () -> Unit,
     private val onMinusZoomLevel: () -> Unit,
     private val onZoomChanged: (CameraState) -> Unit,
+    private val onEventClick: (EventData) -> Unit,
+
 ) {
     private var animatorListener: Animator.AnimatorListener? = null
     private val coins = mutableIntStateOf(0)
@@ -120,7 +123,12 @@ class MapScreen(
             }
         }
 
-        if (isEventSheetShowed) EventBottomSheet { isEventSheetShowed = false }
+        if (isEventSheetShowed) {
+            EventBottomSheet(
+                onDismissRequest = { isEventSheetShowed = false },
+                onEventClick = onEventClick
+            ).Create()
+        }
     }
 
     fun updateZoomLevel(mapView: MapView?, zoomLevel: Double) {

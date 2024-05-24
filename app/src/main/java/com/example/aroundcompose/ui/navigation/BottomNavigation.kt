@@ -17,7 +17,7 @@ fun BottomNavigation(
     currentRoute: String,
 ) {
     NavigationBar(
-        containerColor = Color.Transparent
+        containerColor = JetAroundTheme.colors.primaryBackground
     ) {
         listItems.forEach { item ->
             NavigationBarItem(

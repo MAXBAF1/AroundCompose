@@ -1,7 +1,7 @@
 package com.example.aroundcompose.data
 
 enum class AroundConfig(private val value: String) {
-    HOST_ADDRESS("http://localhost:8080/api/v1"),
+    HOST_ADDRESS("https://aroundgame.ru/api/v1"),
     AUTH_ADDRESS("$HOST_ADDRESS/auth"),
     LOGIN_ADDRESS("$AUTH_ADDRESS/login"),
     REGISTRATION_ADDRESS("$AUTH_ADDRESS/registration"),

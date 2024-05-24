@@ -15,9 +15,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.aroundcompose.ui.common.enums.Teams
+import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
+import com.example.aroundcompose.ui.screens.event_info.EventInfoScreen
 import com.example.aroundcompose.ui.screens.friends.FriendsScreen
 import com.example.aroundcompose.ui.screens.friends.FriendsViewModel
 import com.example.aroundcompose.ui.screens.greetings.GreetingsScreen
@@ -34,6 +36,7 @@ import com.example.aroundcompose.ui.screens.statistics.StatisticsScreen
 import com.example.aroundcompose.ui.screens.statistics.StatisticsViewModel
 import com.example.aroundcompose.ui.screens.teams.SelectTeamScreen
 import com.example.aroundcompose.ui.screens.teams.TeamsViewModel
+import com.google.gson.Gson
 
 
 class NavGraph(
@@ -51,7 +54,7 @@ class NavGraph(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.ACCOUNT_ROUTE,
+            startDestination = Screen.SPLASH_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
             composable(Screen.SPLASH_ROUTE) { CreateSplashScreen() }
@@ -59,11 +62,17 @@ class NavGraph(
             composable(Screen.AUTHORIZATION_ROUTE) { CreateAuthScreen(authorizationViewModel) }
             composable(Screen.REGISTRATION_ROUTE) { CreateRegistrationScreen(registrationViewModel) }
             composable(Screen.TEAMS_ROUTE) { CreateTeamsScreen() }
-            composable(Screen.MAP_ROUTE) { MapManager(mapViewModel).Create() }
+            composable(Screen.MAP_ROUTE) { CreateMapScreen(mapViewModel) }
             composable(Screen.STATISTICS_ROUTE) { CreateStatisticsScreen(statisticsViewModel) }
             composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
             composable(Screen.SETTINGS_ROUTE) { CreateSettingsScreen() }
             composable(Screen.FRIENDS_ROUTE) { CreateFriendsScreen(friendsViewModel) }
+            composable(
+                route = "${Screen.EVENT_INFO_ROUTE}/${EVENT_DATA}={${EVENT_DATA}}",
+                arguments = listOf(navArgument(EVENT_DATA) {
+                    type = NavType.StringType
+                })
+            ) { CreateEventInfoScreen() }
             composable(
                 route = "${Screen.SKILLS_ROUTE}?${IS_OTHER_PLAYER_SCREEN}={${IS_OTHER_PLAYER_SCREEN}}",
                 arguments = listOf(navArgument(IS_OTHER_PLAYER_SCREEN) {
@@ -79,6 +88,24 @@ class NavGraph(
                 })
             ) { CreateAccountScreen() }
         }
+    }
+
+    @Composable
+    private fun CreateEventInfoScreen() {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val arguments = navBackStackEntry?.arguments
+        val eventData =
+            Gson().fromJson(arguments?.getString(IS_OTHER_PLAYER_SCREEN), EventData::class.java)
+
+        if (eventData != null) EventInfoScreen(eventData).Create()
+    }
+
+    @Composable
+    private fun CreateMapScreen(mapViewModel: MapViewModel) {
+        MapManager(mapViewModel, onEventClick = {
+            val jsonEvent = Gson().toJson(it)
+            navController.navigate("${Screen.EVENT_INFO_ROUTE}/$EVENT_DATA=$jsonEvent")
+        }).Create()
     }
 
     @Composable
@@ -183,6 +210,7 @@ class NavGraph(
     }
 
     companion object {
+        const val EVENT_DATA = "EVENT_DATA"
         const val IS_OTHER_PLAYER_SCREEN = "isOtherPlayerScreen"
     }
 }

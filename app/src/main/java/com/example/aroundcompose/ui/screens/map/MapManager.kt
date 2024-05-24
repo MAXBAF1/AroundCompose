@@ -9,12 +9,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.screens.map.location_service.LocationService
 import com.example.aroundcompose.ui.screens.map.models.MapEvent
 import com.example.aroundcompose.ui.screens.map.models.MapViewState
 import com.mapbox.maps.MapView
 
-class MapManager(private val viewModel: MapViewModel) {
+class MapManager(private val viewModel: MapViewModel, private val onEventClick: (EventData) -> Unit,) {
     @Composable
     fun Create() {
         val viewState by viewModel.getViewState().collectAsState()
@@ -30,7 +31,8 @@ class MapManager(private val viewModel: MapViewModel) {
             onMinusZoomLevel = { viewModel.obtainEvent(MapEvent.MinusZoomLevel) },
             onZoomChanged = {
                 viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
-            })
+            },
+            onEventClick = onEventClick)
         mapScreen.Create()
 
         when (val state = viewState) {
