@@ -37,6 +37,7 @@ class CardView(
     private val onCardClick: () -> Unit,
     private val onUpgradeClick: () -> Unit,
     private val isUpgradable: Boolean,
+    private val isCardClicked: Boolean,
     private val modifier: Modifier,
 ) {
     @Composable
@@ -44,10 +45,10 @@ class CardView(
         Column(modifier = modifier.fillMaxWidth()) {
             SkillCard()
 
-            AnimatedVisibility(visible = skillData.isCardClicked) {
+            AnimatedVisibility(visible = isCardClicked) {
                 DescriptionCard(
-                    imageId = skillData.imageId,
-                    descriptionId = skillData.descriptionId
+                    imageId = R.drawable.avatar_example, // FIXME добавить сериализацию
+                    description = skillData.description
                 )
             }
         }
@@ -102,7 +103,7 @@ class CardView(
     private fun SkillIcon() {
         Box {
             Icon(
-                painter = painterResource(id = skillData.iconId),
+                painter = painterResource(id = R.drawable.avatar_example), // FIXME обработка URL
                 contentDescription = "skill icon",
                 modifier = Modifier
                     .clip(JetAroundTheme.shapes.upgradeShape)
@@ -131,7 +132,7 @@ class CardView(
             modifier = Modifier.padding(start = 8.dp)
         ) {
             Text(
-                text = stringResource(id = skillData.titleId),
+                text = skillData.name,
                 style = JetAroundTheme.typography.sixteenMedium,
                 color = JetAroundTheme.colors.textColor
             )
@@ -141,9 +142,13 @@ class CardView(
 
     @Composable
     private fun TextPrice(modifier: Modifier) {
+        val priceText = if (skillData.currentLevel != skillData.maxLevel) {
+            "${stringResource(id = R.string.price)}: ${skillData.cost[skillData.currentLevel + 1]}"
+        } else ""
+
         Row {
             Text(
-                text = "${stringResource(id = R.string.price)}: ${skillData.price}",
+                text = priceText,
                 style = JetAroundTheme.typography.smallMedium,
                 color = JetAroundTheme.colors.informationText,
                 modifier = modifier
@@ -180,7 +185,7 @@ class CardView(
     }
 
     @Composable
-    private fun DescriptionCard(imageId: Int, descriptionId: Int) {
+    private fun DescriptionCard(imageId: Int, description: String) {
         Card(
             shape = JetAroundTheme.shapes.upgradeShape,
             border = BorderStroke(2.dp, JetAroundTheme.colors.textColor),
@@ -207,7 +212,7 @@ class CardView(
                     modifier = Modifier.padding(top = 14.dp, start = 5.dp, end = 5.dp)
                 ) {
                     Text(
-                        text = stringResource(id = descriptionId),
+                        text = description,
                         style = JetAroundTheme.typography.textDesc,
                         color = JetAroundTheme.colors.textColor,
                     )

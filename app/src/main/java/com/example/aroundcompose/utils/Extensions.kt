@@ -20,6 +20,9 @@ import androidx.compose.ui.platform.LocalView
 import com.example.aroundcompose.ui.screens.map.models.MutableCameraState
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraState
+import io.ktor.client.call.body
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpStatusCode
 
 fun Location.toPoint(): Point {
     return Point.fromLngLat(this.longitude, this.latitude)
@@ -76,4 +79,12 @@ private fun rememberIsKeyboardOpen(): State<Boolean> {
 
         awaitDispose { viewTreeObserver.removeOnGlobalLayoutListener(listener)  }
     }
+}
+
+suspend inline fun <reified T> HttpResponse?.castOrNull(): T? {
+    if (this != null && this.status == HttpStatusCode.OK) {
+        return this.body<T>()
+    }
+
+    return null
 }
