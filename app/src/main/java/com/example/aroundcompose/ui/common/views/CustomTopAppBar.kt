@@ -22,6 +22,7 @@ fun CustomTopAppBar(
     modifier: Modifier = Modifier,
     isBackButtonNeeded: Boolean = true,
     showMoney: Boolean = false,
+    numberOfCoins: Int = 1335,
     trailingIconId: Int? = null,
     onTrailingBtnClick: () -> Unit = {},
 ) {
@@ -58,7 +59,7 @@ fun CustomTopAppBar(
             if (showMoney) {
                 CoinView(
                     modifier,
-                    value = 1365,
+                    value = numberOfCoins,
                     backgroundColor = JetAroundTheme.colors.primary,
                     contentColor = JetAroundTheme.colors.primaryBackground
                 )

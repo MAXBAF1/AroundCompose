@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.views.CustomTopAppBar
-import com.example.aroundcompose.ui.screens.skills.models.SkillData
+import com.example.aroundcompose.data.models.SkillDTO
 import com.example.aroundcompose.ui.screens.skills.models.SkillsEvent
 import com.example.aroundcompose.ui.screens.skills.views.CardView
 
@@ -35,7 +35,7 @@ class SkillsScreen(
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
         LaunchedEffect(key1 = Unit) {
-            viewModel.obtainEvent(SkillsEvent.GetInfo)
+            viewModel.obtainEvent(SkillsEvent.GetUserInfo)
         }
 
         Box {
@@ -58,6 +58,7 @@ class SkillsScreen(
                     textId = R.string.skills,
                     isBackButtonNeeded = isOtherPlayerScreen,
                     showMoney = !isOtherPlayerScreen,
+                    numberOfCoins = viewState.coins,
                     onBackClick = onBackClick
                 )
 
@@ -78,7 +79,7 @@ class SkillsScreen(
 
     @Composable
     private fun SkillsContainer(
-        skills: List<SkillData>,
+        skills: List<SkillDTO>,
         skillState: List<Boolean>,
         onCardClick: (index: Int) -> Unit,
         onUpgradeClick: (index: Int) -> Unit,

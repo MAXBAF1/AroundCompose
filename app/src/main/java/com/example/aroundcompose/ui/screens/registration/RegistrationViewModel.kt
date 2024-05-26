@@ -1,7 +1,7 @@
 package com.example.aroundcompose.ui.screens.registration
 
 import androidx.lifecycle.viewModelScope
-import com.example.aroundcompose.data.NetworkService
+import com.example.aroundcompose.data.services.AuthenticationService
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.models.BaseViewModel
@@ -26,7 +26,7 @@ class RegistrationViewModel @Inject constructor(tokenManager: TokenManager) :
         initialState = RegistrationViewState()
     ) {
     private val fields = RegistrationFields()
-    private val networkService = NetworkService(tokenManager)
+    private val networkService = AuthenticationService(tokenManager)
 
     override fun obtainEvent(viewEvent: RegistrationEvent) {
         when (viewEvent) {

@@ -29,11 +29,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.views.LevelView
-import com.example.aroundcompose.ui.screens.skills.models.SkillData
+import com.example.aroundcompose.data.models.SkillDTO
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 class CardView(
-    private val skillData: SkillData,
+    private val skillData: SkillDTO,
     private val onCardClick: () -> Unit,
     private val onUpgradeClick: () -> Unit,
     private val isUpgradable: Boolean,
@@ -154,15 +154,17 @@ class CardView(
                 modifier = modifier
             )
 
-            Icon(
-                painter = painterResource(id = R.drawable.ic_coin),
-                contentDescription = "currency icon",
-                tint = JetAroundTheme.colors.informationText,
-                modifier = Modifier
-                    .size(14.dp)
-                    .padding(start = 2.dp)
-                    .align(Alignment.Bottom)
-            )
+            if (priceText != "") {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_coin),
+                    contentDescription = "currency icon",
+                    tint = JetAroundTheme.colors.informationText,
+                    modifier = Modifier
+                        .size(14.dp)
+                        .padding(start = 2.dp)
+                        .align(Alignment.Bottom)
+                )
+            }
         }
     }
 
@@ -200,7 +202,9 @@ class CardView(
             Column(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top,
-                modifier = Modifier.padding(horizontal = 9.dp, vertical = 24.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 9.dp, vertical = 24.dp)
             ) {
                 Image(
                     painter = painterResource(id = imageId),
