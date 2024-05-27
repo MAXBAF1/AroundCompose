@@ -1,5 +1,6 @@
 package com.example.aroundcompose.ui.navigation
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,7 @@ import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.menu.MenuScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationViewModel
+import com.example.aroundcompose.ui.screens.registration.models.RegistrationFields
 import com.example.aroundcompose.ui.screens.settings.SettingsScreen
 import com.example.aroundcompose.ui.screens.skills.SkillsScreen
 import com.example.aroundcompose.ui.screens.skills.SkillsViewModel
@@ -43,11 +45,13 @@ class NavGraph(
     private val navController: NavHostController,
     private val innerPaddings: PaddingValues,
 ) {
+    @SuppressLint("StateFlowValueCalledInComposition")
     @Composable
     fun Create() {
         val mapViewModel = hiltViewModel<MapViewModel>()
         val authorizationViewModel = hiltViewModel<AuthorizationViewModel>()
         val registrationViewModel = hiltViewModel<RegistrationViewModel>()
+        val teamsViewModel = hiltViewModel<TeamsViewModel>()
         val skillsViewModel = hiltViewModel<SkillsViewModel>()
         val statisticsViewModel = hiltViewModel<StatisticsViewModel>()
         val friendsViewModel = hiltViewModel<FriendsViewModel>()
@@ -61,7 +65,12 @@ class NavGraph(
             composable(Screen.GREETINGS_ROUTE) { CreateGreetingsScreen() }
             composable(Screen.AUTHORIZATION_ROUTE) { CreateAuthScreen(authorizationViewModel) }
             composable(Screen.REGISTRATION_ROUTE) { CreateRegistrationScreen(registrationViewModel) }
-            composable(Screen.TEAMS_ROUTE) { CreateTeamsScreen() }
+            composable(Screen.TEAMS_ROUTE) {
+                CreateTeamsScreen(
+                    teamsViewModel,
+                    registrationViewModel.getViewState().value.fields
+                )
+            }
             composable(Screen.MAP_ROUTE) { CreateMapScreen(mapViewModel) }
             composable(Screen.STATISTICS_ROUTE) { CreateStatisticsScreen(statisticsViewModel) }
             composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
@@ -172,7 +181,8 @@ class NavGraph(
         val arguments = navBackStackEntry?.arguments
         val isOtherPlayerScreen = arguments?.getBoolean(IS_OTHER_PLAYER_SCREEN) ?: false
 
-        AccountScreen(onBackClick = { navController.popBackStack() },
+        AccountScreen(
+            onBackClick = { navController.popBackStack() },
             toSettingsScreen = { navController.navigate(Screen.SETTINGS_ROUTE) },
             toStatisticScreen = { navController.navigate(Screen.STATISTICS_ROUTE) },
             toFriendsScreen = { navController.navigate(Screen.FRIENDS_ROUTE) },
@@ -201,12 +211,18 @@ class NavGraph(
     }
 
     @Composable
-    private fun CreateTeamsScreen() {
-        SelectTeamScreen(viewModel = TeamsViewModel(), onNextClicked = {
-            navController.navigate(Screen.MAP_ROUTE) {
-                popUpTo(navController.graph.startDestinationId) { inclusive = true }
-            }
-        }).Create()
+    private fun CreateTeamsScreen(
+        viewModel: TeamsViewModel,
+        registrationFields: RegistrationFields,
+    ) {
+        SelectTeamScreen(
+            viewModel = viewModel,
+            registrationFields = registrationFields,
+            onNextClicked = {
+                navController.navigate(Screen.MAP_ROUTE) {
+                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                }
+            }).Create()
     }
 
     companion object {

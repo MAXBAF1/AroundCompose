@@ -20,8 +20,7 @@ class SkillsViewModel @Inject constructor(tokenManager: TokenManager) :
     private var coins: Int = 0
     private var skills: List<SkillDTO> = listOf()
     private var skillsStates: MutableList<Boolean> = mutableListOf()
-    private val userInfoService =
-        UserInfoService(tokenManager) // FIXME должен вызываться на главном экране
+    private val userInfoService = UserInfoService(tokenManager)
     private val skillsService = SkillsService(tokenManager)
 
     override fun obtainEvent(viewEvent: SkillsEvent) {

@@ -25,7 +25,7 @@ class AuthenticationService(private val tokenManager: TokenManager) {
         return response?.status
     }
 
-    suspend fun register(authFields: RegistrationFields): HttpStatusCode? {
+    suspend fun register(authFields: RegistrationFields, teamId: Int): HttpStatusCode? {
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Post,
             address = AroundConfig.REGISTRATION_ADDRESS.toString(),
@@ -33,7 +33,7 @@ class AuthenticationService(private val tokenManager: TokenManager) {
                 username = authFields.username.fieldText,
                 email = authFields.email.fieldText,
                 password = authFields.password.fieldText,
-                teamId = 1,
+                teamId = teamId,
                 city = "Yekaterinburg",
             )
         )

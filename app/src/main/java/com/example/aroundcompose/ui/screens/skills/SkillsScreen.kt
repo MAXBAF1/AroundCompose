@@ -24,7 +24,6 @@ import com.example.aroundcompose.data.models.SkillDTO
 import com.example.aroundcompose.ui.screens.skills.models.SkillsEvent
 import com.example.aroundcompose.ui.screens.skills.views.CardView
 
-
 class SkillsScreen(
     private val viewModel: SkillsViewModel,
     private val onBackClick: () -> Unit,
