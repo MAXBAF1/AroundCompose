@@ -20,23 +20,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.common.views.NextButtonView
-import com.example.aroundcompose.ui.screens.registration.models.RegistrationFields
 import com.example.aroundcompose.ui.screens.teams.models.TeamsEvent
 import com.example.aroundcompose.ui.screens.teams.views.TeamView
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 class SelectTeamScreen(
     private val viewModel: TeamsViewModel,
-    private val registrationFields: RegistrationFields,
     private val onNextClicked: () -> Unit,
 ) {
     @Composable
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
-
-        LaunchedEffect(key1 = Unit) {
-            viewModel.obtainEvent(TeamsEvent.GetRegistrationInfo(registrationFields))
-        }
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -48,7 +42,7 @@ class SelectTeamScreen(
             Title()
 
             GridLayoutTeams(
-                viewState.currentTeam,
+                viewState.currentTeamId,
                 onClick = {
                     viewModel.obtainEvent(TeamsEvent.ChangeTeam(it.value))
                 },

@@ -152,10 +152,13 @@ class AuthorizationScreen(
         Text(
             text = stringResource(id = R.string.forgot_password),
             style = JetAroundTheme.typography.textRegistration.copy(color = forgotPasswordColor),
-            modifier = modifier.clickable(onClick = {
-                forgotPasswordColor = Color.DarkGray
-                onForgotPasswordClicked()
-            },
+            modifier = modifier.clickable(
+                onClick = {
+                    forgotPasswordColor = Color.DarkGray
+
+
+//                onForgotPasswordClicked() TODO: Добавить экран восстановления пароля
+                },
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(radius = 0.dp)
             )
@@ -256,10 +259,11 @@ class AuthorizationScreen(
             Text(
                 text = AnnotatedString(stringResource(id = R.string.registration_click)),
                 style = JetAroundTheme.typography.textRegistration.copy(color = registrationColor),
-                modifier = Modifier.clickable(onClick = {
-                    registrationColor = Color.DarkGray
-                    onRegistrationClicked()
-                },
+                modifier = Modifier.clickable(
+                    onClick = {
+                        registrationColor = Color.DarkGray
+                        onRegistrationClicked()
+                    },
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(radius = 0.dp)
                 )

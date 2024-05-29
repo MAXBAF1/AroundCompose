@@ -6,19 +6,19 @@ import com.example.aroundcompose.ui.common.enums.FieldType
 
 object ErrorMessages {
     private val loginErrorMessages = mapOf(
-        "Length" to R.string.login_error_length,
-        "Regex" to R.string.login_error_ABC_digit
+        ErrorsKeys.LENGTH to R.string.login_error_length,
+        ErrorsKeys.REGEX to R.string.login_error_ABC_digit
     )
-    private val emailErrorMessages = mapOf("Regex" to R.string.email_error_domain)
+    private val emailErrorMessages = mapOf(ErrorsKeys.REGEX to R.string.email_error_domain)
     private val passwordErrorMessages = mapOf(
-        "Length" to R.string.password_error_length,
-        "Regex" to R.string.password_error_ABC_digit_special
+        ErrorsKeys.LENGTH  to R.string.password_error_length,
+        ErrorsKeys.REGEX to R.string.password_error_ABC_digit_special
     )
     private val confirmPasswordErrorMessages = mapOf(
-        "Equals" to R.string.password_confirm_error_equals
+        ErrorsKeys.EQUALS to R.string.password_confirm_error_equals
     )
 
-    fun getErrorMessages(type: FieldType, key: String): Int? {
+    fun getErrorMessages(type: FieldType, key: ErrorsKeys): Int? {
         return when (type) {
             FieldType.LOGIN -> loginErrorMessages[key]
             FieldType.EMAIL -> emailErrorMessages[key]

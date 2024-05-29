@@ -24,14 +24,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
+import com.example.aroundcompose.data.models.FriendDTO
+import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.common.views.HexagonImage
 import com.example.aroundcompose.ui.common.views.LevelView
-import com.example.aroundcompose.ui.screens.friends.models.FriendData
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 
 class FriendCard(
-    private val friendData: FriendData,
+    private val position: Int,
+    private val friendData: FriendDTO,
     private val onMoreInfoClick: () -> Unit,
 ) {
     @Composable
@@ -77,20 +79,20 @@ class FriendCard(
     @Composable
     private fun ContainerInfo() {
         Text(
-            text = "${friendData.position}.",
+            text = position.toString(),
             style = JetAroundTheme.typography.mediumSemiBold,
             color = JetAroundTheme.colors.titleColor
         )
         HexagonImage(
-            imageId = friendData.imageId,
-            team = friendData.team,
+            imageId = R.drawable.avatar_example,
+            team = Teams.getById(friendData.teamId),
             border = 2.dp,
             modifier = Modifier
                 .padding(start = 8.dp)
                 .size(50.dp)
         )
         TextInfo(
-            name = friendData.name,
+            name = friendData.username,
             level = friendData.level,
             score = friendData.score
         )

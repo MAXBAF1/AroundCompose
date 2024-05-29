@@ -3,6 +3,7 @@ package com.example.aroundcompose.ui.screens.skills
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.models.SkillDTO
+import com.example.aroundcompose.data.models.UserDTO
 import com.example.aroundcompose.data.services.SkillsService
 import com.example.aroundcompose.data.services.UserInfoService
 import com.example.aroundcompose.ui.common.models.BaseViewModel
@@ -17,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SkillsViewModel @Inject constructor(tokenManager: TokenManager) :
     BaseViewModel<SkillsViewState, SkillsEvent>(initialState = SkillsViewState()) {
-    private var coins: Int = 0
+    private var userInfo: UserDTO? = UserDTO()
     private var skills: List<SkillDTO> = listOf()
     private var skillsStates: MutableList<Boolean> = mutableListOf()
     private val userInfoService = UserInfoService(tokenManager)
@@ -33,24 +34,20 @@ class SkillsViewModel @Inject constructor(tokenManager: TokenManager) :
 
             is SkillsEvent.ClickUpgradeBtn -> {
                 viewModelScope.launch {
-                    val id = skills[viewEvent.index].id
+                    val skill = skills[viewEvent.index]
 
-                    when (skillsService.buyLevels(id = id)) {
+                    when (skillsService.buyLevels(id = skill.id)) {
                         HttpStatusCode.OK -> {
-                            val userInfo = userInfoService.getMe()
+                            skill.currentLevel += 1
+                            userInfo?.coins = userInfo?.coins?.minus(skill.cost[skill.currentLevel])
+                                ?: return@launch
 
-                            skillsService.getUserSkills(userInfo?.id ?: return@launch)
-                                ?.let { skills ->
-                                    this@SkillsViewModel.skills = skills.toList()
-                                    this@SkillsViewModel.coins = userInfo.coins
-
-                                    viewState.update {
-                                        it.copy(
-                                            coins = coins,
-                                            skills = this@SkillsViewModel.skills.toList()
-                                        )
-                                    }
-                                }
+                            viewState.update {
+                                it.copy(
+                                    coins = userInfo?.coins ?: return@launch,
+                                    skills = skills.toList()
+                                )
+                            }
                         }
 
                         else -> return@launch // FIXME сделать обработку ошибок
@@ -60,17 +57,16 @@ class SkillsViewModel @Inject constructor(tokenManager: TokenManager) :
 
             SkillsEvent.GetUserInfo -> {
                 viewModelScope.launch {
-                    val userInfo = userInfoService.getMe()
+                    userInfo = userInfoService.getMe()
 
-                    skillsService.getUserSkills(userInfo?.id ?: return@launch)?.let { skills ->
-                        this@SkillsViewModel.skills = skills.toList()
-                        skillsStates = MutableList(skills.size) { false }
-                        this@SkillsViewModel.coins = userInfo.coins
+                    skillsService.getUserSkills(userInfo?.id ?: return@launch)?.let { userSkills ->
+                        skills = userSkills.toList()
+                        skillsStates = MutableList(userSkills.size) { false }
 
                         viewState.update {
                             it.copy(
-                                coins = coins,
-                                skills = this@SkillsViewModel.skills.toList(),
+                                coins = userInfo?.coins ?: return@launch,
+                                skills = skills.toList(),
                                 skillsStates = skillsStates.toList()
                             )
                         }

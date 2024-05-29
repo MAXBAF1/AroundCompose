@@ -8,10 +8,10 @@ data class SkillDTO(
     @SerialName("id") val id: Int = 1,
     @SerialName("name") val name: String,
     @SerialName("max_level") val maxLevel: Int = 10,
-    @SerialName("current_level") val currentLevel: Int = 1,
+    @SerialName("current_level") var currentLevel: Int = 1,
     @SerialName("rule") val rule: List<Int> = listOf(),
     @SerialName("cost") val cost: List<Int> = listOf(),
     @SerialName("description") val description: String,
     @SerialName("image") val iconUrl: String,
-//    val imageId: Int,
+    @SerialName("icon") val iconId: Int,
 ): IDTO()

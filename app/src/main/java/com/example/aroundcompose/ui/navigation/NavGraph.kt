@@ -29,7 +29,6 @@ import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.menu.MenuScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationViewModel
-import com.example.aroundcompose.ui.screens.registration.models.RegistrationFields
 import com.example.aroundcompose.ui.screens.settings.SettingsScreen
 import com.example.aroundcompose.ui.screens.skills.SkillsScreen
 import com.example.aroundcompose.ui.screens.skills.SkillsViewModel
@@ -40,11 +39,11 @@ import com.example.aroundcompose.ui.screens.teams.SelectTeamScreen
 import com.example.aroundcompose.ui.screens.teams.TeamsViewModel
 import com.google.gson.Gson
 
-
 class NavGraph(
     private val navController: NavHostController,
     private val innerPaddings: PaddingValues,
 ) {
+
     @SuppressLint("StateFlowValueCalledInComposition")
     @Composable
     fun Create() {
@@ -66,10 +65,7 @@ class NavGraph(
             composable(Screen.AUTHORIZATION_ROUTE) { CreateAuthScreen(authorizationViewModel) }
             composable(Screen.REGISTRATION_ROUTE) { CreateRegistrationScreen(registrationViewModel) }
             composable(Screen.TEAMS_ROUTE) {
-                CreateTeamsScreen(
-                    teamsViewModel,
-                    registrationViewModel.getViewState().value.fields
-                )
+                CreateTeamsScreen(teamsViewModel)
             }
             composable(Screen.MAP_ROUTE) { CreateMapScreen(mapViewModel) }
             composable(Screen.STATISTICS_ROUTE) { CreateStatisticsScreen(statisticsViewModel) }
@@ -213,11 +209,9 @@ class NavGraph(
     @Composable
     private fun CreateTeamsScreen(
         viewModel: TeamsViewModel,
-        registrationFields: RegistrationFields,
     ) {
         SelectTeamScreen(
             viewModel = viewModel,
-            registrationFields = registrationFields,
             onNextClicked = {
                 navController.navigate(Screen.MAP_ROUTE) {
                     popUpTo(navController.graph.startDestinationId) { inclusive = true }

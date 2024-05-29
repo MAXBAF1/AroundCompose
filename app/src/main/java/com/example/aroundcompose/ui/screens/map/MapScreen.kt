@@ -87,7 +87,7 @@ class MapScreen(
                 SearchView(modifier = Modifier
                     .weight(1f)
                     .padding(end = 10.dp),
-                    restoredValue = searchText,
+                    value = searchText,
                     onClick = { isEventSheetShowed = true }) {
                     TODO()
                 }

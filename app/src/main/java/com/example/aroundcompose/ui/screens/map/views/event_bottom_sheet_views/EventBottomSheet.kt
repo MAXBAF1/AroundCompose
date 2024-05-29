@@ -45,7 +45,7 @@ class EventBottomSheet(
             sheetState = sheetState
         ) {
             SearchView(
-                restoredValue = "", modifier = Modifier.padding(
+                value = "", modifier = Modifier.padding(
                     start = JetAroundTheme.margins.mainMargin,
                     end = JetAroundTheme.margins.mainMargin,
                     bottom = 24.dp
