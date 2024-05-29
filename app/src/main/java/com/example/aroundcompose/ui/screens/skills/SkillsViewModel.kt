@@ -1,9 +1,8 @@
 package com.example.aroundcompose.ui.screens.skills
 
-import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.screens.skills.models.SkillData
-import com.example.aroundcompose.ui.screens.skills.models.SkillType
+import com.example.aroundcompose.ui.screens.skills.models.Skills
 import com.example.aroundcompose.ui.screens.skills.models.SkillsEvent
 import com.example.aroundcompose.ui.screens.skills.models.SkillsViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,53 +12,25 @@ import javax.inject.Inject
 @HiltViewModel
 class SkillsViewModel @Inject constructor() :
     BaseViewModel<SkillsViewState, SkillsEvent>(initialState = SkillsViewState()) {
-    private val mapOfSkills: HashMap<SkillType, SkillData> = hashMapOf(
-        SkillType.SQUARE to SkillData(
-            iconId = R.drawable.ic_square,
-            imageId = R.drawable.skill_square,
-            titleId = R.string.title_square,
-            descriptionId = R.string.desc_square,
-            currentLevel = 2
-        ),
-        SkillType.BOMB to SkillData(
-            iconId = R.drawable.ic_bomb,
-            imageId = R.drawable.skill_bomb,
-            titleId = R.string.title_bomb,
-            descriptionId = R.string.desc_bomb,
-            currentLevel = 10
-        ),
-        SkillType.INVISIBLE to SkillData(
-            iconId = R.drawable.ic_invisible_user,
-            imageId = R.drawable.skill_invisible,
-            titleId = R.string.title_invisible,
-            descriptionId = R.string.desc_invisible,
-            currentLevel = 5
-        ),
-        SkillType.MINE to SkillData(
-            iconId = R.drawable.ic_mine,
-            imageId = R.drawable.skill_mine,
-            titleId = R.string.title_mine,
-            descriptionId = R.string.desc_mine,
-            currentLevel = 8
-        )
-    )
+    private val skills: Skills = Skills()
 
     override fun obtainEvent(viewEvent: SkillsEvent) {
         when (viewEvent) {
             is SkillsEvent.ClickOnCard -> {
-                mapOfSkills[viewEvent.type] = SkillData(
-                    iconId = mapOfSkills[viewEvent.type]?.iconId!!,
-                    imageId = mapOfSkills[viewEvent.type]?.imageId!!,
-                    titleId = mapOfSkills[viewEvent.type]?.titleId!!,
-                    descriptionId = mapOfSkills[viewEvent.type]?.descriptionId!!,
-                    currentLevel = mapOfSkills[viewEvent.type]?.currentLevel!!,
-                    price = mapOfSkills[viewEvent.type]?.price!!,
-                    isCardClicked = !mapOfSkills[viewEvent.type]?.isCardClicked!!
+                skills[viewEvent.type] = SkillData(
+                    iconId = skills[viewEvent.type].iconId,
+                    imageId = skills[viewEvent.type].imageId,
+                    titleId = skills[viewEvent.type].titleId,
+                    descriptionId = skills[viewEvent.type].descriptionId,
+                    currentLevel = skills[viewEvent.type].currentLevel,
+                    maxLevel = skills[viewEvent.type].maxLevel,
+                    price = skills[viewEvent.type].price,
+                    isCardClicked = !skills[viewEvent.type].isCardClicked
                 )
 
                 viewState.update {
                     it.copy(
-                        mapOfSkills = mapOfSkills.toMap()
+                        skills = skills.copy()
                     )
                 }
             }
