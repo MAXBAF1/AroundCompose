@@ -3,6 +3,7 @@ package com.example.aroundcompose.ui.screens.map
 import android.content.SharedPreferences
 import com.example.aroundcompose.di.NotEncryptedSharedPref
 import com.example.aroundcompose.ui.common.models.BaseViewModel
+import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.screens.map.location_service.LocationService
 import com.example.aroundcompose.ui.screens.map.models.MapEvent
 import com.example.aroundcompose.ui.screens.map.models.MapViewState
@@ -24,6 +25,7 @@ class MapViewModel @Inject constructor(
     private var searchText = ""
     private var cameraState = MutableCameraState()
     private var isEventSheetShowed = false
+    private var isEventInfoSheetShowed = false
 
     override fun obtainEvent(viewEvent: MapEvent) {
         when (viewEvent) {
@@ -34,6 +36,15 @@ class MapViewModel @Inject constructor(
             MapEvent.PlusZoomLevel -> updateZoomLevel(viewEvent)
             is MapEvent.UpdateCameraPosition -> cameraState = viewEvent.cameraState.toMutable()
             is MapEvent.ShowEventSheet -> showEventSheet(viewEvent.show)
+            is MapEvent.ShowEventInfoSheet -> showEventInfoSheet(viewEvent.show, viewEvent.event)
+        }
+    }
+
+    private fun showEventInfoSheet(show: Boolean, chosenEvent: EventData? = null) {
+        showEventSheet(!show)
+        isEventInfoSheetShowed = show
+        viewState.update {
+            it.copy(isEventInfoSheetShowed = isEventInfoSheetShowed, chosenEvent = chosenEvent)
         }
     }
 

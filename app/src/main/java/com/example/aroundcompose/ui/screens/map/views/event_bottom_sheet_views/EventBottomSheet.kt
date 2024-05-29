@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
@@ -41,6 +42,7 @@ class EventBottomSheet(
                 .fillMaxSize()
                 .padding(top = 22.dp),
             onDismissRequest = onDismissRequest,
+            scrimColor = Color.Transparent,
             containerColor = JetAroundTheme.colors.primaryBackground,
             sheetState = sheetState
         ) {
@@ -67,7 +69,7 @@ class EventBottomSheet(
 
     private val exampleEventData = EventData(
         title = "EKB STADIUM MEET 2023",
-        description = " 25 июня 2023 года на территории у стадиона Екатеринбург Арена будет много стиля, дыма и шума, ведь здесь пройдет EKB STADIUM MEET 2023!\u2028\u2028Главной изюминкой станет дрифт зона с показательными проездами пилотов из ENJOY DRIFT и возможностью прокатиться в дрифт такси. \u2028\u2028Гостей ждут розыгрыши и викторины с крутыми подарками от партнеров мероприятия. \u2028\u2028Начало в 12:00, официальное закрытие в 19:00 \u2028\u2028Узнать подробности можно на сайте организаторов: https://ekt-arena.ru/afisha/prochee/ekb-stadium-meet-2023/",
+        description = "25 июня 2023 года на территории у стадиона Екатеринбург Арена будет много стиля, дыма и шума, ведь здесь пройдет EKB STADIUM MEET 2023!\n\nГлавной изюминкой станет дрифт зона с показательными проездами пилотов из ENJOY DRIFT и возможностью прокатиться в дрифт такси.\n\nГостей ждут розыгрыши и викторины с крутыми подарками от партнеров мероприятия.\n\nНачало в 12:00, официальное закрытие в 19:00\n\nУзнать подробности можно на сайте организаторов: https://ekt-arena.ru/afisha/prochee/ekb-stadium-meet-2023/",
         place = "Екатеринбург Арена, Екатеринбург",
         distanceToMe = 16.5
     )

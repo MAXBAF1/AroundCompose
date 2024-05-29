@@ -20,7 +20,7 @@ import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
-import com.example.aroundcompose.ui.screens.event_info.EventInfoScreen
+import com.example.aroundcompose.ui.screens.map.views.event_info_sheet.EventInfoSheet
 import com.example.aroundcompose.ui.screens.friends.FriendsScreen
 import com.example.aroundcompose.ui.screens.friends.FriendsViewModel
 import com.example.aroundcompose.ui.screens.greetings.GreetingsScreen
@@ -69,12 +69,6 @@ class NavGraph(
             composable(Screen.SETTINGS_ROUTE) { CreateSettingsScreen() }
             composable(Screen.FRIENDS_ROUTE) { CreateFriendsScreen(friendsViewModel) }
             composable(
-                route = "${Screen.EVENT_INFO_ROUTE}/${EVENT_DATA}={${EVENT_DATA}}",
-                arguments = listOf(navArgument(EVENT_DATA) {
-                    type = NavType.StringType
-                })
-            ) { CreateEventInfoScreen() }
-            composable(
                 route = "${Screen.SKILLS_ROUTE}?${IS_OTHER_PLAYER_SCREEN}={${IS_OTHER_PLAYER_SCREEN}}",
                 arguments = listOf(navArgument(IS_OTHER_PLAYER_SCREEN) {
                     type = NavType.BoolType
@@ -92,22 +86,8 @@ class NavGraph(
     }
 
     @Composable
-    private fun CreateEventInfoScreen() {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val arguments = navBackStackEntry?.arguments
-        val decodedEvent = Uri.decode(arguments?.getString(IS_OTHER_PLAYER_SCREEN))
-        val event = Gson().fromJson(decodedEvent, EventData::class.java)
-
-        if (decodedEvent != null) EventInfoScreen(event).Create()
-    }
-
-    @Composable
     private fun CreateMapScreen(mapViewModel: MapViewModel) {
-        MapScreen(mapViewModel, onEventClick = {
-            val jsonEvent = Gson().toJson(it)
-            val encodedEvent = Uri.encode(jsonEvent)
-            navController.navigate("${Screen.EVENT_INFO_ROUTE}/$EVENT_DATA=$encodedEvent")
-        }).Create()
+        MapScreen(mapViewModel).Create()
     }
 
     @Composable

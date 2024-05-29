@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
-import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.common.views.CoinView
 import com.example.aroundcompose.ui.common.views.SearchView
 import com.example.aroundcompose.ui.screens.map.location_service.LocationService
@@ -34,6 +33,7 @@ import com.example.aroundcompose.ui.screens.map.views.MapBtn
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap.MapConstant
 import com.example.aroundcompose.ui.screens.map.views.event_bottom_sheet_views.EventBottomSheet
+import com.example.aroundcompose.ui.screens.map.views.event_info_sheet.EventInfoSheet
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
@@ -49,7 +49,7 @@ import com.mapbox.maps.plugin.locationcomponent.location
 
 class MapScreen(
     private val viewModel: MapViewModel,
-    private val onEventClick: (EventData) -> Unit,
+    //private val onEventClick: (EventData) -> Unit,
 ) {
     private var animatorListener: Animator.AnimatorListener? = null
     private val coins = mutableIntStateOf(0)
@@ -138,9 +138,25 @@ class MapScreen(
         }
 
         if (viewState.isEventSheetShowed) {
-            EventBottomSheet(
-                onDismissRequest = { viewModel.obtainEvent(MapEvent.ShowEventSheet(false)) },
-                onEventClick = onEventClick
+            EventBottomSheet(onDismissRequest = {
+                viewModel.obtainEvent(
+                    MapEvent.ShowEventSheet(
+                        false
+                    )
+                )
+            }, onEventClick = {
+                viewModel.obtainEvent(
+                    MapEvent.ShowEventInfoSheet(
+                        true, it
+                    )
+                )
+            }).Create()
+        }
+
+        if (viewState.isEventInfoSheetShowed && viewState.chosenEvent != null) {
+            EventInfoSheet(
+                onDismissRequest = { viewModel.obtainEvent(MapEvent.ShowEventInfoSheet(false)) },
+                eventData = viewState.chosenEvent!!,
             ).Create()
         }
     }
@@ -152,8 +168,7 @@ class MapScreen(
 
     private fun updateZoomLevel(mapView: MapView?, zoomLevel: Double) {
         mapView?.getMapboxMap()?.easeTo(
-            cameraOptions = CameraOptions.Builder()
-                .zoom(zoomLevel).build()
+            cameraOptions = CameraOptions.Builder().zoom(zoomLevel).build()
         )
     }
 
