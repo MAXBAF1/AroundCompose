@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.views.CustomTopAppBar
-import com.example.aroundcompose.ui.screens.skills.models.SkillData
 import com.example.aroundcompose.ui.screens.skills.models.SkillType
+import com.example.aroundcompose.ui.screens.skills.models.Skills
 import com.example.aroundcompose.ui.screens.skills.models.SkillsEvent
 import com.example.aroundcompose.ui.screens.skills.views.CardView
 
@@ -28,7 +28,7 @@ import com.example.aroundcompose.ui.screens.skills.views.CardView
 class SkillsScreen(
     private val viewModel: SkillsViewModel,
     private val onBackClick: () -> Unit,
-    private val isOtherPlayerScreen: Boolean
+    private val isOtherPlayerScreen: Boolean,
 ) {
     @Composable
     fun Create() {
@@ -58,7 +58,7 @@ class SkillsScreen(
                 )
 
                 SkillsContainer(
-                    mapOfSkills = viewState.mapOfSkills,
+                    skills = viewState.skills,
                     onCardClick = { type ->
                         viewModel.obtainEvent(SkillsEvent.ClickOnCard(type))
                     },
@@ -73,7 +73,7 @@ class SkillsScreen(
 
     @Composable
     private fun SkillsContainer(
-        mapOfSkills: Map<SkillType, SkillData>,
+        skills: Skills,
         onCardClick: (skillType: SkillType) -> Unit,
         onUpgradeClick: (skillType: SkillType) -> Unit,
         modifier: Modifier,
@@ -81,7 +81,7 @@ class SkillsScreen(
         Column(modifier) {
             SkillType.values().forEachIndexed { index, type ->
                 CardView(
-                    skillData = mapOfSkills[type]!!,
+                    skillData = skills[type],
                     onCardClick = { onCardClick(type) },
                     onUpgradeClick = { onUpgradeClick(type) },
                     isUpgradable = !isOtherPlayerScreen,

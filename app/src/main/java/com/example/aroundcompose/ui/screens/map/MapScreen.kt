@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -72,7 +73,6 @@ class MapScreen(
             initMap(mapView, viewState.lastLocation)
             viewModel.obtainEvent(MapEvent.SetupService)
             if (!LocationService.isRunning) startService(context)
-
         }, onMoveListener = {
             removeCameraFollow(mapView, positionChangedListener)
             viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
@@ -131,8 +131,13 @@ class MapScreen(
             }
         }
 
-        paintCells(mapView, viewState.paintedCells)
-        updateZoomLevel(mapView, viewState.zoomLevel)
+        LaunchedEffect(key1 = viewState.paintedCells) {
+            paintCells(mapView, viewState.paintedCells)
+        }
+
+        LaunchedEffect(key1 = viewState.zoomLevel) {
+            updateZoomLevel(mapView, viewState.zoomLevel)
+        }
 
         if (viewState.isEventSheetShowed) {
             EventBottomSheet(
@@ -147,14 +152,14 @@ class MapScreen(
         context.startForegroundService(intent)
     }
 
-    fun updateZoomLevel(mapView: MapView?, zoomLevel: Double) {
+    private fun updateZoomLevel(mapView: MapView?, zoomLevel: Double) {
         mapView?.getMapboxMap()?.easeTo(
             cameraOptions = CameraOptions.Builder().center(LocationService.lastLocation)
                 .zoom(zoomLevel).build()
         )
     }
 
-    fun initMap(mapView: MapView?, lastLocation: Point?) {
+    private fun initMap(mapView: MapView?, lastLocation: Point?) {
         val zoomLevel = if (lastLocation == null) 0.0 else MapConstant.ZOOM_LEVEL
 
         mapView?.getMapboxMap()?.setCamera(
@@ -164,7 +169,7 @@ class MapScreen(
         )
     }
 
-    fun paintCells(mapView: MapView?, paintedCells: List<String>) {
+    private fun paintCells(mapView: MapView?, paintedCells: List<String>) {
         val mapboxMap = mapView?.getMapboxMap()
         val paintedCellsFilter =
             Expression.inExpression(Expression.get("id"), literal(paintedCells))

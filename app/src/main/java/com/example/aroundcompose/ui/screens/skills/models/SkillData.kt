@@ -1,6 +1,7 @@
 package com.example.aroundcompose.ui.screens.skills.models
 
 data class SkillData(
+    val id: Int = 1,
     val iconId: Int,
     val imageId: Int,
     val titleId: Int,
