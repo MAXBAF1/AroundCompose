@@ -131,9 +131,7 @@ class MapScreen(
             }
         }
 
-        LaunchedEffect(key1 = viewState.paintedCells) {
-            paintCells(mapView, viewState.paintedCells)
-        }
+        paintCells(mapView, viewState.paintedCells)
 
         LaunchedEffect(key1 = viewState.zoomLevel) {
             updateZoomLevel(mapView, viewState.zoomLevel)
@@ -154,7 +152,7 @@ class MapScreen(
 
     private fun updateZoomLevel(mapView: MapView?, zoomLevel: Double) {
         mapView?.getMapboxMap()?.easeTo(
-            cameraOptions = CameraOptions.Builder().center(LocationService.lastLocation)
+            cameraOptions = CameraOptions.Builder()
                 .zoom(zoomLevel).build()
         )
     }
