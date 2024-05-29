@@ -8,5 +8,6 @@ sealed class MapEvent {
     data class EditSearchText(val text: String) : MapEvent()
     object PlusZoomLevel : MapEvent()
     object MinusZoomLevel : MapEvent()
+    data class ShowEventSheet(val show: Boolean) : MapEvent()
     data class UpdateCameraPosition(val cameraState: CameraState) : MapEvent()
 }

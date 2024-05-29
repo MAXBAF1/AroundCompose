@@ -208,7 +208,7 @@ class CardView(
                 ) {
                     Text(
                         text = stringResource(id = descriptionId),
-                        style = JetAroundTheme.typography.textDesc,
+                        style = JetAroundTheme.typography.regular14,
                         color = JetAroundTheme.colors.textColor,
                     )
 

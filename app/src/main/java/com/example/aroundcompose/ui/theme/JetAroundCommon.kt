@@ -41,7 +41,7 @@ data class JetAroundColors(
 data class JetAroundTypography(
     val appName: TextStyle,
     val headingLogin: TextStyle,
-    val bigBold: TextStyle,
+    val bold24: TextStyle,
     val bigMedium: TextStyle,
     val coin: TextStyle,
     val percent: TextStyle,
@@ -53,7 +53,7 @@ data class JetAroundTypography(
     val mediumRegular: TextStyle,
     val mediumSemiBold: TextStyle,
     val mediumBold: TextStyle,
-    val textDesc: TextStyle,
+    val regular14: TextStyle,
     val title: TextStyle,
     val eventCardTitle: TextStyle,
     val eventCardPlaceAndBtn: TextStyle,

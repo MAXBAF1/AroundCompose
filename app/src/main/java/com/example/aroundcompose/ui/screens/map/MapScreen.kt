@@ -1,6 +1,8 @@
 package com.example.aroundcompose.ui.screens.map
 
 import android.animation.Animator
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -18,12 +21,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.common.views.CoinView
 import com.example.aroundcompose.ui.common.views.SearchView
 import com.example.aroundcompose.ui.screens.map.location_service.LocationService
+import com.example.aroundcompose.ui.screens.map.models.MapEvent
 import com.example.aroundcompose.ui.screens.map.views.MapBtn
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap.MapConstant
@@ -31,7 +36,6 @@ import com.example.aroundcompose.ui.screens.map.views.event_bottom_sheet_views.E
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
-import com.mapbox.maps.CameraState
 import com.mapbox.maps.MapView
 import com.mapbox.maps.extension.style.expressions.dsl.generated.literal
 import com.mapbox.maps.extension.style.expressions.dsl.generated.rgb
@@ -43,36 +47,35 @@ import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListen
 import com.mapbox.maps.plugin.locationcomponent.location
 
 class MapScreen(
-    private val onMapInit: (MapView) -> Unit,
-    private val onMoveListener: (CameraState) -> Unit,
-    private val onPlusZoomLevel: () -> Unit,
-    private val onMinusZoomLevel: () -> Unit,
-    private val onZoomChanged: (CameraState) -> Unit,
+    private val viewModel: MapViewModel,
     private val onEventClick: (EventData) -> Unit,
-
 ) {
     private var animatorListener: Animator.AnimatorListener? = null
     private val coins = mutableIntStateOf(0)
 
     @Composable
     fun Create() {
+        val viewState by viewModel.getViewState().collectAsState()
         var mapView: MapView? by remember { mutableStateOf(null) }
-        var searchText by remember { mutableStateOf("") }
+        val searchText by remember { mutableStateOf("") }
         val positionChangedListener by remember {
             mutableStateOf(OnIndicatorPositionChangedListener {
                 mapView?.getMapboxMap()?.setCamera(CameraOptions.Builder().center(it).build())
             })
         }
-        var isEventSheetShowed by remember { mutableStateOf(false) }
         var rotation by remember { mutableFloatStateOf(0F) }
         var compassIconId by remember { mutableIntStateOf(R.drawable.ic_navigate) }
+        val context = LocalContext.current
 
         MyMapboxMap(mapViewCallback = { mv ->
             mapView = mv
-            onMapInit(mv)
+            initMap(mapView, viewState.lastLocation)
+            viewModel.obtainEvent(MapEvent.SetupService)
+            if (!LocationService.isRunning) startService(context)
+
         }, onMoveListener = {
             removeCameraFollow(mapView, positionChangedListener)
-            onMoveListener(it)
+            viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
         }, onRotate = {
             compassIconId = R.drawable.ic_compass
             rotation = it
@@ -88,7 +91,7 @@ class MapScreen(
                     .weight(1f)
                     .padding(end = 10.dp),
                     restoredValue = searchText,
-                    onClick = { isEventSheetShowed = true }) {
+                    onClick = { viewModel.obtainEvent(MapEvent.ShowEventSheet(true)) }) {
                     TODO()
                 }
                 CoinView(modifier = Modifier, value = coins.intValue)
@@ -107,28 +110,41 @@ class MapScreen(
                     Spacer(modifier = Modifier.size(width = 0.dp, height = 0.dp))
                     Column {
                         Spacer(modifier = Modifier.size(width = 0.dp, height = 60.dp))
-                        MapBtn(iconId = R.drawable.ic_plus, onClick = onPlusZoomLevel)
+                        MapBtn(iconId = R.drawable.ic_plus, onClick = {
+                            viewModel.obtainEvent(MapEvent.PlusZoomLevel)
+                        })
                         Spacer(modifier = Modifier.size(width = 0.dp, height = 12.dp))
-                        MapBtn(iconId = R.drawable.ic_minus, onClick = onMinusZoomLevel)
+                        MapBtn(iconId = R.drawable.ic_minus,
+                            onClick = { viewModel.obtainEvent(MapEvent.MinusZoomLevel) })
                     }
                     MapBtn(iconId = compassIconId, rotation = rotation) {
                         onCompassClick(mapView, positionChangedListener, onNorthFaced = {
                             rotation = 0F
                             compassIconId = R.drawable.ic_navigate
                         }, onZoomChanged = {
-                            mapView?.getMapboxMap()?.cameraState?.let { onZoomChanged(it) }
+                            mapView?.getMapboxMap()?.cameraState?.let {
+                                viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
+                            }
                         })
                     }
                 }
             }
         }
 
-        if (isEventSheetShowed) {
+        paintCells(mapView, viewState.paintedCells)
+        updateZoomLevel(mapView, viewState.zoomLevel)
+
+        if (viewState.isEventSheetShowed) {
             EventBottomSheet(
-                onDismissRequest = { isEventSheetShowed = false },
+                onDismissRequest = { viewModel.obtainEvent(MapEvent.ShowEventSheet(false)) },
                 onEventClick = onEventClick
             ).Create()
         }
+    }
+
+    private fun startService(context: Context) {
+        val intent = Intent(context, LocationService::class.java)
+        context.startForegroundService(intent)
     }
 
     fun updateZoomLevel(mapView: MapView?, zoomLevel: Double) {

@@ -62,7 +62,7 @@ class SelectTeamScreen(
     private fun Title() {
         Text(
             text = stringResource(id = R.string.choose_team).uppercase(),
-            style = JetAroundTheme.typography.bigBold,
+            style = JetAroundTheme.typography.bold24,
             color = JetAroundTheme.colors.textColor
         )
     }

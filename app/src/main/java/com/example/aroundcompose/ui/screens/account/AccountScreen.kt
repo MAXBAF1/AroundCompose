@@ -296,7 +296,7 @@ class AccountScreen(
                     Text(
                         text = "10684 ${stringResource(id = R.string.cells).uppercase()}",
                         color = textColor,
-                        style = JetAroundTheme.typography.bigBold
+                        style = JetAroundTheme.typography.bold24
                     )
                 }
                 Box(

@@ -7,7 +7,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,9 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -67,7 +65,7 @@ fun PopularEventCard(eventData: EventData, onClick: () -> Unit, modifier: Modifi
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     EventDistanceToMeText(eventData.distanceToMe)
-                    ReadButton { }
+                    ReadButton()
                 }
             }
         }
@@ -76,14 +74,13 @@ fun PopularEventCard(eventData: EventData, onClick: () -> Unit, modifier: Modifi
 
 
 @Composable
-private fun ReadButton(onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        contentPadding = PaddingValues(6.dp),
+private fun ReadButton() {
+    Card(
         shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = JetAroundTheme.colors.primary)
+        colors = CardDefaults.cardColors(containerColor = JetAroundTheme.colors.primary)
     ) {
         Text(
+            modifier = Modifier.padding(6.dp),
             text = stringResource(id = R.string.read),
             style = JetAroundTheme.typography.eventCardPlaceAndBtn,
             color = JetAroundTheme.colors.primaryBackground

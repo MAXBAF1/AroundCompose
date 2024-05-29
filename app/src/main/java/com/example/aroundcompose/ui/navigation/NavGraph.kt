@@ -1,6 +1,7 @@
 package com.example.aroundcompose.ui.navigation
 
 import android.app.Activity
+import android.net.Uri
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -23,7 +24,7 @@ import com.example.aroundcompose.ui.screens.event_info.EventInfoScreen
 import com.example.aroundcompose.ui.screens.friends.FriendsScreen
 import com.example.aroundcompose.ui.screens.friends.FriendsViewModel
 import com.example.aroundcompose.ui.screens.greetings.GreetingsScreen
-import com.example.aroundcompose.ui.screens.map.MapManager
+import com.example.aroundcompose.ui.screens.map.MapScreen
 import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.menu.MenuScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationScreen
@@ -54,7 +55,7 @@ class NavGraph(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.SPLASH_ROUTE,
+            startDestination = Screen.MAP_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
             composable(Screen.SPLASH_ROUTE) { CreateSplashScreen() }
@@ -94,17 +95,18 @@ class NavGraph(
     private fun CreateEventInfoScreen() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val arguments = navBackStackEntry?.arguments
-        val eventData =
-            Gson().fromJson(arguments?.getString(IS_OTHER_PLAYER_SCREEN), EventData::class.java)
+        val decodedEvent = Uri.decode(arguments?.getString(IS_OTHER_PLAYER_SCREEN))
+        val event = Gson().fromJson(decodedEvent, EventData::class.java)
 
-        if (eventData != null) EventInfoScreen(eventData).Create()
+        if (decodedEvent != null) EventInfoScreen(event).Create()
     }
 
     @Composable
     private fun CreateMapScreen(mapViewModel: MapViewModel) {
-        MapManager(mapViewModel, onEventClick = {
+        MapScreen(mapViewModel, onEventClick = {
             val jsonEvent = Gson().toJson(it)
-            navController.navigate("${Screen.EVENT_INFO_ROUTE}/$EVENT_DATA=$jsonEvent")
+            val encodedEvent = Uri.encode(jsonEvent)
+            navController.navigate("${Screen.EVENT_INFO_ROUTE}/$EVENT_DATA=$encodedEvent")
         }).Create()
     }
 
