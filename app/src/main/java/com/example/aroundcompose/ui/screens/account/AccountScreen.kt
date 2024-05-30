@@ -73,11 +73,12 @@ class AccountScreen(
     private val toSkillsScreen: () -> Unit,
     private val userId: Int,
 ) {
+    private val isMyAccount = userId == -1
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
-
         LaunchedEffect(key1 = Unit) { viewModel.obtainEvent(AccountEvent.GetUserInfo(userId)) }
 
         Scaffold(containerColor = JetAroundTheme.colors.primaryBackground) {
@@ -98,7 +99,7 @@ class AccountScreen(
                         modifier = Modifier.padding(bottom = 24.dp),
                         textId = R.string.account,
                         onBackClick = onBackClick,
-                        trailingIconId = if (userId == -1) R.drawable.ic_settings else null,
+                        trailingIconId = if (isMyAccount) R.drawable.ic_settings else null,
                         onTrailingBtnClick = toSettingsScreen
                     )
                     Avatar(modifier = Modifier.padding(bottom = 16.dp))
@@ -108,9 +109,10 @@ class AccountScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         NameAndLevels(
-                            user = viewState.userInfo, modifier = Modifier.padding(end = 20.dp)
+                            user = viewState.userInfo,
+                            modifier = Modifier.padding(end = if (isMyAccount) 0.dp else 20.dp)
                         )
-                        if (userId != -1) AddFriendBtn()
+                        if (!isMyAccount) AddFriendBtn()
                     }
 
                     MainButtons(viewState.myCells, viewState.myTeamCells)
@@ -163,16 +165,16 @@ class AccountScreen(
 
     @Composable
     private fun PlaceId(id: Int) {
-        if (userId != -1) {
+        if (isMyAccount) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+            ) { Id(id) }
+        } else {
             Row(
                 modifier = Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.Bottom
-            ) { Id(id) }
-        } else {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
             ) { Id(id) }
         }
     }
@@ -214,14 +216,7 @@ class AccountScreen(
                 onClick = toStatisticScreen
             )
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                if (userId != -1) {
-                    ToOtherScreenBtn(
-                        onClick = toSkillsScreen,
-                        text = stringResource(id = R.string.skills),
-                        icon = painterResource(id = R.drawable.ic_skills),
-                        bgColor = JetAroundTheme.colors.purple
-                    )
-                } else {
+                if (isMyAccount) {
                     ToOtherScreenBtn(
                         onClick = toFriendsScreen,
                         modifier = Modifier.weight(1F),
@@ -235,6 +230,13 @@ class AccountScreen(
                         modifier = Modifier.weight(1F),
                         text = stringResource(id = R.string.moneys),
                         icon = painterResource(id = R.drawable.ic_menu_coin),
+                        bgColor = JetAroundTheme.colors.purple
+                    )
+                } else {
+                    ToOtherScreenBtn(
+                        onClick = toSkillsScreen,
+                        text = stringResource(id = R.string.skills),
+                        icon = painterResource(id = R.drawable.ic_skills),
                         bgColor = JetAroundTheme.colors.purple
                     )
                 }
@@ -298,7 +300,12 @@ class AccountScreen(
             colors = CardDefaults.cardColors(containerColor = bgColor),
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
-            Row {
+            Row(
+                modifier = Modifier.clickable(indication = rememberRipple(),
+                        interactionSource = remember { MutableInteractionSource() },
+                        enabled = onClick != null,
+                        onClick = onClick ?: {})
+            ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = stringResource(id = titleTextId),
