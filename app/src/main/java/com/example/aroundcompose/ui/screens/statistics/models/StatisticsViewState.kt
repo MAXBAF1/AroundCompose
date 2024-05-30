@@ -1,5 +1,6 @@
 package com.example.aroundcompose.ui.screens.statistics.models
 
+import com.example.aroundcompose.data.models.FriendDTO
 import com.example.aroundcompose.ui.common.enums.Teams
 
 data class StatisticsViewState(

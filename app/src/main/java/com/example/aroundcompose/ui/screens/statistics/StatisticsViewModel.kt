@@ -1,7 +1,6 @@
 package com.example.aroundcompose.ui.screens.statistics
 
 import com.example.aroundcompose.data.models.FriendDTO
-import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.screens.statistics.models.StatisticsEvent
 import com.example.aroundcompose.ui.screens.statistics.models.StatisticsViewState
@@ -30,7 +29,7 @@ class StatisticsViewModel @Inject constructor() :
             }
 
             StatisticsEvent.GetStatisticInfo -> {
-                
+
             }
         }
     }
