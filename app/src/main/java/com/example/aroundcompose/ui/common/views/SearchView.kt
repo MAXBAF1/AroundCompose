@@ -14,7 +14,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.example.aroundcompose.utils.clearFocusOnKeyboardDismiss
-import kotlinx.coroutines.delay
 
 @Composable
 fun SearchView(
@@ -43,11 +41,7 @@ fun SearchView(
         BasicTextField(
             modifier = Modifier.clearFocusOnKeyboardDismiss(),
             value = value,
-            onValueChange = {
-                if (enabled) {
-                    onValueChange(value)
-                }
-            },
+            onValueChange = { if (enabled) onValueChange(it) },
             enabled = enabled,
             singleLine = true,
             textStyle = JetAroundTheme.typography.sixteenMedium.copy(color = JetAroundTheme.colors.textColor),

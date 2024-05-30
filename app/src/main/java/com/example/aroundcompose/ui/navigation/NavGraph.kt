@@ -2,7 +2,6 @@ package com.example.aroundcompose.ui.navigation
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.net.Uri
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -17,11 +16,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.aroundcompose.ui.common.enums.Teams
-import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
-import com.example.aroundcompose.ui.screens.map.views.event_info_sheet.EventInfoSheet
 import com.example.aroundcompose.ui.screens.friends.FriendsScreen
 import com.example.aroundcompose.ui.screens.friends.FriendsViewModel
 import com.example.aroundcompose.ui.screens.greetings.GreetingsScreen
@@ -38,7 +35,6 @@ import com.example.aroundcompose.ui.screens.statistics.StatisticsScreen
 import com.example.aroundcompose.ui.screens.statistics.StatisticsViewModel
 import com.example.aroundcompose.ui.screens.teams.SelectTeamScreen
 import com.example.aroundcompose.ui.screens.teams.TeamsViewModel
-import com.google.gson.Gson
 
 class NavGraph(
     private val navController: NavHostController,
