@@ -39,7 +39,6 @@ class NavGraph(
     private val navController: NavHostController,
     private val innerPaddings: PaddingValues,
 ) {
-
     @SuppressLint("StateFlowValueCalledInComposition")
     @Composable
     fun Create() {
