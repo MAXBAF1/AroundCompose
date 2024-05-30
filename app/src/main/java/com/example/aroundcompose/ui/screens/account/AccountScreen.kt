@@ -300,7 +300,12 @@ class AccountScreen(
             colors = CardDefaults.cardColors(containerColor = bgColor),
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
-            Row {
+            Row(
+                modifier = Modifier.clickable(indication = rememberRipple(),
+                        interactionSource = remember { MutableInteractionSource() },
+                        enabled = onClick != null,
+                        onClick = onClick ?: {})
+            ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = stringResource(id = titleTextId),
