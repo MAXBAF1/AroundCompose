@@ -9,7 +9,7 @@ import com.example.aroundcompose.R
 val typography = JetAroundTypography(
     appName = TextStyle(fontSize = 64.sp, fontFamily = FontFamily(Font(R.font.involve_regular))),
     headingLogin = TextStyle(fontSize = 32.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
-    bigBold = TextStyle(fontSize = 24.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
+    bold24 = TextStyle(fontSize = 24.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
     bigMedium = TextStyle(fontSize = 24.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     title = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
     coin = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
@@ -18,7 +18,7 @@ val typography = JetAroundTypography(
     sixteenMedium = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     mediumRegular = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_regular))),
     mediumBold = TextStyle(fontSize = 15.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
-    textDesc = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_regular))),
+    regular14 = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_regular))),
     fourteenMedium = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     textBtn = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
     textRegistration = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),

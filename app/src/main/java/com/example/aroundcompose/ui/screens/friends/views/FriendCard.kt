@@ -128,7 +128,7 @@ class FriendCard(
             }
             Text(
                 text = "захвачено: $score клеток",
-                style = JetAroundTheme.typography.textDesc,
+                style = JetAroundTheme.typography.regular14,
                 color = color,
                 modifier = Modifier.padding(top = 2.dp)
             )

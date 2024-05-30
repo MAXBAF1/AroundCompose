@@ -45,7 +45,7 @@ fun CustomTopAppBar(
                 }
                 Text(
                     text = stringResource(id = textId).uppercase(),
-                    style = JetAroundTheme.typography.bigBold,
+                    style = JetAroundTheme.typography.bold24,
                     color = JetAroundTheme.colors.textColor
                 )
             }

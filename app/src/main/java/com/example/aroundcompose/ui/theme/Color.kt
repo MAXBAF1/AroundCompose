@@ -3,7 +3,7 @@ package com.example.aroundcompose.ui.theme
 import androidx.compose.ui.graphics.Color
 
 internal val baseLightPalette = JetAroundColors(
-    primaryBackground = Color(0xFFFFFFFF),
+    primaryBackground = Color(0xFFFCFCFC),
     darkGray = Color(0xFF5C5C5C),
     mapBtnBg = Color(1f, 1f, 1f, 1f),
     lightTint = Color(0xFFBDBDBD),
@@ -13,7 +13,7 @@ internal val baseLightPalette = JetAroundColors(
     notActiveColor = Color(0xFF9E9FAC),
     textColor = Color(0xFF1D1D1D),
     titleColor = Color(0xFF1E1E1E),
-    secondaryBackground = Color(0xFFF2F4F3),
+    //secondaryBackground = Color(0xFFFCFCFC),
     blue = Color(0xFF555EF6),
     gray = Color(0xFFD9D9D9),
     purple = Color(0xFFB26BE9),
@@ -44,7 +44,7 @@ internal val baseDarkPalette = JetAroundColors(
     notActiveColor = Color(0xFF9E9FAC),
     textColor = Color(0xFF1D1D1D),
     titleColor = Color(0xFF1E1E1E),
-    secondaryBackground = Color(0xFFF2F4F3),
+    //secondaryBackground = Color(0xFFF2F4F3),
     blue = Color(0xFF555EF6),
     gray = Color(0xFFD9D9D9),
     purple = Color(0xFFB26BE9),

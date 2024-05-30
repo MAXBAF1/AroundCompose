@@ -3,6 +3,7 @@ package com.example.aroundcompose.ui.screens.map
 import android.content.SharedPreferences
 import com.example.aroundcompose.di.NotEncryptedSharedPref
 import com.example.aroundcompose.ui.common.models.BaseViewModel
+import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.screens.map.location_service.LocationService
 import com.example.aroundcompose.ui.screens.map.models.MapEvent
 import com.example.aroundcompose.ui.screens.map.models.MapViewState
@@ -17,13 +18,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    @NotEncryptedSharedPref private val sharedPreferences: SharedPreferences
-) : BaseViewModel<MapViewState, MapEvent>(initialState = MapViewState.CellsCaptured()) {
-
+    @NotEncryptedSharedPref private val sharedPreferences: SharedPreferences,
+) : BaseViewModel<MapViewState, MapEvent>(initialState = MapViewState()) {
     private val paintedCells: ArrayList<String> = arrayListOf()
     private val coins = 0
     private var searchText = ""
     private var cameraState = MutableCameraState()
+    private var isEventSheetShowed = false
+    private var isEventInfoSheetShowed = false
 
     override fun obtainEvent(viewEvent: MapEvent) {
         when (viewEvent) {
@@ -33,13 +35,30 @@ class MapViewModel @Inject constructor(
             MapEvent.MinusZoomLevel -> updateZoomLevel(viewEvent)
             MapEvent.PlusZoomLevel -> updateZoomLevel(viewEvent)
             is MapEvent.UpdateCameraPosition -> cameraState = viewEvent.cameraState.toMutable()
+            is MapEvent.ShowEventSheet -> showEventSheet(viewEvent.show)
+            is MapEvent.ShowEventInfoSheet -> showEventInfoSheet(viewEvent.show, viewEvent.event)
         }
+    }
+
+    private fun showEventInfoSheet(show: Boolean, chosenEvent: EventData? = null) {
+        showEventSheet(!show)
+        isEventInfoSheetShowed = show
+        viewState.update {
+            it.copy(isEventInfoSheetShowed = isEventInfoSheetShowed, chosenEvent = chosenEvent)
+        }
+    }
+
+    private fun showEventSheet(show: Boolean) {
+        isEventSheetShowed = show
+        viewState.update { it.copy(isEventSheetShowed = isEventSheetShowed) }
     }
 
     private fun init() {
         this.cameraState.center = getLastLocationFromSharedPref()
         LocationService.lastLocation = cameraState.center
-        viewState.update { MapViewState.Init(cameraState.center, searchText, coins) }
+        viewState.update {
+            it.copy(lastLocation = cameraState.center, searchText = searchText, coins = coins)
+        }
     }
 
     private fun updateZoomLevel(zoomLevelUpdateEvent: MapEvent) {
@@ -48,7 +67,7 @@ class MapViewModel @Inject constructor(
         } else if (zoomLevelUpdateEvent == MapEvent.PlusZoomLevel) {
             cameraState.zoom += (MapConstant.ZOOM_LEVEL_DELTA)
         }
-        viewState.update { MapViewState.ZoomLevelUpdated(cameraState.zoom) }
+        viewState.update { it.copy(zoomLevel = cameraState.zoom) }
     }
 
     private fun getLastLocationFromSharedPref(): Point? {
@@ -58,12 +77,13 @@ class MapViewModel @Inject constructor(
     }
 
     private fun setupService() {
-        viewState.update { MapViewState.CellsCaptured(paintedCells.toList()) }
+        viewState.update { it.copy(paintedCells = paintedCells.toList()) }
         val h3 = H3Core.newSystemInstance()
 
-        LocationService.onLocationResult = {
-            val newCell =
-                h3.latLngToCellAddress(it.latitude, it.longitude, MapConstant.H3_RESOLUTION)
+        LocationService.onLocationResult = { location ->
+            val newCell = h3.latLngToCellAddress(
+                location.latitude, location.longitude, MapConstant.H3_RESOLUTION
+            )
 
             if (!paintedCells.contains(newCell)) {
                 val neighborsCells = h3.gridDisk(newCell, 2)
@@ -71,7 +91,7 @@ class MapViewModel @Inject constructor(
                 val newCells = neighborsCells.take(1)
 
                 paintedCells.addAll(newCells)
-                viewState.update { MapViewState.CellsCaptured(paintedCells.toList()) }
+                viewState.update { it.copy(paintedCells = paintedCells.toList()) }
             }
         }
     }

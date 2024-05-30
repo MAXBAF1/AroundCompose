@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
@@ -29,7 +30,7 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 
 class EventBottomSheet(
-    private val onDismissRequest: () -> Unit, private val onEventClick: (EventData) -> Unit
+    private val onDismissRequest: () -> Unit, private val onEventClick: (EventData) -> Unit,
 ) {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -41,6 +42,7 @@ class EventBottomSheet(
                 .fillMaxSize()
                 .padding(top = 22.dp),
             onDismissRequest = onDismissRequest,
+            scrimColor = Color.Transparent,
             containerColor = JetAroundTheme.colors.primaryBackground,
             sheetState = sheetState
         ) {
@@ -65,13 +67,19 @@ class EventBottomSheet(
         }
     }
 
+    private val exampleEventData = EventData(
+        title = "EKB STADIUM MEET 2023",
+        description = "25 июня 2023 года на территории у стадиона Екатеринбург Арена будет много стиля, дыма и шума, ведь здесь пройдет EKB STADIUM MEET 2023!\n\nГлавной изюминкой станет дрифт зона с показательными проездами пилотов из ENJOY DRIFT и возможностью прокатиться в дрифт такси.\n\nГостей ждут розыгрыши и викторины с крутыми подарками от партнеров мероприятия.\n\nНачало в 12:00, официальное закрытие в 19:00\n\nУзнать подробности можно на сайте организаторов: https://ekt-arena.ru/afisha/prochee/ekb-stadium-meet-2023/",
+        place = "Екатеринбург Арена, Екатеринбург",
+        distanceToMe = 16.5
+    )
+
+
     @Composable
     private fun PopularEventsRow() {
         LazyRow(
             modifier = Modifier.padding(bottom = 24.dp)
         ) {
-            val exampleEventData =
-                EventData("EKB STADIUM MEET 2023", "Екатеринбург Арена, Екатеринбург", 16.5)
             items(7) {
                 val modifier = when (it) {
                     0 -> Modifier.padding(start = JetAroundTheme.margins.mainMargin, end = 16.dp)
@@ -90,8 +98,6 @@ class EventBottomSheet(
     @Composable
     private fun ClosestEventsColumn() {
         LazyColumn(modifier = Modifier.padding(horizontal = JetAroundTheme.margins.mainMargin)) {
-            val exampleEventData =
-                EventData("Спектакль «Сын Луны»", "Академический театр драмы, Екатерибург", 3.3)
             items(7) {
                 val modifier = when (it) {
                     0 -> Modifier.padding(top = 14.dp, bottom = 16.dp)
@@ -109,7 +115,7 @@ class EventBottomSheet(
 
     @Composable
     private fun TitleAndAllBtn(
-        titleText: String, onAllClick: () -> Unit, modifier: Modifier = Modifier
+        titleText: String, onAllClick: () -> Unit, modifier: Modifier = Modifier,
     ) {
         Row(
             modifier = modifier

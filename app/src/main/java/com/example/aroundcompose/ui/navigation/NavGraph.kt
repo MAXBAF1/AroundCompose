@@ -2,6 +2,7 @@ package com.example.aroundcompose.ui.navigation
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.net.Uri
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -20,11 +21,11 @@ import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.screens.account.AccountScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
-import com.example.aroundcompose.ui.screens.event_info.EventInfoScreen
+import com.example.aroundcompose.ui.screens.map.views.event_info_sheet.EventInfoSheet
 import com.example.aroundcompose.ui.screens.friends.FriendsScreen
 import com.example.aroundcompose.ui.screens.friends.FriendsViewModel
 import com.example.aroundcompose.ui.screens.greetings.GreetingsScreen
-import com.example.aroundcompose.ui.screens.map.MapManager
+import com.example.aroundcompose.ui.screens.map.MapScreen
 import com.example.aroundcompose.ui.screens.map.MapViewModel
 import com.example.aroundcompose.ui.screens.menu.MenuScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationScreen
@@ -57,7 +58,7 @@ class NavGraph(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.SPLASH_ROUTE,
+            startDestination = Screen.MAP_ROUTE,
             modifier = Modifier.padding(innerPaddings)
         ) {
             composable(Screen.SPLASH_ROUTE) { CreateSplashScreen() }
@@ -72,12 +73,6 @@ class NavGraph(
             composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
             composable(Screen.SETTINGS_ROUTE) { CreateSettingsScreen() }
             composable(Screen.FRIENDS_ROUTE) { CreateFriendsScreen(friendsViewModel) }
-            composable(
-                route = "${Screen.EVENT_INFO_ROUTE}/${EVENT_DATA}={${EVENT_DATA}}",
-                arguments = listOf(navArgument(EVENT_DATA) {
-                    type = NavType.StringType
-                })
-            ) { CreateEventInfoScreen() }
             composable(
                 route = "${Screen.SKILLS_ROUTE}?${IS_OTHER_PLAYER_SCREEN}={${IS_OTHER_PLAYER_SCREEN}}",
                 arguments = listOf(navArgument(IS_OTHER_PLAYER_SCREEN) {
@@ -96,21 +91,8 @@ class NavGraph(
     }
 
     @Composable
-    private fun CreateEventInfoScreen() {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val arguments = navBackStackEntry?.arguments
-        val eventData =
-            Gson().fromJson(arguments?.getString(IS_OTHER_PLAYER_SCREEN), EventData::class.java)
-
-        if (eventData != null) EventInfoScreen(eventData).Create()
-    }
-
-    @Composable
     private fun CreateMapScreen(mapViewModel: MapViewModel) {
-        MapManager(mapViewModel, onEventClick = {
-            val jsonEvent = Gson().toJson(it)
-            navController.navigate("${Screen.EVENT_INFO_ROUTE}/$EVENT_DATA=$jsonEvent")
-        }).Create()
+        MapScreen(mapViewModel).Create()
     }
 
     @Composable

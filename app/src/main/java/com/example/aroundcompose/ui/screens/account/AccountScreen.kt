@@ -196,7 +196,7 @@ class AccountScreen(
             CellsInfoCard(
                 titleTextId = R.string.team_captured,
                 bgColor = JetAroundTheme.colors.blue,
-                textColor = JetAroundTheme.colors.secondaryBackground,
+                textColor = JetAroundTheme.colors.primaryBackground,
                 decorationId = R.drawable.hex_decoration_2,
                 modifier = Modifier.padding(bottom = 16.dp),
                 onClick = toStatisticScreen
@@ -252,14 +252,14 @@ class AccountScreen(
             ) {
                 Text(
                     text = text,
-                    color = JetAroundTheme.colors.secondaryBackground,
+                    color = JetAroundTheme.colors.primaryBackground,
                     style = JetAroundTheme.typography.bigMedium,
                     modifier = Modifier.padding(end = 8.dp)
                 )
                 Icon(
                     painter = icon,
                     contentDescription = "$text icon",
-                    tint = JetAroundTheme.colors.secondaryBackground
+                    tint = JetAroundTheme.colors.primaryBackground
                 )
             }
         }
@@ -296,7 +296,7 @@ class AccountScreen(
                     Text(
                         text = "10684 ${stringResource(id = R.string.cells).uppercase()}",
                         color = textColor,
-                        style = JetAroundTheme.typography.bigBold
+                        style = JetAroundTheme.typography.bold24
                     )
                 }
                 Box(

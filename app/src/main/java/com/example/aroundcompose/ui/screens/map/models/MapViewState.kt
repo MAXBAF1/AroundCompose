@@ -1,14 +1,15 @@
 package com.example.aroundcompose.ui.screens.map.models
 
+import com.example.aroundcompose.ui.common.models.EventData
 import com.mapbox.geojson.Point
 
-sealed class MapViewState {
-    data class Init(
-        val lastLocation: Point? = null,
-        val searchText: String,
-        val coins: Int,
-    ) : MapViewState()
-
-    data class CellsCaptured(val paintedCells: List<String> = listOf()) : MapViewState()
-    data class ZoomLevelUpdated(val zoomLevel: Double) : MapViewState()
-}
+data class MapViewState(
+    val lastLocation: Point? = null,
+    val searchText: String = "",
+    val coins: Int = 0,
+    val paintedCells: List<String> = listOf(),
+    val zoomLevel: Double = 0.0,
+    val isEventSheetShowed: Boolean = false,
+    val isEventInfoSheetShowed: Boolean = false,
+    val chosenEvent: EventData? = null
+)

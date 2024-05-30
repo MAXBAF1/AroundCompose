@@ -28,22 +28,19 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 @Composable
 fun ClosestEventCard(eventData: EventData, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier
-            .clickable(
-                onClick = onClick,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple()
-            )
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = JetAroundTheme.colors.primaryBackground),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                .clickable(interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(),
-                    onClick = {})
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable(
+                    onClick = onClick,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple()
+                )
                 .padding(12.dp)
         ) {
             Image(
