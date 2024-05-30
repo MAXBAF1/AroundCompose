@@ -28,6 +28,7 @@ fun UserCard(
     name: String, score: Int,
     team: Teams = Teams.NONE,
     isCurrentUser: Boolean = false,
+    modifier: Modifier,
     onClick: () -> Unit,
 ) {
     Card(
@@ -42,13 +43,17 @@ fun UserCard(
             disabledContentColor = JetAroundTheme.colors.userCard.copy(alpha = 0.30F)
         ),
         shape = JetAroundTheme.shapes.upgradeShape,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                onClick = onClick,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = JetAroundTheme.colors.textColor)
-            )
+        modifier = if (isCurrentUser) {
+            modifier.fillMaxWidth()
+        } else {
+            modifier
+                .fillMaxWidth()
+                .clickable(
+                    onClick = onClick,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = JetAroundTheme.colors.textColor)
+                )
+        }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -68,14 +73,14 @@ fun UserCard(
                     style = style,
                     color = color
                 )
-                if (!isCurrentUser) {
-                    HexagonImage(
-                        imageId = imageId,
-                        team = team,
-                        border = 1.dp,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
+
+                HexagonImage(
+                    imageId = imageId,
+                    team = team,
+                    border = 1.dp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+
                 Text(
                     text = if (isCurrentUser) {
                         stringResource(R.string.currentUser)

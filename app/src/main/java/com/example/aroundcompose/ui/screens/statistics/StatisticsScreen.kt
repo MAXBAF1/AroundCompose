@@ -7,17 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,18 +29,22 @@ import com.example.aroundcompose.ui.common.views.CustomTopAppBar
 import com.example.aroundcompose.ui.screens.statistics.models.StatisticsEvent
 import com.example.aroundcompose.ui.screens.statistics.views.ButtonListView
 import com.example.aroundcompose.ui.screens.statistics.views.HexagonView
-import com.example.aroundcompose.ui.screens.statistics.views.ListBtn
 import com.example.aroundcompose.ui.screens.statistics.views.StatisticTeamView
 import com.example.aroundcompose.ui.screens.statistics.views.UserCard
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 class StatisticsScreen(
     private val viewModel: StatisticsViewModel,
+    private val toUserScreen: (id: Int) -> Unit,
     private val onBackClicked: () -> Unit,
 ) {
     @Composable
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+
+        LaunchedEffect(key1 = Unit) {
+            viewModel.obtainEvent(StatisticsEvent.GetStatisticInfo)
+        }
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,16 +56,19 @@ class StatisticsScreen(
                 textId = R.string.statistic,
                 onBackClick = onBackClicked
             )
-            TeamsStatistics(Modifier.weight(0.45f))
+            TeamsStatistics(viewState.teamsProgressMap, Modifier.weight(0.45f))
+
             TopLists(
                 currentButton = viewState.currentButton,
+                list = if (viewState.currentButton) viewState.serverList else viewState.friendsList,
+                onMoreInfoClick = toUserScreen,
                 modifier = Modifier.weight(0.55F)
             )
         }
     }
 
     @Composable
-    private fun TeamsStatistics(modifier: Modifier) {
+    private fun TeamsStatistics(teamsProgress: Map<Int, Float>, modifier: Modifier) {
         Box(
             contentAlignment = Alignment.TopStart,
             modifier = modifier
@@ -83,33 +87,46 @@ class StatisticsScreen(
             )
             HexagonView(Modifier.offset(x = (-47).dp, y = 43.dp))
 
-            StatisticTeamView(
-                currentPercent = 69F,
-                team = Teams.LIGHT_BLUE,
-                isLeader = true
-            ).Create()
+            teamsProgress[4]?.let {
+                StatisticTeamView(
+                    currentPercent = it,
+                    team = Teams.LIGHT_BLUE,
+                    isLeader = true
+                ).Create()
+            }
 
-            StatisticTeamView(
-                currentPercent = 20F,
-                team = Teams.YELLOW
-            ).Create()
+            teamsProgress[3]?.let {
+                StatisticTeamView(
+                    currentPercent = it,
+                    team = Teams.YELLOW
+                ).Create()
+            }
 
-            StatisticTeamView(
-                currentPercent = 10F,
-                team = Teams.PURPLE
-            ).Create()
+            teamsProgress[2]?.let {
+                StatisticTeamView(
+                    currentPercent = it,
+                    team = Teams.PURPLE
+                ).Create()
+            }
 
-            StatisticTeamView(
-                currentPercent = 1F,
-                team = Teams.BLUE
-            ).Create()
+            teamsProgress[1]?.let {
+                StatisticTeamView(
+                    currentPercent = it,
+                    team = Teams.BLUE
+                ).Create()
+            }
 
             HexagonView(Modifier.offset(x = 249.dp, y = 146.dp))
         }
     }
 
     @Composable
-    private fun TopLists(currentButton: Boolean, modifier: Modifier) {
+    private fun TopLists(
+        currentButton: Boolean,
+        list: List<Pair<Boolean, FriendDTO>>?,
+        onMoreInfoClick: (id: Int) -> Unit,
+        modifier: Modifier,
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
@@ -126,72 +143,45 @@ class StatisticsScreen(
             )
 
             Column(
-                modifier = modifier
-                    .padding(horizontal = 20.dp)
-                    .verticalScroll(rememberScrollState())
+                modifier = modifier.padding(horizontal = 20.dp)
             ) {
-                Spacer(modifier = Modifier.height(20.dp))
-
-                UserCard(
-                    position = 1,
-                    imageId = R.drawable.avatar_example,
-                    name = "Egor332",
-                    score = 694,
-                    team = Teams.LIGHT_BLUE,
-                    onClick = {}
-                )
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                UserCard(
-                    position = 2,
-                    imageId = R.drawable.avatar_example,
-                    name = "Danila",
-                    score = 537,
-                    team = Teams.YELLOW,
-                    isCurrentUser = true,
-                    onClick = {}
-                )
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                UserCard(
-                    position = 3,
-                    imageId = R.drawable.avatar_example,
-                    name = "BAF1",
-                    score = 356,
-                    team = Teams.PURPLE,
-                    onClick = {}
-                )
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                UserCard(
-                    position = 4,
-                    imageId = R.drawable.avatar_example,
-                    name = "Char32",
-                    score = 235,
-                    team = Teams.BLUE,
-                    onClick = {}
-                )
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                ListBtn(
-                    onClick = {
-
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
+                if (currentButton) {
+                    list?.let { ContainerList(it, onMoreInfoClick) }
+                } else {
+                    list?.let { ContainerList(it, onMoreInfoClick) }
+                }
             }
         }
     }
 
     @Composable
-    private fun ContainerList(usersList: List<FriendDTO>) {
-        LazyColumn {
-
+    private fun ContainerList(
+        usersList: List<Pair<Boolean, FriendDTO>>,
+        onMoreInfoClick: (id: Int) -> Unit,
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            items(usersList.size) { index ->
+                UserCard(
+                    position = index + 1,
+                    imageId = R.drawable.avatar_example,
+                    name = usersList[index].second.username,
+                    score = usersList[index].second.score,
+                    isCurrentUser = usersList[index].first,
+                    team = Teams.getById(usersList[index].second.teamId),
+                    modifier = when (index) {
+                        0 -> Modifier.padding(top = 24.dp, bottom = 7.dp)
+                        usersList.size - 1 -> Modifier.padding(top = 7.dp, bottom = 20.dp)
+                        else -> Modifier.padding(vertical = 7.dp)
+                    },
+                    onClick = {
+                        onMoreInfoClick(usersList[index].second.id)
+                    }
+                )
+            }
         }
     }
 

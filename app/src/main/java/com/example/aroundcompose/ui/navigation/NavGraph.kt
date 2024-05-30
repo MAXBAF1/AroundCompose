@@ -123,7 +123,11 @@ class NavGraph(
     private fun CreateStatisticsScreen(statisticsViewModel: StatisticsViewModel) {
         StatisticsScreen(
             viewModel = statisticsViewModel,
-            onBackClicked = { navController.popBackStack() }).Create()
+            toUserScreen = {
+                navController.navigate("${Screen.ACCOUNT_ROUTE}?$USER_ID=$it")
+            },
+            onBackClicked = { navController.popBackStack() }
+        ).Create()
     }
 
     @Composable

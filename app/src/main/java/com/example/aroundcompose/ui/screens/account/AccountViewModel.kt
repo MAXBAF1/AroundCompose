@@ -36,7 +36,7 @@ class AccountViewModel @Inject constructor(tokenManager: TokenManager) :
                 userInfoService.getMe()
             } else userInfoService.getUser(id)) ?: UserDTO()
 
-            myCells = 39 //FIXME Сделать запрос
+            myCells = statisticService.getUserById(id)?.score ?: 0
             myTeamCells = statisticService.getTeam(id)?.score ?: 0
 
             viewState.update {

@@ -12,7 +12,7 @@ class StatisticService(private val tokenManager: TokenManager) {
     suspend fun getTeam(id: Int): TeamDTO? {
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Get,
-            address = AroundConfig.STATISTIC_ADDRESS.toString() + "/team/$id",
+            address = AroundConfig.STATISTIC_TEAM_ADDRESS.toString() + "/$id",
             accessToken = tokenManager.getTokens().first.toString()
         )
         return response.castOrNull<TeamDTO>()
@@ -21,7 +21,7 @@ class StatisticService(private val tokenManager: TokenManager) {
     suspend fun getAllTeams(): List<TeamDTO>? {
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Get,
-            address = AroundConfig.STATISTIC_ADDRESS.toString() + "/team/all",
+            address = AroundConfig.STATISTIC_TEAM_ADDRESS.toString() + "/all",
             accessToken = tokenManager.getTokens().first.toString()
         )
         return response.castOrNull<List<TeamDTO>>()
@@ -30,7 +30,7 @@ class StatisticService(private val tokenManager: TokenManager) {
     suspend fun getTopUsers(): List<FriendDTO>? {
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Get,
-            address = AroundConfig.STATISTIC_ADDRESS.toString() + "/top",
+            address = AroundConfig.STATISTIC_USER_ADDRESS.toString() + "/top",
             accessToken = tokenManager.getTokens().first.toString()
         )
         return response.castOrNull<List<FriendDTO>>()
@@ -39,7 +39,7 @@ class StatisticService(private val tokenManager: TokenManager) {
     suspend fun getUserFriends(): List<FriendDTO>? {
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Get,
-            address = AroundConfig.STATISTIC_ADDRESS.toString() + "/me/friends",
+            address = AroundConfig.STATISTIC_USER_ADDRESS.toString() + "/me/friends",
             accessToken = tokenManager.getTokens().first.toString()
         )
         return response.castOrNull<List<FriendDTO>>()
@@ -48,7 +48,16 @@ class StatisticService(private val tokenManager: TokenManager) {
     suspend fun getUserStatistic(): FriendDTO? {
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Get,
-            address = AroundConfig.STATISTIC_ADDRESS.toString() + "/me",
+            address = AroundConfig.STATISTIC_USER_ADDRESS.toString() + "/me",
+            accessToken = tokenManager.getTokens().first.toString()
+        )
+        return response.castOrNull<FriendDTO>()
+    }
+
+    suspend fun getUserById(id:Int): FriendDTO? {
+        val response = JwtRequestManager.createRequest(
+            methodType = HttpMethod.Get,
+            address = AroundConfig.STATISTIC_USER_ADDRESS.toString() + "/$id",
             accessToken = tokenManager.getTokens().first.toString()
         )
         return response.castOrNull<FriendDTO>()

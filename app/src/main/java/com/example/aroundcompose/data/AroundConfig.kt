@@ -10,6 +10,8 @@ enum class AroundConfig(private val value: String) {
     USER_ADDRESS("$HOST_ADDRESS/user"),
     CHUNKS_ADDRESS("$HOST_ADDRESS/chunks"),
     STATISTIC_ADDRESS("$HOST_ADDRESS/stat"),
+    STATISTIC_USER_ADDRESS("$STATISTIC_ADDRESS/user"),
+    STATISTIC_TEAM_ADDRESS("$STATISTIC_ADDRESS/team"),
     SKILLS_ADDRESS("$HOST_ADDRESS/skills");
 
     override fun toString(): String = value

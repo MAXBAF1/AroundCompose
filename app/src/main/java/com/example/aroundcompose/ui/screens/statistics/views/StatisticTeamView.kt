@@ -82,7 +82,7 @@ class StatisticTeamView(
         foregroundColor: Color,
         modifier: Modifier,
     ) {
-        val height = 126.dp * (currentPercent / 100)
+        val height = 126.dp * currentPercent / 100
 
         Box(
             contentAlignment = Alignment.BottomCenter,
