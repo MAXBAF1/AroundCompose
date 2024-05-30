@@ -66,21 +66,20 @@ class NavGraph(
             }
             composable(Screen.MAP_ROUTE) { CreateMapScreen(mapViewModel) }
             composable(Screen.STATISTICS_ROUTE) { CreateStatisticsScreen(statisticsViewModel) }
-            composable(Screen.MENU_ROUTE) { CreateMenuScreen() }
             composable(Screen.SETTINGS_ROUTE) { CreateSettingsScreen() }
             composable(Screen.FRIENDS_ROUTE) { CreateFriendsScreen(friendsViewModel) }
             composable(
-                route = "${Screen.SKILLS_ROUTE}?${IS_OTHER_PLAYER_SCREEN}={${IS_OTHER_PLAYER_SCREEN}}",
-                arguments = listOf(navArgument(IS_OTHER_PLAYER_SCREEN) {
-                    type = NavType.BoolType
-                    defaultValue = false
+                route = "${Screen.SKILLS_ROUTE}?$USER_ID={$USER_ID}",
+                arguments = listOf(navArgument(USER_ID) {
+                    type = NavType.IntType
+                    defaultValue = -1
                 })
             ) { CreateSkillsScreen(skillsViewModel) }
             composable(
-                route = "${Screen.ACCOUNT_ROUTE}?$IS_OTHER_PLAYER_SCREEN={$IS_OTHER_PLAYER_SCREEN}",
-                arguments = listOf(navArgument(IS_OTHER_PLAYER_SCREEN) {
-                    type = NavType.BoolType
-                    defaultValue = false
+                route = "${Screen.ACCOUNT_ROUTE}?$USER_ID={$USER_ID}",
+                arguments = listOf(navArgument(USER_ID) {
+                    type = NavType.IntType
+                    defaultValue = -1
                 })
             ) { CreateAccountScreen() }
         }
@@ -114,9 +113,10 @@ class NavGraph(
     private fun CreateFriendsScreen(friendsViewModel: FriendsViewModel) {
         FriendsScreen(viewModel = friendsViewModel,
             onBackClick = { navController.popBackStack() },
-            onMoreInfoClick = {
-                navController.navigate("${Screen.ACCOUNT_ROUTE}?$IS_OTHER_PLAYER_SCREEN=true")
-            }).Create()
+            toUserScreen = {
+                navController.navigate("${Screen.ACCOUNT_ROUTE}?$USER_ID=$it")
+            }
+        ).Create()
     }
 
     @Composable
@@ -130,30 +130,20 @@ class NavGraph(
     private fun CreateSkillsScreen(skillsViewModel: SkillsViewModel) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val arguments = navBackStackEntry?.arguments
-        val isOtherPlayerScreen = arguments?.getBoolean(IS_OTHER_PLAYER_SCREEN) ?: false
+        val userId = arguments?.getInt(USER_ID, -1)  ?: -1
 
         SkillsScreen(
             viewModel = skillsViewModel,
             onBackClick = { navController.popBackStack() },
-            isOtherPlayerScreen = isOtherPlayerScreen
+            userId = userId
         ).Create()
-    }
-
-    @Composable
-    private fun CreateMenuScreen() {
-        MenuScreen(toSettingsScreen = {},
-            toAccountScreen = { navController.navigate(Screen.ACCOUNT_ROUTE) },
-            toEventsScreen = {},
-            toMoneysScreen = {},
-            toStatisticScreen = { navController.navigate(Screen.STATISTICS_ROUTE) },
-            toFriendsScreen = { navController.navigate(Screen.FRIENDS_ROUTE) }).Create()
     }
 
     @Composable
     private fun CreateAccountScreen() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val arguments = navBackStackEntry?.arguments
-        val isOtherPlayerScreen = arguments?.getBoolean(IS_OTHER_PLAYER_SCREEN) ?: false
+        val userId = arguments?.getInt(USER_ID, -1) ?: -1
 
         AccountScreen(
             onBackClick = { navController.popBackStack() },
@@ -161,8 +151,8 @@ class NavGraph(
             toStatisticScreen = { navController.navigate(Screen.STATISTICS_ROUTE) },
             toFriendsScreen = { navController.navigate(Screen.FRIENDS_ROUTE) },
             toMoneysScreen = { },
-            toSkillsScreen = { navController.navigate("${Screen.SKILLS_ROUTE}?$IS_OTHER_PLAYER_SCREEN=true") },
-            isOtherPlayerScreen = isOtherPlayerScreen
+            toSkillsScreen = { navController.navigate("${Screen.SKILLS_ROUTE}?$USER_ID=$userId") },
+            userId = userId
         ).Create()
     }
 
@@ -198,7 +188,6 @@ class NavGraph(
     }
 
     companion object {
-        const val EVENT_DATA = "EVENT_DATA"
-        const val IS_OTHER_PLAYER_SCREEN = "isOtherPlayerScreen"
+        const val USER_ID = "USER_ID"
     }
 }

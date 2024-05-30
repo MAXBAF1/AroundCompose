@@ -31,10 +31,9 @@ internal class MainActivity : ComponentActivity() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
             val arguments = navBackStackEntry?.arguments
-            val isOtherPlayerScreen =
-                arguments?.getBoolean(NavGraph.IS_OTHER_PLAYER_SCREEN) ?: false
+            val userId = arguments?.getInt(NavGraph.USER_ID, -1) ?: -1
             val showBottomNav = Screen.getBottomItems().map { it.route }
-                .contains(currentRoute?.substringBefore("?")) && !isOtherPlayerScreen
+                .contains(currentRoute?.substringBefore("?")) && userId == -1
 
             AroundComposeTheme {
                 Scaffold(bottomBar = {

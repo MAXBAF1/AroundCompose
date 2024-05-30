@@ -3,7 +3,6 @@ package com.example.aroundcompose.ui.navigation
 import com.example.aroundcompose.R
 
 sealed class Screen(val titleId: Int, val iconId: Int, val route: String) {
-    object MenuScreen : Screen(R.string.menu, R.drawable.ic_menu, MENU_ROUTE)
     object SkillsScreen : Screen(R.string.skills, R.drawable.ic_skills, SKILLS_ROUTE)
     object MapScreen : Screen(R.string.map, R.drawable.ic_map, MAP_ROUTE)
     object AccountScreen : Screen(R.string.account, R.drawable.ic_account, ACCOUNT_ROUTE)
@@ -20,7 +19,6 @@ sealed class Screen(val titleId: Int, val iconId: Int, val route: String) {
         const val MAIN_ROUTE = "MAIN_ROUTE"
         const val PERMISSIONS_ROUTE = "PERMISSIONS_ROUTE"
         const val MAP_ROUTE = "MAP_ROUTE"
-        const val MENU_ROUTE = "MENU_ROUTE"
         const val ACCOUNT_ROUTE = "ACCOUNT_ROUTE"
         const val SETTINGS_ROUTE = "SETTINGS_ROUTE"
         const val SKILLS_ROUTE = "SKILLS_ROUTE"

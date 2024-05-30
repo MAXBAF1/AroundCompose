@@ -30,7 +30,7 @@ import kotlinx.coroutines.delay
 class FriendsScreen(
     private val viewModel: FriendsViewModel,
     private val onBackClick: () -> Unit,
-    private val onMoreInfoClick: () -> Unit,
+    private val toUserScreen: (id: Int) -> Unit,
 ) {
     @Composable
     fun Create() {
@@ -44,8 +44,7 @@ class FriendsScreen(
             Image(
                 painter = painterResource(id = R.drawable.friends_background),
                 contentDescription = "backgroundImage",
-                modifier = Modifier
-                    .align(Alignment.BottomEnd),
+                modifier = Modifier.align(Alignment.BottomEnd),
                 contentScale = ContentScale.Crop
             )
 
@@ -61,24 +60,20 @@ class FriendsScreen(
                     onBackClick = onBackClick
                 )
 
-                SearchView(
-                    modifier = Modifier.padding(top = 14.dp, bottom = 8.dp),
+                SearchView(modifier = Modifier.padding(top = 14.dp, bottom = 8.dp),
                     value = viewState.searchText,
                     onValueChange = {
                         viewModel.obtainEvent(FriendsEvent.OnSearchTextChange(it))
-                    }
-                )
+                    })
 
                 if (viewState.searchText == "") {
                     UsersContainer(
-                        list = viewState.friendsList,
-                        onMoreInfoClick = onMoreInfoClick
+                        list = viewState.friendsList, toUserScreen = toUserScreen
                     )
                 } else {
                     if (!viewState.friendsFilteredList.isNullOrEmpty()) {
                         UsersContainer(
-                            list = viewState.friendsFilteredList!!,
-                            onMoreInfoClick = onMoreInfoClick
+                            list = viewState.friendsFilteredList!!, toUserScreen = toUserScreen
                         )
 
                         HorizontalDivider(
@@ -91,10 +86,7 @@ class FriendsScreen(
                     }
 
                     viewState.usersList?.let {
-                        UsersContainer(
-                            list = it,
-                            onMoreInfoClick = onMoreInfoClick
-                        )
+                        UsersContainer(list = it, toUserScreen = toUserScreen)
                     }
                 }
             }
@@ -112,7 +104,7 @@ class FriendsScreen(
     @Composable
     private fun UsersContainer(
         list: List<FriendDTO>,
-        onMoreInfoClick: () -> Unit,
+        toUserScreen: (id: Int) -> Unit,
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -120,11 +112,9 @@ class FriendsScreen(
             verticalArrangement = Arrangement.Top
         ) {
             items(list.size) { index ->
-                FriendCard(
-                    position = index + 1,
-                    friendData = list[index],
-                    onMoreInfoClick = onMoreInfoClick
-                ).Create(
+                FriendCard(position = index + 1, friendData = list[index], onMoreInfoClick = {
+                    toUserScreen(list[index].id)
+                }).Create(
                     modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
                 )
             }

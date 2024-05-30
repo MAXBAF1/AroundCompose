@@ -2,6 +2,7 @@ package com.example.aroundcompose.ui.screens.account
 
 import android.annotation.SuppressLint
 import android.graphics.Paint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -66,7 +67,7 @@ class AccountScreen(
     private val toFriendsScreen: () -> Unit,
     private val toMoneysScreen: () -> Unit,
     private val toSkillsScreen: () -> Unit,
-    private val isOtherPlayerScreen: Boolean
+    private val userId: Int
 ) {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
@@ -89,7 +90,7 @@ class AccountScreen(
                         modifier = Modifier.padding(bottom = 24.dp),
                         textId = R.string.account,
                         onBackClick = onBackClick,
-                        trailingIconId = if (!isOtherPlayerScreen) R.drawable.ic_settings else null,
+                        trailingIconId = if (userId == -1) R.drawable.ic_settings else null,
                         onTrailingBtnClick = toSettingsScreen
                     )
                     Avatar(modifier = Modifier.padding(bottom = 16.dp))
@@ -99,7 +100,7 @@ class AccountScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         NameAndLevels(modifier = Modifier.padding(end = 20.dp))
-                        if (isOtherPlayerScreen) AddFriendBtn()
+                        if (userId != -1) AddFriendBtn()
                     }
 
                     MainButtons()
@@ -152,7 +153,7 @@ class AccountScreen(
 
     @Composable
     private fun PlaceId() {
-        if (isOtherPlayerScreen) {
+        if (userId != -1) {
             Row(
                 modifier = Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.Center,
@@ -202,7 +203,7 @@ class AccountScreen(
                 onClick = toStatisticScreen
             )
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                if (isOtherPlayerScreen) {
+                if (userId != -1) {
                     ToOtherScreenBtn(
                         onClick = toSkillsScreen,
                         text = stringResource(id = R.string.skills),
