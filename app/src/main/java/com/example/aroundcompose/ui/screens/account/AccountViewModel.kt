@@ -3,6 +3,7 @@ package com.example.aroundcompose.ui.screens.account
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.models.UserDTO
+import com.example.aroundcompose.data.services.StatisticService
 import com.example.aroundcompose.data.services.UserInfoService
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.screens.account.models.AccountEvent
@@ -16,7 +17,10 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(tokenManager: TokenManager) :
     BaseViewModel<AccountViewState, AccountEvent>(initialState = AccountViewState()) {
     private val userInfoService = UserInfoService(tokenManager)
+    private val statisticService = StatisticService(tokenManager)
     private var userInfo = UserDTO()
+    private var myCells: Int = 0
+    private var myTeamCells: Int = 0
 
     override fun obtainEvent(viewEvent: AccountEvent) {
         super.obtainEvent(viewEvent)
@@ -32,7 +36,12 @@ class AccountViewModel @Inject constructor(tokenManager: TokenManager) :
                 userInfoService.getMe()
             } else userInfoService.getUser(id)) ?: UserDTO()
 
-            viewState.update { it.copy(userInfo = userInfo.copy()) }
+            myCells = 39 //FIXME Сделать запрос
+            myTeamCells = statisticService.getTeam(id)?.score ?: 0
+
+            viewState.update {
+                it.copy(userInfo = userInfo.copy(), myCells = myCells, myTeamCells = myTeamCells)
+            }
         }
     }
 }

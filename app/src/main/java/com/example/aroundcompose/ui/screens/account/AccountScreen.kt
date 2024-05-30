@@ -113,7 +113,7 @@ class AccountScreen(
                         if (userId != -1) AddFriendBtn()
                     }
 
-                    MainButtons()
+                    MainButtons(viewState.myCells, viewState.myTeamCells)
                     PlaceId(viewState.userInfo.id)
                 }
             }
@@ -196,14 +196,16 @@ class AccountScreen(
     }
 
     @Composable
-    private fun MainButtons() {
+    private fun MainButtons(myCells: Int, teamCells: Int) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             CellsInfoCard(
+                count = myCells,
                 titleTextId = R.string.you_captured,
                 decorationId = R.drawable.hex_decoration_1,
                 modifier = Modifier.padding(bottom = 16.dp),
             )
             CellsInfoCard(
+                count = teamCells,
                 titleTextId = R.string.team_captured,
                 bgColor = JetAroundTheme.colors.blue,
                 textColor = JetAroundTheme.colors.primaryBackground,
@@ -277,6 +279,7 @@ class AccountScreen(
 
     @Composable
     private fun CellsInfoCard(
+        count: Int,
         titleTextId: Int,
         decorationId: Int,
         modifier: Modifier = Modifier,
@@ -304,7 +307,7 @@ class AccountScreen(
                         modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
                     )
                     Text(
-                        text = "10684 ${stringResource(id = R.string.cells).uppercase()}",
+                        text = "$count ${stringResource(id = R.string.cells).uppercase()}",
                         color = textColor,
                         style = JetAroundTheme.typography.bold24
                     )
