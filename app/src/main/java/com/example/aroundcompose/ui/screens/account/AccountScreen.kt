@@ -2,7 +2,6 @@ package com.example.aroundcompose.ui.screens.account
 
 import android.annotation.SuppressLint
 import android.graphics.Paint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -30,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,24 +54,32 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.toPath
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
+import com.example.aroundcompose.data.models.UserDTO
 import com.example.aroundcompose.ui.common.views.CustomIconButton
 import com.example.aroundcompose.ui.common.views.CustomTopAppBar
+import com.example.aroundcompose.ui.screens.account.models.AccountEvent
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.example.aroundcompose.utils.RoundedPolygonShape
 
 class AccountScreen(
+    private val viewModel: AccountViewModel,
     private val onBackClick: () -> Unit,
     private val toSettingsScreen: () -> Unit,
     private val toStatisticScreen: () -> Unit,
     private val toFriendsScreen: () -> Unit,
     private val toMoneysScreen: () -> Unit,
     private val toSkillsScreen: () -> Unit,
-    private val userId: Int
+    private val userId: Int,
 ) {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun Create() {
+        val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+
+        LaunchedEffect(key1 = Unit) { viewModel.obtainEvent(AccountEvent.GetUserInfo(userId)) }
+
         Scaffold(containerColor = JetAroundTheme.colors.primaryBackground) {
             Column(
                 modifier = Modifier
@@ -99,12 +107,14 @@ class AccountScreen(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        NameAndLevels(modifier = Modifier.padding(end = 20.dp))
+                        NameAndLevels(
+                            user = viewState.userInfo, modifier = Modifier.padding(end = 20.dp)
+                        )
                         if (userId != -1) AddFriendBtn()
                     }
 
                     MainButtons()
-                    PlaceId()
+                    PlaceId(viewState.userInfo.id)
                 }
             }
         }
@@ -152,24 +162,23 @@ class AccountScreen(
     }
 
     @Composable
-    private fun PlaceId() {
+    private fun PlaceId(id: Int) {
         if (userId != -1) {
             Row(
                 modifier = Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.Bottom
-            ) { Id() }
+            ) { Id(id) }
         } else {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
-            ) { Id() }
+            ) { Id(id) }
         }
     }
 
     @Composable
-    private fun Id() {
-        val id = 123234359
+    private fun Id(id: Int) {
         val clipboardManager = LocalClipboardManager.current
         val context = LocalContext.current
 
@@ -332,16 +341,16 @@ class AccountScreen(
     }
 
     @Composable
-    private fun NameAndLevels(modifier: Modifier = Modifier) {
+    private fun NameAndLevels(user: UserDTO, modifier: Modifier = Modifier) {
         Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "@MAXBAF1",
+                text = user.username,
                 color = JetAroundTheme.colors.textColor,
                 style = JetAroundTheme.typography.mediumSemiBold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = "lvl.16 / lvl.100",
+                text = "lvl.${user.level} / lvl.100",
                 color = JetAroundTheme.colors.textColor,
                 style = JetAroundTheme.typography.smallSemiBold
             )

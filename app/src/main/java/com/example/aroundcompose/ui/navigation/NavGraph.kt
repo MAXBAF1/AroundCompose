@@ -17,6 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.screens.account.AccountScreen
+import com.example.aroundcompose.ui.screens.account.AccountViewModel
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationScreen
 import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel
 import com.example.aroundcompose.ui.screens.friends.FriendsScreen
@@ -51,6 +52,7 @@ class NavGraph(
         val skillsViewModel = hiltViewModel<SkillsViewModel>()
         val statisticsViewModel = hiltViewModel<StatisticsViewModel>()
         val friendsViewModel = hiltViewModel<FriendsViewModel>()
+        val accountViewModel = hiltViewModel<AccountViewModel>()
 
         NavHost(
             navController = navController,
@@ -81,7 +83,7 @@ class NavGraph(
                     type = NavType.IntType
                     defaultValue = -1
                 })
-            ) { CreateAccountScreen() }
+            ) { CreateAccountScreen(accountViewModel) }
         }
     }
 
@@ -129,8 +131,8 @@ class NavGraph(
     @Composable
     private fun CreateSkillsScreen(skillsViewModel: SkillsViewModel) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val arguments = navBackStackEntry?.arguments
-        val userId = arguments?.getInt(USER_ID, -1)  ?: -1
+        val arguments = navBackStackEntry?.arguments ?: return
+        val userId = arguments.getInt(USER_ID, -1)
 
         SkillsScreen(
             viewModel = skillsViewModel,
@@ -140,12 +142,13 @@ class NavGraph(
     }
 
     @Composable
-    private fun CreateAccountScreen() {
+    private fun CreateAccountScreen(accountViewModel: AccountViewModel) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val arguments = navBackStackEntry?.arguments
-        val userId = arguments?.getInt(USER_ID, -1) ?: -1
+        val arguments = navBackStackEntry?.arguments ?: return
+        val userId = arguments.getInt(USER_ID, -1)
 
         AccountScreen(
+            viewModel = accountViewModel,
             onBackClick = { navController.popBackStack() },
             toSettingsScreen = { navController.navigate(Screen.SETTINGS_ROUTE) },
             toStatisticScreen = { navController.navigate(Screen.STATISTICS_ROUTE) },

@@ -25,17 +25,14 @@ class TeamsViewModel @Inject constructor(tokenManager: TokenManager) :
 
                 viewState.update {
                     it.copy(
-                        currentTeamId = currentTeamId,
-                        isEnableNextBtn = currentTeamId != -1
+                        currentTeamId = currentTeamId, isEnableNextBtn = currentTeamId != -1
                     )
                 }
             }
 
             TeamsEvent.ClickBtnNext -> {
                 viewModelScope.launch {
-                    when (userInfoService.patchMe(
-                        teamId = currentTeamId
-                    )) {
+                    when (userInfoService.patchMe(teamId = currentTeamId)) {
                         HttpStatusCode.OK -> viewState.update { it.copy(toNextScreen = true) }
                         else -> viewState.update { it.copy(toNextScreen = false) } // FIXME сделать обработку ошибок
                     }
