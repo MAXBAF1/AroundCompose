@@ -1,117 +1,57 @@
 package com.example.aroundcompose.ui.screens.friends
 
-import com.example.aroundcompose.R
-import com.example.aroundcompose.ui.common.enums.Teams
+import androidx.lifecycle.viewModelScope
+import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.models.FriendDTO
+import com.example.aroundcompose.data.services.FriendsService
+import com.example.aroundcompose.data.services.UserInfoService
 import com.example.aroundcompose.ui.common.models.BaseViewModel
-import com.example.aroundcompose.ui.screens.friends.models.FriendData
 import com.example.aroundcompose.ui.screens.friends.models.FriendsEvent
 import com.example.aroundcompose.ui.screens.friends.models.FriendsViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
-import java.util.UUID
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class FriendsViewModel @Inject constructor() :
+@HiltViewModel
+class FriendsViewModel @Inject constructor(tokenManager: TokenManager) :
     BaseViewModel<FriendsViewState, FriendsEvent>(initialState = FriendsViewState()) {
-    private val friendsList: MutableList<FriendData> = mutableListOf(
-        FriendData(
-            id = UUID.randomUUID(),
-            level = 3,
-            team = Teams.YELLOW,
-            position = 1,
-            imageId = R.drawable.avatar_example,
-            name = "MagicHero11",
-            score = 560
-        ),
-        FriendData(
-            id = UUID.randomUUID(),
-            level = 5,
-            team = Teams.LIGHT_BLUE,
-            position = 2,
-            imageId = R.drawable.avatar_example,
-            name = "IdiRabotaiOlen'",
-            score = 320
-        ),
-        FriendData(
-            id = UUID.randomUUID(),
-            level = 8,
-            team = Teams.BLUE,
-            position = 3,
-            imageId = R.drawable.avatar_example,
-            name = "Test228",
-            score = 220
-        ),
-        FriendData(
-            id = UUID.randomUUID(),
-            level = 1,
-            team = Teams.PURPLE,
-            position = 4,
-            imageId = R.drawable.avatar_example,
-            name = "Dinozavr",
-            score = 180
-        ),
-        FriendData(
-            id = UUID.randomUUID(),
-            level = 2,
-            team = Teams.YELLOW,
-            position = 5,
-            imageId = R.drawable.avatar_example,
-            name = "Fredy Fasber",
-            score = 150
-        ),
-        FriendData(
-            id = UUID.randomUUID(),
-            level = 8,
-            team = Teams.LIGHT_BLUE,
-            position = 6,
-            imageId = R.drawable.avatar_example,
-            name = "Oleg Mongol",
-            score = 100
-        ),
-        FriendData(
-            id = UUID.randomUUID(),
-            level = 1,
-            team = Teams.PURPLE,
-            position = 7,
-            imageId = R.drawable.avatar_example,
-            name = "Outsider",
-            score = 80
-        ),
-        FriendData(
-            id = UUID.randomUUID(),
-            level = 2,
-            team = Teams.BLUE,
-            position = 8,
-            imageId = R.drawable.avatar_example,
-            name = "Anime",
-            score = 50
-        ),
-    )
-    private val friendsFilteredList: MutableList<FriendData> = mutableListOf()
+    private val friendsService = FriendsService(tokenManager)
+    private val usersService = UserInfoService(tokenManager)
+    private var friendsList: Array<FriendDTO>? = arrayOf()
+    private var usersList: Array<FriendDTO>? = arrayOf()
+    private var friendsFilteredList: List<FriendDTO>? = listOf()
     private var searchText: String = ""
-    private var isEventSheetShowed: Boolean = false
 
     override fun obtainEvent(viewEvent: FriendsEvent) {
         when (viewEvent) {
-            is FriendsEvent.OnSearchTextChanged -> {
+            FriendsEvent.GetUsersList -> {
+                viewModelScope.launch {
+                    usersList = usersService.findUser(searchText)
+
+                    viewState.update { it.copy(usersList = usersList?.toList()) }
+                }
+            }
+
+            FriendsEvent.GetFriendsList -> {
+                viewModelScope.launch {
+                    friendsList = friendsService.findFriends()
+                }
+            }
+
+            is FriendsEvent.OnSearchTextChange -> {
                 searchText = viewEvent.text
-                searchList(searchText)
+
+                friendsFilteredList = friendsList?.filter {
+                    it.username.lowercase().contains(searchText.lowercase())
+                }
 
                 viewState.update {
                     it.copy(
                         searchText = searchText,
-                        friendsFilteredList = friendsFilteredList
+                        friendsFilteredList = friendsFilteredList?.toList(),
                     )
                 }
-            }
-        }
-    }
-
-    private fun searchList(text: String) {
-        friendsFilteredList.clear()
-
-        friendsList.forEach { friendCard ->
-            if (friendCard.name.lowercase().contains(text.lowercase())) {
-                friendsFilteredList.add(friendCard)
             }
         }
     }

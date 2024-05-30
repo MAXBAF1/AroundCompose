@@ -15,10 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,16 +24,15 @@ import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.example.aroundcompose.utils.clearFocusOnKeyboardDismiss
+import kotlinx.coroutines.delay
 
 @Composable
 fun SearchView(
     modifier: Modifier = Modifier,
-    restoredValue: String,
+    value: String,
     onClick: (() -> Unit)? = null,
     onValueChange: (String) -> Unit,
 ) {
-    var value by remember { mutableStateOf(restoredValue) }
-    LaunchedEffect(key1 = restoredValue) { value = restoredValue }
     val enabled = onClick == null
 
     Card(
@@ -49,8 +45,7 @@ fun SearchView(
             value = value,
             onValueChange = {
                 if (enabled) {
-                    value = it
-                    onValueChange(it)
+                    onValueChange(value)
                 }
             },
             enabled = enabled,

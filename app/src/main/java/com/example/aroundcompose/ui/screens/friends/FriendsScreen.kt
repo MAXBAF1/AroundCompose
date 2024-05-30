@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,11 +19,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
+import com.example.aroundcompose.data.models.FriendDTO
 import com.example.aroundcompose.ui.common.views.CustomTopAppBar
 import com.example.aroundcompose.ui.common.views.SearchView
-import com.example.aroundcompose.ui.screens.friends.models.FriendData
 import com.example.aroundcompose.ui.screens.friends.models.FriendsEvent
 import com.example.aroundcompose.ui.screens.friends.views.FriendCard
+import com.example.aroundcompose.ui.theme.JetAroundTheme
+import kotlinx.coroutines.delay
 
 class FriendsScreen(
     private val viewModel: FriendsViewModel,
@@ -31,6 +35,10 @@ class FriendsScreen(
     @Composable
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+
+        LaunchedEffect(key1 = Unit) {
+            viewModel.obtainEvent(FriendsEvent.GetFriendsList)
+        }
 
         Box {
             Image(
@@ -54,47 +62,70 @@ class FriendsScreen(
                 )
 
                 SearchView(
-                    modifier = Modifier
-                        .padding(bottom = 22.dp),
-                    restoredValue = viewState.searchText,
+                    modifier = Modifier.padding(top = 14.dp, bottom = 8.dp),
+                    value = viewState.searchText,
                     onValueChange = {
-                        viewModel.obtainEvent(FriendsEvent.OnSearchTextChanged(it))
+                        viewModel.obtainEvent(FriendsEvent.OnSearchTextChange(it))
                     }
                 )
 
                 if (viewState.searchText == "") {
-                    FriendsContainer(
+                    UsersContainer(
                         list = viewState.friendsList,
                         onMoreInfoClick = onMoreInfoClick
                     )
                 } else {
-                    FriendsContainer(
-                        list = viewState.friendsFilteredList,
-                        onMoreInfoClick = onMoreInfoClick
-                    )
+                    if (!viewState.friendsFilteredList.isNullOrEmpty()) {
+                        UsersContainer(
+                            list = viewState.friendsFilteredList!!,
+                            onMoreInfoClick = onMoreInfoClick
+                        )
+
+                        HorizontalDivider(
+                            thickness = 2.dp,
+                            color = JetAroundTheme.colors.notActiveColor,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp, horizontal = 16.dp)
+                        )
+                    }
+
+                    viewState.usersList?.let {
+                        UsersContainer(
+                            list = it,
+                            onMoreInfoClick = onMoreInfoClick
+                        )
+                    }
                 }
             }
+        }
+
+        LaunchedEffect(key1 = viewState.searchText) {
+            if (viewState.searchText.isBlank()) return@LaunchedEffect
+
+            delay(200)
+
+            viewModel.obtainEvent(FriendsEvent.GetUsersList)
         }
     }
 
     @Composable
-    private fun FriendsContainer(
-        list: List<FriendData>,
+    private fun UsersContainer(
+        list: List<FriendDTO>,
         onMoreInfoClick: () -> Unit,
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
             items(list.size) { index ->
                 FriendCard(
+                    position = index + 1,
                     friendData = list[index],
                     onMoreInfoClick = onMoreInfoClick
                 ).Create(
-                    modifier = if (index != 0) {
-                        Modifier.padding(top = 16.dp)
-                    } else Modifier
+                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
                 )
             }
         }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,20 +42,22 @@ class SelectTeamScreen(
             Title()
 
             GridLayoutTeams(
-                viewState.currentTeam,
+                viewState.currentTeamId,
                 onClick = {
-                    viewModel.obtainEvent(TeamsEvent.ChangeTeam(it))
+                    viewModel.obtainEvent(TeamsEvent.ChangeTeam(it.value))
                 },
                 modifier = Modifier.padding(top = 40.dp)
             )
 
             NextButtonView(
                 enabled = viewState.isEnableNextBtn,
-                onClick = onNextClicked,
+                onClick = { viewModel.obtainEvent(TeamsEvent.ClickBtnNext) },
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .align(Alignment.End)
             )
+
+            if (viewState.toNextScreen) onNextClicked()
         }
     }
 
@@ -68,12 +71,12 @@ class SelectTeamScreen(
     }
 
     @Composable
-    private fun GridLayoutTeams(currentTeam: Teams, onClick: (Teams) -> Unit, modifier: Modifier) {
+    private fun GridLayoutTeams(currentTeamId: Int, onClick: (Teams) -> Unit, modifier: Modifier) {
         Column(modifier) {
             Row {
                 TeamView(
                     containerColor = JetAroundTheme.colors.blue,
-                    isEnable = currentTeam == Teams.BLUE,
+                    isEnable = currentTeamId == Teams.BLUE.value,
                     onClick = { onClick(Teams.BLUE) }
                 )
 
@@ -81,7 +84,7 @@ class SelectTeamScreen(
 
                 TeamView(
                     containerColor = JetAroundTheme.colors.purple,
-                    isEnable = currentTeam == Teams.PURPLE,
+                    isEnable = currentTeamId == Teams.PURPLE.value,
                     onClick = { onClick(Teams.PURPLE) }
                 )
             }
@@ -91,7 +94,7 @@ class SelectTeamScreen(
             Row {
                 TeamView(
                     containerColor = JetAroundTheme.colors.yellow,
-                    isEnable = currentTeam == Teams.YELLOW,
+                    isEnable = currentTeamId == Teams.YELLOW.value,
                     onClick = { onClick(Teams.YELLOW) }
                 )
 
@@ -99,7 +102,7 @@ class SelectTeamScreen(
 
                 TeamView(
                     containerColor = JetAroundTheme.colors.lightBlue,
-                    isEnable = currentTeam == Teams.LIGHT_BLUE,
+                    isEnable = currentTeamId == Teams.LIGHT_BLUE.value,
                     onClick = { onClick(Teams.LIGHT_BLUE) }
                 )
             }

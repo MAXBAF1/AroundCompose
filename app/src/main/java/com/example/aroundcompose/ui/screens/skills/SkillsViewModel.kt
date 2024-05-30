@@ -1,41 +1,78 @@
 package com.example.aroundcompose.ui.screens.skills
 
+import androidx.lifecycle.viewModelScope
+import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.models.SkillDTO
+import com.example.aroundcompose.data.models.UserDTO
+import com.example.aroundcompose.data.services.SkillsService
+import com.example.aroundcompose.data.services.UserInfoService
 import com.example.aroundcompose.ui.common.models.BaseViewModel
-import com.example.aroundcompose.ui.screens.skills.models.SkillData
-import com.example.aroundcompose.ui.screens.skills.models.Skills
 import com.example.aroundcompose.ui.screens.skills.models.SkillsEvent
 import com.example.aroundcompose.ui.screens.skills.models.SkillsViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SkillsViewModel @Inject constructor() :
+class SkillsViewModel @Inject constructor(tokenManager: TokenManager) :
     BaseViewModel<SkillsViewState, SkillsEvent>(initialState = SkillsViewState()) {
-    private val skills: Skills = Skills()
+    private var userInfo: UserDTO? = UserDTO()
+    private var skills: List<SkillDTO> = listOf()
+    private var skillsStates: MutableList<Boolean> = mutableListOf()
+    private val userInfoService = UserInfoService(tokenManager)
+    private val skillsService = SkillsService(tokenManager)
 
     override fun obtainEvent(viewEvent: SkillsEvent) {
         when (viewEvent) {
             is SkillsEvent.ClickOnCard -> {
-                skills[viewEvent.type] = SkillData(
-                    iconId = skills[viewEvent.type].iconId,
-                    imageId = skills[viewEvent.type].imageId,
-                    titleId = skills[viewEvent.type].titleId,
-                    descriptionId = skills[viewEvent.type].descriptionId,
-                    currentLevel = skills[viewEvent.type].currentLevel,
-                    maxLevel = skills[viewEvent.type].maxLevel,
-                    price = skills[viewEvent.type].price,
-                    isCardClicked = !skills[viewEvent.type].isCardClicked
-                )
+                skillsStates[viewEvent.index] = !skillsStates[viewEvent.index]
 
-                viewState.update {
-                    it.copy(
-                        skills = skills.copy()
-                    )
+                viewState.update { it.copy(skillsStates = skillsStates.toList()) }
+            }
+
+            is SkillsEvent.ClickUpgradeBtn -> {
+                viewModelScope.launch {
+                    val skill = skills[viewEvent.index]
+
+                    when (skillsService.buyLevels(id = skill.id)) {
+                        HttpStatusCode.OK -> {
+                            skill.currentLevel += 1
+                            userInfo?.coins = userInfo?.coins?.minus(skill.cost[skill.currentLevel])
+                                ?: return@launch
+
+                            viewState.update {
+                                it.copy(
+                                    coins = userInfo?.coins ?: return@launch,
+                                    skills = skills.toList()
+                                )
+                            }
+                        }
+
+                        else -> return@launch // FIXME сделать обработку ошибок
+                    }
                 }
             }
 
-            is SkillsEvent.ClickUpgradeBtn -> {}
+            SkillsEvent.GetUserInfo -> {
+                viewModelScope.launch {
+                    userInfo = userInfoService.getMe()
+
+                    skillsService.getUserSkills(userInfo?.id ?: return@launch)?.let { userSkills ->
+                        skills = userSkills.toList()
+                        skillsStates = MutableList(userSkills.size) { false }
+
+                        viewState.update {
+                            it.copy(
+                                coins = userInfo?.coins ?: return@launch,
+                                skills = skills.toList(),
+                                skillsStates = skillsStates.toList()
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

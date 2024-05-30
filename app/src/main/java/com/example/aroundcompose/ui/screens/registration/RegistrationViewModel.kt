@@ -1,8 +1,8 @@
 package com.example.aroundcompose.ui.screens.registration
 
 import androidx.lifecycle.viewModelScope
-import com.example.aroundcompose.data.NetworkService
 import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.services.AuthenticationService
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.common.models.FieldData
@@ -11,6 +11,7 @@ import com.example.aroundcompose.ui.screens.registration.models.RegistrationFiel
 import com.example.aroundcompose.ui.screens.registration.models.RegistrationViewState
 import com.example.aroundcompose.ui.screens.registration.models.validation_data.ErrorMessages
 import com.example.aroundcompose.ui.screens.registration.models.validation_data.ErrorStatus
+import com.example.aroundcompose.ui.screens.registration.models.validation_data.ErrorsKeys
 import com.example.aroundcompose.ui.screens.registration.models.validation_data.TextFieldsRegex
 import com.example.aroundcompose.utils.TextFieldValidation
 import com.example.aroundcompose.utils.TextFieldValidation.checkPasswordConfirm
@@ -26,7 +27,7 @@ class RegistrationViewModel @Inject constructor(tokenManager: TokenManager) :
         initialState = RegistrationViewState()
     ) {
     private val fields = RegistrationFields()
-    private val networkService = NetworkService(tokenManager)
+    private val networkService = AuthenticationService(tokenManager)
 
     override fun obtainEvent(viewEvent: RegistrationEvent) {
         when (viewEvent) {
@@ -64,16 +65,32 @@ class RegistrationViewModel @Inject constructor(tokenManager: TokenManager) :
         when (type) {
             FieldType.LOGIN, FieldType.PASSWORD -> {
                 val errorLengthStatus = TextFieldValidation.checkLength(text, type)
-                val errorRegexStatus =
-                    TextFieldValidation.checkRegex(text, TextFieldsRegex.getRegex(type))
+                val errorRegexStatus = TextFieldValidation.checkRegex(
+                    text, TextFieldsRegex.getRegex(type)
+                )
+
+                if (type == FieldType.PASSWORD) {
+                    val errorPasswordConfirmStatus = checkPasswordConfirm(
+                        text, fields[FieldType.CONFIRM_PASSWORD].fieldText
+                    )
+
+                    fields[FieldType.CONFIRM_PASSWORD] = fields[FieldType.CONFIRM_PASSWORD].copy(
+                        textErrorId = if (errorPasswordConfirmStatus == ErrorStatus.ERROR) {
+                            ErrorMessages.getErrorMessages(
+                                FieldType.CONFIRM_PASSWORD,
+                                ErrorsKeys.EQUALS
+                            )
+                        } else null
+                    )
+                }
 
                 textErrorId = when {
                     errorLengthStatus == ErrorStatus.ERROR -> {
-                        ErrorMessages.getErrorMessages(type, "Length")
+                        ErrorMessages.getErrorMessages(type, ErrorsKeys.LENGTH)
                     }
 
                     errorRegexStatus == ErrorStatus.ERROR -> {
-                        ErrorMessages.getErrorMessages(type, "Regex")
+                        ErrorMessages.getErrorMessages(type, ErrorsKeys.REGEX)
                     }
 
                     else -> null
@@ -85,17 +102,17 @@ class RegistrationViewModel @Inject constructor(tokenManager: TokenManager) :
                     TextFieldValidation.checkRegex(text, TextFieldsRegex.getRegex(type))
 
                 textErrorId = if (errorRegexStatus == ErrorStatus.ERROR) {
-                    ErrorMessages.getErrorMessages(type, "Regex")
+                    ErrorMessages.getErrorMessages(type, ErrorsKeys.REGEX)
                 } else null
             }
 
             FieldType.CONFIRM_PASSWORD -> {
                 val errorPasswordConfirmStatus = checkPasswordConfirm(
-                    fields[FieldType.PASSWORD]?.fieldText ?: "", text
+                    fields[FieldType.PASSWORD].fieldText, text
                 )
 
                 textErrorId = if (errorPasswordConfirmStatus == ErrorStatus.ERROR) {
-                    ErrorMessages.getErrorMessages(type, "Equals")
+                    ErrorMessages.getErrorMessages(type, ErrorsKeys.EQUALS)
                 } else null
             }
         }

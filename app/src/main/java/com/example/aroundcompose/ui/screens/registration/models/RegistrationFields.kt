@@ -10,7 +10,6 @@ data class RegistrationFields(
     var password: FieldData = FieldData(),
     var confirmPassword: FieldData = FieldData(),
 ) : IFields {
-
     override operator fun get(type: FieldType): FieldData {
         return when (type) {
             FieldType.LOGIN -> username

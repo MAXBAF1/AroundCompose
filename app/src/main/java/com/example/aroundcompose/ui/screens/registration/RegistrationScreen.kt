@@ -70,7 +70,7 @@ class RegistrationScreen(
         modifier: Modifier,
     ) {
         Column(modifier) {
-            FieldType.values().forEachIndexed { index, fieldType ->
+            FieldType.entries.forEachIndexed { index, fieldType ->
                 TextFieldView(
                     textFieldType = fieldType,
                     textValue = fields[fieldType].fieldText,
@@ -86,7 +86,7 @@ class RegistrationScreen(
                         FieldType.EMAIL -> painterResource(id = R.drawable.ic_email)
                         else -> painterResource(id = R.drawable.ic_lock)
                     },
-                    imeAction = if (index == FieldType.values().size - 1) {
+                    imeAction = if (index == FieldType.entries.size - 1) {
                         ImeAction.Done
                     } else {
                         ImeAction.Next
