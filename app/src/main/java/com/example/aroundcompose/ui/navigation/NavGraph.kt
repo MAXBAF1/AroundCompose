@@ -24,7 +24,6 @@ import com.example.aroundcompose.ui.screens.friends.FriendsViewModel
 import com.example.aroundcompose.ui.screens.greetings.GreetingsScreen
 import com.example.aroundcompose.ui.screens.map.MapScreen
 import com.example.aroundcompose.ui.screens.map.MapViewModel
-import com.example.aroundcompose.ui.screens.menu.MenuScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationViewModel
 import com.example.aroundcompose.ui.screens.settings.SettingsScreen
@@ -130,7 +129,7 @@ class NavGraph(
     private fun CreateSkillsScreen(skillsViewModel: SkillsViewModel) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val arguments = navBackStackEntry?.arguments
-        val userId = arguments?.getInt(USER_ID, -1)  ?: -1
+        val userId = arguments?.getInt(USER_ID, -1) ?: -1
 
         SkillsScreen(
             viewModel = skillsViewModel,

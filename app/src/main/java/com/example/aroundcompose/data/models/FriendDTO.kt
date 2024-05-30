@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FriendDTO(
     @SerialName("id") val id: Int = 0,
+//    @SerialName("position") val position: Int = 0,
     @SerialName("username") val username: String = "",
     @SerialName("avatar") val avatar: String = "",
     @SerialName("team_id") val teamId: Int = 0,

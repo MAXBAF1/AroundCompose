@@ -49,12 +49,12 @@ class UserInfoService(private val tokenManager: TokenManager) {
         return response.castOrNull<UserDTO>()
     }
 
-    suspend fun findUser(username: String): Array<FriendDTO>? {
+    suspend fun findUser(username: String): List<FriendDTO>? {
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Post,
             address = AroundConfig.USER_ADDRESS.toString() + "/find?username=$username",
             accessToken = tokenManager.getTokens().first.toString()
         )
-        return response.castOrNull<Array<FriendDTO>>()
+        return response.castOrNull<List<FriendDTO>>()
     }
 }

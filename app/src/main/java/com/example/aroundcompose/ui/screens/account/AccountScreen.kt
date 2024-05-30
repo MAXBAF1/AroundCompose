@@ -2,7 +2,6 @@ package com.example.aroundcompose.ui.screens.account
 
 import android.annotation.SuppressLint
 import android.graphics.Paint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -67,7 +66,7 @@ class AccountScreen(
     private val toFriendsScreen: () -> Unit,
     private val toMoneysScreen: () -> Unit,
     private val toSkillsScreen: () -> Unit,
-    private val userId: Int
+    private val userId: Int,
 ) {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
