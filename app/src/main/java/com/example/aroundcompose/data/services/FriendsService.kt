@@ -8,12 +8,12 @@ import com.example.aroundcompose.utils.castOrNull
 import io.ktor.http.HttpMethod
 
 class FriendsService(private val tokenManager: TokenManager) {
-    suspend fun findFriends(): Array<FriendDTO>? {
+    suspend fun findFriends(): List<FriendDTO>? {
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Get,
-            address = AroundConfig.USER_ADDRESS.toString() + "/me/friends",
+            address = AroundConfig.STATISTIC_ADDRESS.toString() + "/me/friends",
             accessToken = tokenManager.getTokens().first.toString()
         )
-        return response.castOrNull<Array<FriendDTO>>()
+        return response.castOrNull<List<FriendDTO>>()
     }
 }

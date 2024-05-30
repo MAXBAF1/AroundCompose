@@ -25,7 +25,6 @@ import com.example.aroundcompose.ui.screens.friends.FriendsViewModel
 import com.example.aroundcompose.ui.screens.greetings.GreetingsScreen
 import com.example.aroundcompose.ui.screens.map.MapScreen
 import com.example.aroundcompose.ui.screens.map.MapViewModel
-import com.example.aroundcompose.ui.screens.menu.MenuScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationScreen
 import com.example.aroundcompose.ui.screens.registration.RegistrationViewModel
 import com.example.aroundcompose.ui.screens.settings.SettingsScreen
@@ -41,7 +40,6 @@ class NavGraph(
     private val navController: NavHostController,
     private val innerPaddings: PaddingValues,
 ) {
-
     @SuppressLint("StateFlowValueCalledInComposition")
     @Composable
     fun Create() {

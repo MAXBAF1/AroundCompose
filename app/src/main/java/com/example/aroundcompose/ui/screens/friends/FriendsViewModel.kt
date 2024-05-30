@@ -18,8 +18,8 @@ class FriendsViewModel @Inject constructor(tokenManager: TokenManager) :
     BaseViewModel<FriendsViewState, FriendsEvent>(initialState = FriendsViewState()) {
     private val friendsService = FriendsService(tokenManager)
     private val usersService = UserInfoService(tokenManager)
-    private var friendsList: Array<FriendDTO>? = arrayOf()
-    private var usersList: Array<FriendDTO>? = arrayOf()
+    private var friendsList: List<FriendDTO>? = listOf()
+    private var usersList: List<FriendDTO>? = listOf()
     private var friendsFilteredList: List<FriendDTO>? = listOf()
     private var searchText: String = ""
 
@@ -35,7 +35,13 @@ class FriendsViewModel @Inject constructor(tokenManager: TokenManager) :
 
             FriendsEvent.GetFriendsList -> {
                 viewModelScope.launch {
-                    friendsList = friendsService.findFriends()
+                    friendsList = friendsService.findFriends()?.sortedBy { it.score }
+
+                    viewState.update { viewState ->
+                        viewState.copy(
+                            friendsList = friendsList?.toList() ?: return@launch
+                        )
+                    }
                 }
             }
 
@@ -46,8 +52,8 @@ class FriendsViewModel @Inject constructor(tokenManager: TokenManager) :
                     it.username.lowercase().contains(searchText.lowercase())
                 }
 
-                viewState.update {
-                    it.copy(
+                viewState.update { viewState ->
+                    viewState.copy(
                         searchText = searchText,
                         friendsFilteredList = friendsFilteredList?.toList(),
                     )

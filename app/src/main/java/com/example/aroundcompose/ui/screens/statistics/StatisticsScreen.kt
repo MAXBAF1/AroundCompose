@@ -26,10 +26,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
+import com.example.aroundcompose.data.models.FriendDTO
 import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.common.views.CustomTopAppBar
 import com.example.aroundcompose.ui.screens.statistics.models.StatisticsEvent
-import com.example.aroundcompose.ui.screens.statistics.models.UserData
 import com.example.aroundcompose.ui.screens.statistics.views.ButtonListView
 import com.example.aroundcompose.ui.screens.statistics.views.HexagonView
 import com.example.aroundcompose.ui.screens.statistics.views.ListBtn
@@ -189,7 +189,7 @@ class StatisticsScreen(
     }
 
     @Composable
-    private fun ContainerList(usersList: List<UserData>) {
+    private fun ContainerList(usersList: List<FriendDTO>) {
         LazyColumn {
 
         }

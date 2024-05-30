@@ -1,10 +1,11 @@
 package com.example.aroundcompose.ui.screens.statistics.models
 
+import com.example.aroundcompose.data.models.FriendDTO
 import com.example.aroundcompose.ui.common.enums.Teams
 
 data class StatisticsViewState(
-    val serverList: List<UserData> = listOf(),
-    val friendsList: List<UserData> = listOf(),
+    val serverList: List<FriendDTO> = listOf(),
+    val friendsList: List<FriendDTO> = listOf(),
     val mapOfTeamsProgress: Map<Teams, Float> = mapOf(
         Teams.LIGHT_BLUE to 69F,
         Teams.YELLOW to 20F,

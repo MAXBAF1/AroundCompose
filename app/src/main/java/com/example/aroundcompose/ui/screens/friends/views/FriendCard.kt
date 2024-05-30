@@ -79,7 +79,7 @@ class FriendCard(
     @Composable
     private fun ContainerInfo() {
         Text(
-            text = position.toString(),
+            text = "$position.",
             style = JetAroundTheme.typography.mediumSemiBold,
             color = JetAroundTheme.colors.titleColor
         )
