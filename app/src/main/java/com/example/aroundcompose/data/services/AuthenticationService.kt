@@ -5,7 +5,7 @@ import com.example.aroundcompose.data.JwtRequestManager
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.models.AuthDTO
 import com.example.aroundcompose.data.models.RegistrationDTO
-import com.example.aroundcompose.data.models.TokenResponse
+import com.example.aroundcompose.data.models.TokensDTO
 import com.example.aroundcompose.ui.screens.authorization.models.AuthFields
 import com.example.aroundcompose.ui.screens.registration.models.RegistrationFields
 import com.example.aroundcompose.utils.castOrNull
@@ -21,7 +21,7 @@ class AuthenticationService(private val tokenManager: TokenManager) {
                 email = authFields.email.fieldText, password = authFields.password.fieldText
             )
         )
-        response.castOrNull<TokenResponse>()?.let { tokenManager.saveTokens(it) }
+        response.castOrNull<TokensDTO>()?.let { tokenManager.saveTokens(it) }
         return response?.status
     }
 
@@ -37,7 +37,16 @@ class AuthenticationService(private val tokenManager: TokenManager) {
                 city = "Yekaterinburg",
             )
         )
-        response.castOrNull<TokenResponse>()?.let { tokenManager.saveTokens(it) }
+        response.castOrNull<TokensDTO>()?.let { tokenManager.saveTokens(it) }
+        return response?.status
+    }
+
+    suspend fun refresh(): HttpStatusCode? {
+        val response = JwtRequestManager.createRequest(
+            methodType = HttpMethod.Post,
+            address = "${AroundConfig.AUTH_ADDRESS}/refresh",
+        )
+        response.castOrNull<TokensDTO>()?.let { tokenManager.saveTokens(it) }
         return response?.status
     }
 }

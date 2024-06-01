@@ -12,10 +12,11 @@ import io.ktor.http.HttpStatusCode
 
 class UserInfoService(private val tokenManager: TokenManager) {
     suspend fun getMe(): UserDTO? {
+        val tokens = tokenManager.getTokens() ?: return null
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Get,
             address = AroundConfig.USER_ADDRESS.toString() + "/me",
-            accessToken = tokenManager.getTokens().first.toString()
+            accessToken = tokens.accessToken
         )
         return response.castOrNull<UserDTO>()
     }
@@ -26,6 +27,7 @@ class UserInfoService(private val tokenManager: TokenManager) {
         city: String? = null,
         teamId: Int? = null,
     ): HttpStatusCode? {
+        val tokens = tokenManager.getTokens() ?: return null
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Patch,
             body = EditableUserDTO(
@@ -35,25 +37,27 @@ class UserInfoService(private val tokenManager: TokenManager) {
                 teamId = teamId,
             ),
             address = AroundConfig.USER_ADDRESS.toString() + "/me",
-            accessToken = tokenManager.getTokens().first.toString()
+            accessToken = tokens.accessToken
         )
         return response?.status
     }
 
     suspend fun getUser(id: Int): UserDTO? {
+        val tokens = tokenManager.getTokens() ?: return null
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Get,
             address = AroundConfig.USER_ADDRESS.toString() + "/$id",
-            accessToken = tokenManager.getTokens().first.toString()
+            accessToken = tokens.accessToken
         )
         return response.castOrNull<UserDTO>()
     }
 
     suspend fun findUser(username: String): List<FriendDTO>? {
+        val tokens = tokenManager.getTokens() ?: return null
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Post,
             address = AroundConfig.USER_ADDRESS.toString() + "/find?username=$username",
-            accessToken = tokenManager.getTokens().first.toString()
+            accessToken = tokens.accessToken
         )
         return response.castOrNull<List<FriendDTO>>()
     }

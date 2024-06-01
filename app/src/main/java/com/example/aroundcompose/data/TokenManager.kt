@@ -1,33 +1,41 @@
 package com.example.aroundcompose.data
 
 import android.content.SharedPreferences
-import com.example.aroundcompose.data.models.TokenResponse
+import com.example.aroundcompose.data.models.TokensDTO
 import com.example.aroundcompose.di.EncryptedSharedPref
 import javax.inject.Inject
 
 class TokenManager @Inject constructor(
-    @EncryptedSharedPref private val sharedPref: SharedPreferences
+    @EncryptedSharedPref private val sharedPref: SharedPreferences,
 ) {
 
-    fun saveTokens(tokenResponse: TokenResponse) {
+    fun saveTokens(tokens: TokensDTO) {
         with(sharedPref.edit()) {
-            putString("access_token", tokenResponse.accessToken)
-            putString("refresh_token", tokenResponse.refreshToken)
+            putString(ACCESS_TOKEN, tokens.accessToken)
+            putString(REFRESH_TOKEN, tokens.refreshToken)
             apply()
         }
     }
 
-    fun getTokens(): Pair<String?, String?> {
-        val accessToken = sharedPref.getString("access_token", null)
-        val refreshToken = sharedPref.getString("refresh_token", null)
-        return Pair(accessToken, refreshToken)
+    fun getTokens(): TokensDTO? {
+        val accessToken = sharedPref.getString(ACCESS_TOKEN, null)
+        val refreshToken = sharedPref.getString(REFRESH_TOKEN, null)
+
+        if (accessToken == null || refreshToken == null) return null
+
+        return TokensDTO(accessToken, refreshToken)
     }
 
     fun clearTokens() {
         with(sharedPref.edit()) {
-            remove("access_token")
-            remove("refresh_token")
+            remove(ACCESS_TOKEN)
+            remove(REFRESH_TOKEN)
             apply()
         }
+    }
+
+    companion object {
+        private const val ACCESS_TOKEN = "access_token"
+        private const val REFRESH_TOKEN = "refresh_token"
     }
 }

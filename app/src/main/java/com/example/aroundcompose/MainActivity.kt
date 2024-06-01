@@ -32,7 +32,7 @@ internal class MainActivity : ComponentActivity() {
             val currentRoute = navBackStackEntry?.destination?.route
             val arguments = navBackStackEntry?.arguments
             val userId = arguments?.getInt(NavGraph.USER_ID, -1) ?: -1
-            val showBottomNav = Screen.getBottomItems().map { it.route }
+            val showBottomNav = Screen.getBottomItems().map { it.name }
                 .contains(currentRoute?.substringBefore("?")) && userId == -1
 
             AroundComposeTheme {

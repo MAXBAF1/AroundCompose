@@ -20,23 +20,22 @@ class TeamsViewModel @Inject constructor(tokenManager: TokenManager) :
 
     override fun obtainEvent(viewEvent: TeamsEvent) {
         when (viewEvent) {
-            is TeamsEvent.ChangeTeam -> {
-                currentTeamId = viewEvent.teamId
+            is TeamsEvent.ChangeTeam -> changeTeam(viewEvent.teamId)
+            TeamsEvent.ClickNextBtn -> clickNextBtn()
+        }
+    }
 
-                viewState.update {
-                    it.copy(
-                        currentTeamId = currentTeamId, isEnableNextBtn = currentTeamId != -1
-                    )
-                }
-            }
+    private fun changeTeam(currentTeamId: Int) {
+        viewState.update {
+            it.copy(currentTeamId = currentTeamId, isEnableNextBtn = currentTeamId != -1)
+        }
+    }
 
-            TeamsEvent.ClickBtnNext -> {
-                viewModelScope.launch {
-                    when (userInfoService.patchMe(teamId = currentTeamId)) {
-                        HttpStatusCode.OK -> viewState.update { it.copy(toNextScreen = true) }
-                        else -> viewState.update { it.copy(toNextScreen = false) } // FIXME сделать обработку ошибок
-                    }
-                }
+    private fun clickNextBtn() {
+        viewModelScope.launch {
+            when (userInfoService.patchMe(teamId = currentTeamId)) {
+                HttpStatusCode.OK -> viewState.update { it.copy(toNextScreen = true) }
+                else -> viewState.update { it.copy(toNextScreen = false) } // FIXME сделать обработку ошибок
             }
         }
     }

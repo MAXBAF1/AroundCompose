@@ -10,19 +10,21 @@ import io.ktor.http.HttpStatusCode
 
 class SkillsService(private val tokenManager: TokenManager) {
     suspend fun getUserSkills(id: Int): Array<SkillDTO>? {
+        val tokens = tokenManager.getTokens() ?: return null
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Get,
             address = AroundConfig.USER_ADDRESS.toString() + "/$id/skills",
-            accessToken = tokenManager.getTokens().first.toString()
+            accessToken = tokens.accessToken
         )
         return response.castOrNull<Array<SkillDTO>>()
     }
 
     suspend fun buyLevels(id: Int, levels: Int = 1): HttpStatusCode? {
+        val tokens = tokenManager.getTokens() ?: return null
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Post,
             address = AroundConfig.SKILLS_ADDRESS.toString() + "/$id/buyLevels?levels=$levels",
-            accessToken = tokenManager.getTokens().first.toString()
+            accessToken = tokens.accessToken
         )
         return response?.status
     }

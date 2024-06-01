@@ -21,24 +21,26 @@ fun BottomNavigation(
     ) {
         listItems.forEach { item ->
             NavigationBarItem(
-                selected = currentRoute == item.route,
+                selected = currentRoute == item.name,
                 onClick = {
-                    if (currentRoute == item.route) return@NavigationBarItem
+                    if (currentRoute == item.name) return@NavigationBarItem
 
-                    else if (item.route == Screen.MAP_ROUTE) {
-                        navController.navigate(item.route) {
-                            popUpTo(item.route) { inclusive = true }
+                    else if (item.name == Screen.MapScreen.name) {
+                        navController.navigate(item.name) {
+                            popUpTo(item.name) { inclusive = true }
                         }
-                    } else navController.navigate(item.route) { popUpTo(Screen.MAP_ROUTE) }
+                    } else navController.navigate(item.name) { popUpTo(Screen.MapScreen.name) }
                 },
                 icon = {
-                    Icon(
-                        painter = painterResource(id = item.iconId),
-                        contentDescription = "icon",
-                        tint = if (currentRoute == item.route) {
-                            JetAroundTheme.colors.textColor
-                        } else JetAroundTheme.colors.lightTint
-                    )
+                    if (item.iconId != null) {
+                        Icon(
+                            painter = painterResource(id = item.iconId),
+                            contentDescription = "icon",
+                            tint = if (currentRoute == item.name) {
+                                JetAroundTheme.colors.textColor
+                            } else JetAroundTheme.colors.lightTint
+                        )
+                    }
                 },
                 label = { /*Text(text = stringResource(id = item.titleId))*/ },
                 colors = NavigationBarItemDefaults.colors(

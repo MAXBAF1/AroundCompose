@@ -42,10 +42,6 @@ class StatisticsScreen(
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
-        LaunchedEffect(key1 = Unit) {
-            viewModel.obtainEvent(StatisticsEvent.GetStatisticInfo)
-        }
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier

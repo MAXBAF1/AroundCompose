@@ -33,10 +33,6 @@ class SkillsScreen(
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
-        LaunchedEffect(key1 = Unit) {
-            viewModel.obtainEvent(SkillsEvent.GetUserInfo)
-        }
-
         Box {
             Image(
                 painter = painterResource(id = R.drawable.skills_background),

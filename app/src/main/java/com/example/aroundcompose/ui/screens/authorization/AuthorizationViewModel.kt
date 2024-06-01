@@ -1,8 +1,8 @@
 package com.example.aroundcompose.ui.screens.authorization
 
 import androidx.lifecycle.viewModelScope
-import com.example.aroundcompose.data.services.AuthenticationService
 import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.services.AuthenticationService
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.common.models.FieldData
@@ -26,7 +26,6 @@ class AuthorizationViewModel @Inject constructor(tokenManager: TokenManager) :
     override fun obtainEvent(viewEvent: AuthorizationEvent) {
         when (viewEvent) {
             is AuthorizationEvent.ChangeFieldText -> changeFieldText(viewEvent.type, viewEvent.text)
-
             AuthorizationEvent.ClickLoginBtn -> clickLoginBtn()
             AuthorizationEvent.ClickLoginGoogleBtn -> {}
             AuthorizationEvent.ClickLoginVkBtn -> {}

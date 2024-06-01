@@ -31,22 +31,21 @@ class RegistrationViewModel @Inject constructor(tokenManager: TokenManager) :
 
     override fun obtainEvent(viewEvent: RegistrationEvent) {
         when (viewEvent) {
-            is RegistrationEvent.ChangeFieldText -> {
-                val textErrorId: Int? = checkInputError(viewEvent.type, viewEvent.text)
-
-                fields[viewEvent.type] = FieldData(
-                    fieldText = viewEvent.text, textErrorId = textErrorId
-                )
-
-                viewState.update {
-                    it.copy(
-                        fields = fields.copy(),
-                        isEnabledNextBtn = TextFieldValidation.isAllFieldsValid(fields)
-                    )
-                }
-            }
-
+            is RegistrationEvent.ChangeFieldText -> changeFieldText(viewEvent.type, viewEvent.text)
             RegistrationEvent.ClickNextBtn -> clickNextBtn()
+        }
+    }
+
+    private fun changeFieldText(type: FieldType, text: String) {
+        val textErrorId: Int? = checkInputError(type, text)
+
+        fields[type] = FieldData(fieldText = text, textErrorId = textErrorId)
+
+        viewState.update {
+            it.copy(
+                fields = fields.copy(),
+                isEnabledNextBtn = TextFieldValidation.isAllFieldsValid(fields)
+            )
         }
     }
 
@@ -77,8 +76,7 @@ class RegistrationViewModel @Inject constructor(tokenManager: TokenManager) :
                     fields[FieldType.CONFIRM_PASSWORD] = fields[FieldType.CONFIRM_PASSWORD].copy(
                         textErrorId = if (errorPasswordConfirmStatus == ErrorStatus.ERROR) {
                             ErrorMessages.getErrorMessages(
-                                FieldType.CONFIRM_PASSWORD,
-                                ErrorsKeys.EQUALS
+                                FieldType.CONFIRM_PASSWORD, ErrorsKeys.EQUALS
                             )
                         } else null
                     )

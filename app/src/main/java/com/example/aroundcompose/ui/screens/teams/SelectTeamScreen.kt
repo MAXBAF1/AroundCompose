@@ -50,7 +50,7 @@ class SelectTeamScreen(
 
             NextButtonView(
                 enabled = viewState.isEnableNextBtn,
-                onClick = { viewModel.obtainEvent(TeamsEvent.ClickBtnNext) },
+                onClick = { viewModel.obtainEvent(TeamsEvent.ClickNextBtn) },
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .align(Alignment.End)

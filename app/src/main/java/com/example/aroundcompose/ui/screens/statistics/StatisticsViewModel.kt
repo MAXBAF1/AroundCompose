@@ -28,49 +28,55 @@ class StatisticsViewModel @Inject constructor(tokenManager: TokenManager) :
     private var currentButton: Boolean = true
     private var currentUserId: Int = 0
 
+    init {
+        setStatisticInfo()
+    }
+
     override fun obtainEvent(viewEvent: StatisticsEvent) {
         when (viewEvent) {
-            StatisticsEvent.OnListBtnClick -> {
-                viewModelScope.launch {
-                    currentButton = !currentButton
+            StatisticsEvent.OnListBtnClick -> clickListBtn()
+        }
+    }
 
-                    updateListStatistic(currentButton)
+    private fun setStatisticInfo() {
+        viewModelScope.launch {
+            currentUserId = userInfoService.getMe()?.id ?: return@launch
 
-                    viewState.update { viewState ->
-                        viewState.copy(currentButton = currentButton,
-                            friendsList = friendsList?.toList() ?: return@launch,
-                            serverList = serverList?.sortedByDescending {
-                                it.second.score
-                            } ?: return@launch)
-                    }
-                }
+            statisticsService.getAllTeams()?.forEach { teamDTO ->
+                teamsProgressMap[teamDTO.id] = teamDTO.score.toFloat()
+                totalScore += teamDTO.score.toFloat()
             }
 
-            StatisticsEvent.GetStatisticInfo -> {
-                viewModelScope.launch {
-                    currentUserId = userInfoService.getMe()?.id ?: return@launch
+            teamsProgressMap.values.forEachIndexed { index, score ->
+                teamsProgressMap[index + 1] = (score / totalScore) * 100
+            }
 
-                    statisticsService.getAllTeams()?.forEach { teamDTO ->
-                        teamsProgressMap[teamDTO.id] = teamDTO.score.toFloat()
-                        totalScore += teamDTO.score.toFloat()
-                    }
+            totalScore = 0F
 
-                    teamsProgressMap.values.forEachIndexed { index, score ->
-                        teamsProgressMap[index + 1] = (score / totalScore) * 100
-                    }
+            updateListStatistic(currentButton)
 
-                    totalScore = 0F
+            viewState.update { viewState ->
+                viewState.copy(teamsProgressMap = teamsProgressMap.toMap(),
+                    friendsList = friendsList?.toList() ?: return@launch,
+                    serverList = serverList?.sortedByDescending {
+                        it.second.score
+                    } ?: return@launch)
+            }
+        }
+    }
 
-                    updateListStatistic(currentButton)
+    private fun clickListBtn() {
+        viewModelScope.launch {
+            currentButton = !currentButton
 
-                    viewState.update { viewState ->
-                        viewState.copy(teamsProgressMap = teamsProgressMap.toMap(),
-                            friendsList = friendsList?.toList() ?: return@launch,
-                            serverList = serverList?.sortedByDescending {
-                                it.second.score
-                            } ?: return@launch)
-                    }
-                }
+            updateListStatistic(currentButton)
+
+            viewState.update { viewState ->
+                viewState.copy(currentButton = currentButton,
+                    friendsList = friendsList?.toList() ?: return@launch,
+                    serverList = serverList?.sortedByDescending {
+                        it.second.score
+                    } ?: return@launch)
             }
         }
     }

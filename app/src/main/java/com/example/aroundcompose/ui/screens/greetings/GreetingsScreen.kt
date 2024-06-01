@@ -25,36 +25,42 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.Teams
+import com.example.aroundcompose.ui.navigation.Screen
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.example.aroundcompose.utils.RoundedPolygonShape
-import kotlinx.coroutines.delay
 
 @Composable
-fun GreetingsScreen(team: Teams, navigateToNextScreen: () -> Unit) {
+fun GreetingsScreen(toOtherScreen: (Screen) -> Unit) {
+    val viewModel = hiltViewModel<GreetingsViewModel>()
+    val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+
     val shape = RoundedPolygonShape(
         RoundedPolygon(numVertices = 6, rounding = CornerRounding(radius = 0.14F))
     )
-    val backgroundColor = when (team) {
+
+    val backgroundColor = when (viewState.team) {
         Teams.LIGHT_BLUE -> JetAroundTheme.colors.lightBlue
         Teams.YELLOW -> JetAroundTheme.colors.yellow
         Teams.PURPLE -> JetAroundTheme.colors.purple
         Teams.BLUE, Teams.NONE -> JetAroundTheme.colors.blue
     }
 
-    var expanded by remember { mutableStateOf(false) }
-    val height: Dp by animateDpAsState(
-        targetValue = if (expanded) 162.dp else 0.dp,
+    var isAnimationStart by remember { mutableStateOf(false) }
+    var isAnimationEnd by remember { mutableStateOf(false) }
+
+    val height by animateDpAsState(
+        targetValue = if (isAnimationStart) 162.dp else 0.dp,
         animationSpec = tween(durationMillis = 3000),
         label = ""
-    )
+    ) { isAnimationEnd = true }
 
-    LaunchedEffect(Unit) {
-        expanded = true
-        delay(3000)
-        navigateToNextScreen()
-    }
+    LaunchedEffect(key1 = Unit) { isAnimationStart = true }
+
+    if (isAnimationEnd && viewState.newScreen != null) toOtherScreen(viewState.newScreen!!)
 
     Box(
         contentAlignment = Alignment.Center,

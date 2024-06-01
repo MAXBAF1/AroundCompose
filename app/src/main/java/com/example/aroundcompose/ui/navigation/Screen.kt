@@ -2,32 +2,23 @@ package com.example.aroundcompose.ui.navigation
 
 import com.example.aroundcompose.R
 
-sealed class Screen(val titleId: Int, val iconId: Int, val route: String) {
-    object SkillsScreen : Screen(R.string.skills, R.drawable.ic_skills, SKILLS_ROUTE)
-    object MapScreen : Screen(R.string.map, R.drawable.ic_map, MAP_ROUTE)
-    object AccountScreen : Screen(R.string.account, R.drawable.ic_account, ACCOUNT_ROUTE)
-
+enum class Screen(val titleId: Int? = null, val iconId: Int? = null) {
+    SkillsScreen(R.string.skills, R.drawable.ic_skills),
+    MapScreen(R.string.map, R.drawable.ic_map),
+    AccountScreen(R.string.account, R.drawable.ic_account),
+    GreetingsScreen,
+    SplashScreen,
+    SettingsScreen,
+    StatisticScreen,
+    AuthorizationScreen,
+    RestorePasswordScreen,
+    RegistrationScreen,
+    TeamsScreen,
+    FriendsScreen;
 
     companion object {
         fun getBottomItems(): List<Screen> {
             return listOf(SkillsScreen, MapScreen, AccountScreen)
         }
-
-        const val GREETINGS_ROUTE = "GREETINGS_ROUTE"
-        const val EVENT_INFO_ROUTE = "EVENT_INFO_ROUTE"
-        const val SPLASH_ROUTE = "SPLASH_ROUTE"
-        const val MAIN_ROUTE = "MAIN_ROUTE"
-        const val PERMISSIONS_ROUTE = "PERMISSIONS_ROUTE"
-        const val MAP_ROUTE = "MAP_ROUTE"
-        const val ACCOUNT_ROUTE = "ACCOUNT_ROUTE"
-        const val SETTINGS_ROUTE = "SETTINGS_ROUTE"
-        const val SKILLS_ROUTE = "SKILLS_ROUTE"
-        const val STATISTICS_ROUTE = "STATISTICS_ROUTE"
-        const val PROFILE_ROUTE = "PROFILE_ROUTE"
-        const val AUTHORIZATION_ROUTE = "AUTHORIZATION_ROUTE"
-        const val RESTORE_PASSWORD_ROUTE = "RESTORE_PASSWORD_ROUTE"
-        const val REGISTRATION_ROUTE = "REGISTRATION_ROUTE"
-        const val TEAMS_ROUTE = "TEAMS_ROUTE"
-        const val FRIENDS_ROUTE = "FRIENDS_ROUTE"
     }
 }

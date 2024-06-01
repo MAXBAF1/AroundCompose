@@ -36,10 +36,6 @@ class FriendsScreen(
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
-        LaunchedEffect(key1 = Unit) {
-            viewModel.obtainEvent(FriendsEvent.GetFriendsList)
-        }
-
         Box {
             Image(
                 painter = painterResource(id = R.drawable.friends_background),
@@ -97,7 +93,7 @@ class FriendsScreen(
 
             delay(200)
 
-            viewModel.obtainEvent(FriendsEvent.GetUsersList)
+            viewModel.obtainEvent(FriendsEvent.SetUsersList)
         }
     }
 

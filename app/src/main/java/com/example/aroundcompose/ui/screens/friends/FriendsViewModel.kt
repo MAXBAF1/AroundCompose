@@ -23,42 +23,46 @@ class FriendsViewModel @Inject constructor(tokenManager: TokenManager) :
     private var friendsFilteredList: List<FriendDTO>? = listOf()
     private var searchText: String = ""
 
+    init {
+        setFriendsList()
+    }
+
     override fun obtainEvent(viewEvent: FriendsEvent) {
         when (viewEvent) {
-            FriendsEvent.GetUsersList -> {
-                viewModelScope.launch {
-                    usersList = usersService.findUser(searchText)
+            FriendsEvent.SetUsersList -> setUsersList()
+            is FriendsEvent.OnSearchTextChange -> searchTextChange(viewEvent.text)
+        }
+    }
 
-                    viewState.update { it.copy(usersList = usersList?.toList()) }
-                }
+    private fun setFriendsList() {
+        viewModelScope.launch {
+            friendsList = friendsService.findFriends()?.sortedBy { it.score }
+
+            viewState.update { viewState ->
+                viewState.copy(friendsList = friendsList?.toList() ?: return@launch)
             }
+        }
+    }
 
-            FriendsEvent.GetFriendsList -> {
-                viewModelScope.launch {
-                    friendsList = friendsService.findFriends()?.sortedBy { it.score }
+    private fun setUsersList() {
+        viewModelScope.launch {
+            usersList = usersService.findUser(searchText)
 
-                    viewState.update { viewState ->
-                        viewState.copy(
-                            friendsList = friendsList?.toList() ?: return@launch
-                        )
-                    }
-                }
-            }
+            viewState.update { it.copy(usersList = usersList?.toList()) }
+        }
+    }
 
-            is FriendsEvent.OnSearchTextChange -> {
-                searchText = viewEvent.text
+    private fun searchTextChange(searchText: String) {
+        this.searchText = searchText
+        friendsFilteredList = friendsList?.filter {
+            it.username.lowercase().contains(searchText.lowercase())
+        }
 
-                friendsFilteredList = friendsList?.filter {
-                    it.username.lowercase().contains(searchText.lowercase())
-                }
-
-                viewState.update { viewState ->
-                    viewState.copy(
-                        searchText = searchText,
-                        friendsFilteredList = friendsFilteredList?.toList(),
-                    )
-                }
-            }
+        viewState.update { viewState ->
+            viewState.copy(
+                searchText = searchText,
+                friendsFilteredList = friendsFilteredList?.toList(),
+            )
         }
     }
 }

@@ -1,0 +1,51 @@
+package com.example.aroundcompose.ui.screens.greetings
+
+import androidx.lifecycle.viewModelScope
+import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.services.AuthenticationService
+import com.example.aroundcompose.data.services.UserInfoService
+import com.example.aroundcompose.ui.common.enums.Teams
+import com.example.aroundcompose.ui.common.models.BaseViewModel
+import com.example.aroundcompose.ui.navigation.Screen
+import com.example.aroundcompose.ui.screens.greetings.models.GreetingsEvent
+import com.example.aroundcompose.ui.screens.greetings.models.GreetingsViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.random.Random
+
+@HiltViewModel
+class GreetingsViewModel @Inject constructor(private val tokenManager: TokenManager) :
+    BaseViewModel<GreetingsViewState, GreetingsEvent>(GreetingsViewState()) {
+    private val authService = AuthenticationService(tokenManager)
+    private val userInfoService = UserInfoService(tokenManager)
+
+    init {
+        viewState.update { it.copy(team = Teams.getById(Random.nextInt(1, 5))) }
+        setNewScreen()
+    }
+
+    override fun obtainEvent(viewEvent: GreetingsEvent) {
+
+    }
+
+    private fun setNewScreen() {
+        val tokens = tokenManager.getTokens()
+        viewModelScope.launch {
+            val newScreen = if (tokens == null) {
+                Screen.AuthorizationScreen
+            } else {
+                val me = userInfoService.getMe()
+                if (me == null) {
+                    if (authService.refresh() == HttpStatusCode.OK) {
+                        Screen.MapScreen
+                    } else Screen.AuthorizationScreen
+                } else Screen.MapScreen
+            }
+
+            viewState.update { it.copy(newScreen = newScreen) }
+        }
+    }
+}

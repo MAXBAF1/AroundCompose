@@ -24,54 +24,61 @@ class SkillsViewModel @Inject constructor(tokenManager: TokenManager) :
     private val userInfoService = UserInfoService(tokenManager)
     private val skillsService = SkillsService(tokenManager)
 
+    init {
+        setUserInfo()
+    }
+
     override fun obtainEvent(viewEvent: SkillsEvent) {
         when (viewEvent) {
-            is SkillsEvent.ClickOnCard -> {
-                skillsStates[viewEvent.index] = !skillsStates[viewEvent.index]
+            is SkillsEvent.ClickOnCard -> clickOnCard(viewEvent.index)
+            is SkillsEvent.ClickUpgradeBtn -> clickUpgradeBtn(viewEvent.index)
+        }
+    }
 
-                viewState.update { it.copy(skillsStates = skillsStates.toList()) }
-            }
+    private fun setUserInfo() {
+        viewModelScope.launch {
+            userInfo = userInfoService.getMe()
 
-            is SkillsEvent.ClickUpgradeBtn -> {
-                viewModelScope.launch {
-                    val skill = skills[viewEvent.index]
+            skillsService.getUserSkills(userInfo?.id ?: return@launch)?.let { userSkills ->
+                skills = userSkills.toList()
+                skillsStates = MutableList(userSkills.size) { false }
 
-                    when (skillsService.buyLevels(id = skill.id)) {
-                        HttpStatusCode.OK -> {
-                            skill.currentLevel += 1
-                            userInfo?.coins = userInfo?.coins?.minus(skill.cost[skill.currentLevel])
-                                ?: return@launch
-
-                            viewState.update {
-                                it.copy(
-                                    coins = userInfo?.coins ?: return@launch,
-                                    skills = skills.toList()
-                                )
-                            }
-                        }
-
-                        else -> return@launch // FIXME сделать обработку ошибок
-                    }
+                viewState.update {
+                    it.copy(
+                        coins = userInfo?.coins ?: return@launch,
+                        skills = skills.toList(),
+                        skillsStates = skillsStates.toList()
+                    )
                 }
             }
+        }
+    }
 
-            SkillsEvent.GetUserInfo -> {
-                viewModelScope.launch {
-                    userInfo = userInfoService.getMe()
+    private fun clickOnCard(index: Int) {
+        skillsStates[index] = !skillsStates[index]
 
-                    skillsService.getUserSkills(userInfo?.id ?: return@launch)?.let { userSkills ->
-                        skills = userSkills.toList()
-                        skillsStates = MutableList(userSkills.size) { false }
+        viewState.update { it.copy(skillsStates = skillsStates.toList()) }
+    }
 
-                        viewState.update {
-                            it.copy(
-                                coins = userInfo?.coins ?: return@launch,
-                                skills = skills.toList(),
-                                skillsStates = skillsStates.toList()
-                            )
-                        }
+    private fun clickUpgradeBtn(index: Int) {
+        viewModelScope.launch {
+            val skill = skills[index]
+
+            when (skillsService.buyLevels(id = skill.id)) {
+                HttpStatusCode.OK -> {
+                    skill.currentLevel += 1
+                    userInfo?.coins = userInfo?.coins?.minus(skill.cost[skill.currentLevel])
+                        ?: return@launch
+
+                    viewState.update {
+                        it.copy(
+                            coins = userInfo?.coins ?: return@launch,
+                            skills = skills.toList()
+                        )
                     }
                 }
+
+                else -> return@launch // FIXME сделать обработку ошибок
             }
         }
     }

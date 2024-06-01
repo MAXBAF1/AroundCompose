@@ -9,10 +9,11 @@ import io.ktor.http.HttpMethod
 
 class FriendsService(private val tokenManager: TokenManager) {
     suspend fun findFriends(): List<FriendDTO>? {
+        val tokens = tokenManager.getTokens() ?: return null
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Get,
             address = AroundConfig.STATISTIC_ADDRESS.toString() + "/me/friends",
-            accessToken = tokenManager.getTokens().first.toString()
+            accessToken = tokens.accessToken
         )
         return response.castOrNull<List<FriendDTO>>()
     }
