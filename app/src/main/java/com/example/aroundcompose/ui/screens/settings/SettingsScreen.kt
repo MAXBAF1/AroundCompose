@@ -31,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.views.CustomButton
 import com.example.aroundcompose.ui.common.views.CustomTopAppBar
@@ -43,13 +45,14 @@ class SettingsScreen(private val onBackClick: () -> Unit) {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun Create() {
+        val viewModel = hiltViewModel<SettingsViewModel>()
+        val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+
         Scaffold {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(
-                        top = JetAroundTheme.margins.mainMargin, bottom = 16.dp
-                    ),
+                    .padding(top = JetAroundTheme.margins.mainMargin, bottom = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
@@ -81,12 +84,14 @@ class SettingsScreen(private val onBackClick: () -> Unit) {
                     )
                 )
                 RowToDetailsScreen(
-                    onClick = {}, title = stringResource(id = R.string.name), hint = "@MAXBAF1"
+                    onClick = {},
+                    title = stringResource(id = R.string.name),
+                    hint = viewState.meInfo.username
                 )
                 RowToDetailsScreen(
                     onClick = {},
                     title = stringResource(id = R.string.mail),
-                    hint = "marina.volkova@gmail.com"
+                    hint = viewState.meInfo.email
                 )
                 RowToDetailsScreen(
                     onClick = {}, title = stringResource(id = R.string.password)
@@ -118,7 +123,7 @@ class SettingsScreen(private val onBackClick: () -> Unit) {
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun ThemePicker(modifier: Modifier = Modifier) {
-        val tabList = ThemeTabs.values()
+        val tabList = ThemeTabs.entries.toTypedArray()
         val pagerState = rememberPagerState { tabList.size }
 
         Column(
@@ -137,7 +142,7 @@ class SettingsScreen(private val onBackClick: () -> Unit) {
 
     @Composable
     private fun RowToDetailsScreen(
-        onClick: () -> Unit, title: String, modifier: Modifier = Modifier, hint: String = ""
+        onClick: () -> Unit, title: String, modifier: Modifier = Modifier, hint: String = "",
     ) {
         Row(
             modifier = modifier

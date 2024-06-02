@@ -17,7 +17,7 @@ import javax.inject.Inject
 class FriendsViewModel @Inject constructor(tokenManager: TokenManager) :
     BaseViewModel<FriendsViewState, FriendsEvent>(initialState = FriendsViewState()) {
     private val friendsService = FriendsService(tokenManager)
-    private val usersService = UserInfoService(tokenManager)
+    private val userInfoService = UserInfoService(tokenManager)
     private var friendsList: List<FriendDTO>? = listOf()
     private var usersList: List<FriendDTO>? = listOf()
     private var friendsFilteredList: List<FriendDTO>? = listOf()
@@ -46,7 +46,7 @@ class FriendsViewModel @Inject constructor(tokenManager: TokenManager) :
 
     private fun setUsersList() {
         viewModelScope.launch {
-            usersList = usersService.findUser(searchText)
+            usersList = userInfoService.findUser(searchText)
 
             viewState.update { it.copy(usersList = usersList?.toList()) }
         }
