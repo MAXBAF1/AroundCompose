@@ -42,9 +42,11 @@ class AuthenticationService(private val tokenManager: TokenManager) {
     }
 
     suspend fun refresh(): HttpStatusCode? {
+        val tokens = tokenManager.getTokens() ?: return null
+
         val response = JwtRequestManager.createRequest(
             methodType = HttpMethod.Post,
-            address = "${AroundConfig.AUTH_ADDRESS}/refresh",
+            address = "${AroundConfig.REFRESH_ADDRESS}?refresh_token=${tokens.refreshToken}",
         )
         response.castOrNull<TokensDTO>()?.let { tokenManager.saveTokens(it) }
         return response?.status

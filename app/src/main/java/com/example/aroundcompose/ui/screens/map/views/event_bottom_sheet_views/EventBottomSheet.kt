@@ -24,13 +24,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
+import com.example.aroundcompose.data.models.EventDTO
 import com.example.aroundcompose.ui.common.models.EventData
 import com.example.aroundcompose.ui.common.views.SearchView
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 
 class EventBottomSheet(
-    private val onDismissRequest: () -> Unit, private val onEventClick: (EventData) -> Unit,
+    private val events: List<EventDTO>,
+    private val onDismissRequest: () -> Unit,
+    private val onEventClick: (EventData) -> Unit,
 ) {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable

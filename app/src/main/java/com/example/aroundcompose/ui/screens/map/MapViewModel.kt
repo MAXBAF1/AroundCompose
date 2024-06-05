@@ -1,6 +1,12 @@
 package com.example.aroundcompose.ui.screens.map
 
 import android.content.SharedPreferences
+import androidx.lifecycle.viewModelScope
+import com.example.aroundcompose.data.JwtRequestManager
+import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.models.CellDTO
+import com.example.aroundcompose.data.models.EventDTO
+import com.example.aroundcompose.data.services.EventsService
 import com.example.aroundcompose.di.NotEncryptedSharedPref
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.common.models.EventData
@@ -13,19 +19,27 @@ import com.example.aroundcompose.utils.toMutable
 import com.mapbox.geojson.Point
 import com.uber.h3core.H3Core
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.toList
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
     @NotEncryptedSharedPref private val sharedPreferences: SharedPreferences,
+    private val tokenManager: TokenManager,
 ) : BaseViewModel<MapViewState, MapEvent>(initialState = MapViewState()) {
-    private val paintedCells: ArrayList<String> = arrayListOf()
+    private val paintedCells: ArrayList<CellDTO> = arrayListOf()
+    private var lastCell: String = ""
     private val coins = 0
     private var searchText = ""
     private var cameraState = MutableCameraState()
     private var isEventSheetShowed = false
     private var isEventInfoSheetShowed = false
+
+    private val eventsService = EventsService(tokenManager)
+    private var events: List<EventDTO> = listOf()
 
     override fun obtainEvent(viewEvent: MapEvent) {
         when (viewEvent) {
@@ -50,7 +64,11 @@ class MapViewModel @Inject constructor(
 
     private fun showEventSheet(show: Boolean) {
         isEventSheetShowed = show
-        viewState.update { it.copy(isEventSheetShowed = isEventSheetShowed) }
+        viewModelScope.launch {
+            events = eventsService.getAllEvents() ?: return@launch
+
+            viewState.update { it.copy(isEventSheetShowed = isEventSheetShowed, events = events) }
+        }
     }
 
     private fun init() {
@@ -77,22 +95,41 @@ class MapViewModel @Inject constructor(
     }
 
     private fun setupService() {
-        viewState.update { it.copy(paintedCells = paintedCells.toList()) }
         val h3 = H3Core.newSystemInstance()
+        val accessToken = tokenManager.getTokens()?.accessToken ?: return
+
+        viewState.update { it.copy(paintedCells = paintedCells.toList()) }
+
+        val receivedCellsChannel = Channel<CellDTO>()
+        viewModelScope.launch {
+            JwtRequestManager.receiveCellsFromWebSocket(receivedCellsChannel, accessToken)
+        }
+
+        viewModelScope.launch {
+            paintedCells.addAll(receivedCellsChannel.toList())
+            viewState.update { it.copy(paintedCells = paintedCells.toList()) }
+        }
 
         LocationService.onLocationResult = { location ->
             val newCell = h3.latLngToCellAddress(
                 location.latitude, location.longitude, MapConstant.H3_RESOLUTION
             )
 
-            if (!paintedCells.contains(newCell)) {
-                val neighborsCells = h3.gridDisk(newCell, 2)
-                neighborsCells.removeAll(paintedCells)
-                val newCells = neighborsCells.take(1)
-
-                paintedCells.addAll(newCells)
-                viewState.update { it.copy(paintedCells = paintedCells.toList()) }
+            if (lastCell != newCell) {
+                viewModelScope.launch {
+                    JwtRequestManager.sendCellToWebSocket(CellDTO(newCell), accessToken)
+                    lastCell = newCell
+                }
             }
+
+            /* if (!paintedCells.contains(newCell)) {
+                 val neighborsCells = h3.gridDisk(newCell, 2)
+                 neighborsCells.removeAll(paintedCells)
+                 val newCells = neighborsCells.take(1)
+
+                 paintedCells.addAll(newCells)
+                 viewState.update { it.copy(paintedCells = paintedCells.toList()) }
+             }*/
         }
     }
 }

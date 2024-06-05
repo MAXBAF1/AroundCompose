@@ -3,8 +3,11 @@ package com.example.aroundcompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.aroundcompose.ui.navigation.BottomNavigation
@@ -19,13 +22,7 @@ internal class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /* Transparent InfoBar */
-//        enableEdgeToEdge(
-//            statusBarStyle = SystemBarStyle.dark(
-//                android.graphics.Color.TRANSPARENT
-//            )
-//        )
-
+        enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()

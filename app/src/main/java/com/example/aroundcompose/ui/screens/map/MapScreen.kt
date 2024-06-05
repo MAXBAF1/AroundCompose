@@ -131,26 +131,18 @@ class MapScreen(
             }
         }
 
-        paintCells(mapView, viewState.paintedCells)
+        paintCells(mapView, viewState.paintedCells.map { it.id })
 
         LaunchedEffect(key1 = viewState.zoomLevel) {
             updateZoomLevel(mapView, viewState.zoomLevel)
         }
 
         if (viewState.isEventSheetShowed) {
-            EventBottomSheet(onDismissRequest = {
-                viewModel.obtainEvent(
-                    MapEvent.ShowEventSheet(
-                        false
-                    )
-                )
-            }, onEventClick = {
-                viewModel.obtainEvent(
-                    MapEvent.ShowEventInfoSheet(
-                        true, it
-                    )
-                )
-            }).Create()
+            EventBottomSheet(
+                events = viewState.events,
+                onDismissRequest = { viewModel.obtainEvent(MapEvent.ShowEventSheet(false)) },
+                onEventClick = { viewModel.obtainEvent(MapEvent.ShowEventInfoSheet(true, it)) },
+            ).Create()
         }
 
         if (viewState.isEventInfoSheetShowed && viewState.chosenEvent != null) {

@@ -12,7 +12,13 @@ enum class AroundConfig(private val value: String) {
     STATISTIC_ADDRESS("$HOST_ADDRESS/stat"),
     STATISTIC_USER_ADDRESS("$STATISTIC_ADDRESS/user"),
     STATISTIC_TEAM_ADDRESS("$STATISTIC_ADDRESS/team"),
-    SKILLS_ADDRESS("$HOST_ADDRESS/skills");
+    SKILLS_ADDRESS("$HOST_ADDRESS/skills"),
+    EVENTS_ADDRESS("$HOST_ADDRESS/map-events"),
+    EVENTS_ALL_ADDRESS("$EVENTS_ADDRESS/all"),
+
+    WS_HOST("wss://aroundgame.ru/ws"),
+    CELLS_CHANGES_FROM_USER("$WS_HOST/topic/chunk.changes"),
+    CELLS_CHANGES_EVENT("$WS_HOST/topic/chunk.event");
 
     override fun toString(): String = value
 }
