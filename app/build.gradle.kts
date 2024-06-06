@@ -81,7 +81,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
-    // Permission launcher
+    // Accompanist
     implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
 
     // Compose lifecycle

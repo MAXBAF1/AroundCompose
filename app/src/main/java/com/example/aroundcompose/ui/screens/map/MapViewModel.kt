@@ -6,6 +6,7 @@ import com.example.aroundcompose.data.JwtRequestManager
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.models.CellDTO
 import com.example.aroundcompose.data.models.EventDTO
+import com.example.aroundcompose.data.services.CellsService
 import com.example.aroundcompose.data.services.EventsService
 import com.example.aroundcompose.di.NotEncryptedSharedPref
 import com.example.aroundcompose.ui.common.models.BaseViewModel
@@ -30,6 +31,7 @@ class MapViewModel @Inject constructor(
     @NotEncryptedSharedPref private val sharedPreferences: SharedPreferences,
     private val tokenManager: TokenManager,
 ) : BaseViewModel<MapViewState, MapEvent>(initialState = MapViewState()) {
+    private val cellsService = CellsService(tokenManager)
     private val paintedCells: ArrayList<CellDTO> = arrayListOf()
     private var lastCell: String = ""
     private val coins = 0
@@ -39,6 +41,7 @@ class MapViewModel @Inject constructor(
     private var isEventInfoSheetShowed = false
 
     private val eventsService = EventsService(tokenManager)
+
     private var events: List<EventDTO> = listOf()
 
     override fun obtainEvent(viewEvent: MapEvent) {
@@ -98,7 +101,11 @@ class MapViewModel @Inject constructor(
         val h3 = H3Core.newSystemInstance()
         val accessToken = tokenManager.getTokens()?.accessToken ?: return
 
-        viewState.update { it.copy(paintedCells = paintedCells.toList()) }
+        viewModelScope.launch {
+            val newCells = cellsService.getAll() ?: return@launch
+
+            viewState.update { it.copy(paintedCells = newCells) }
+        }
 
         val receivedCellsChannel = Channel<CellDTO>()
         viewModelScope.launch {

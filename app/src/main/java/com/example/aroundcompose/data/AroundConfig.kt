@@ -15,6 +15,8 @@ enum class AroundConfig(private val value: String) {
     SKILLS_ADDRESS("$HOST_ADDRESS/skills"),
     EVENTS_ADDRESS("$HOST_ADDRESS/map-events"),
     EVENTS_ALL_ADDRESS("$EVENTS_ADDRESS/all"),
+    CELLS_ADDRESS("$HOST_ADDRESS/chunks"),
+    CELLS_ALL_ADDRESS("$CELLS_ADDRESS/all"),
 
     WS_HOST("wss://aroundgame.ru/ws"),
     CELLS_CHANGES_FROM_USER("$WS_HOST/topic/chunk.changes"),

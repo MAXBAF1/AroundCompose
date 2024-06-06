@@ -43,6 +43,8 @@ class NavGraph(
     @SuppressLint("StateFlowValueCalledInComposition")
     @Composable
     fun Create() {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+
         val mapViewModel = hiltViewModel<MapViewModel>()
         val authorizationViewModel = hiltViewModel<AuthorizationViewModel>()
         val registrationViewModel = hiltViewModel<RegistrationViewModel>()
@@ -55,7 +57,12 @@ class NavGraph(
         NavHost(
             navController = navController,
             startDestination = Screen.SplashScreen.name,
-            modifier = Modifier.padding(top = 0.dp).padding(innerPaddings)
+            modifier = Modifier.padding(
+                top = if (navBackStackEntry?.destination?.route != Screen.MapScreen.name) {
+                    innerPaddings.calculateTopPadding()
+                } else 0.dp,
+                bottom = innerPaddings.calculateBottomPadding(),
+            )
         ) {
             composable(Screen.SplashScreen.name) { CreateSplashScreen() }
             composable(Screen.GreetingsScreen.name) { CreateGreetingsScreen() }

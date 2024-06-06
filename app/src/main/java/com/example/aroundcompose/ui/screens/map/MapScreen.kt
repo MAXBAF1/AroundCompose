@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -81,11 +85,16 @@ class MapScreen(
             rotation = it
         }).Create()
 
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(JetAroundTheme.margins.mapScreenMargin),
         ) {
+            Spacer(
+                Modifier.windowInsetsTopHeight(WindowInsets.systemBars)
+            )
+
             Row {
                 SearchView(modifier = Modifier
                     .weight(1f)
@@ -129,6 +138,9 @@ class MapScreen(
                     }
                 }
             }
+            Spacer(
+                Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)
+            )
         }
 
         paintCells(mapView, viewState.paintedCells.map { it.id })

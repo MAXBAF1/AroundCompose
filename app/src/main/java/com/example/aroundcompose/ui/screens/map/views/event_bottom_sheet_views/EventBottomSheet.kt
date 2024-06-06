@@ -43,7 +43,7 @@ class EventBottomSheet(
         ModalBottomSheet(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 22.dp),
+                .padding(top = 5.dp),
             onDismissRequest = onDismissRequest,
             scrimColor = Color.Transparent,
             containerColor = JetAroundTheme.colors.primaryBackground,
