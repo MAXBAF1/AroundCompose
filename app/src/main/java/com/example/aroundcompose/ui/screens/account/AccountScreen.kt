@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.nativeCanvas
@@ -114,8 +116,13 @@ class AccountScreen(
                         )
                         if (!isMyAccount) AddFriendBtn()
                     }
-
-                    MainButtons(viewState.myCells, viewState.myTeamCells)
+                    Text(
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        text = stringResource(id = R.string.how_much_cells).uppercase(),
+                        style = JetAroundTheme.typography.bold16,
+                        color = JetAroundTheme.colors.primary
+                    )
+                    MainButtons(viewState.myCells, viewState.myTeamCells, viewState.myAllTimeCells)
                     PlaceId(viewState.userInfo.id)
                 }
             }
@@ -198,22 +205,23 @@ class AccountScreen(
     }
 
     @Composable
-    private fun MainButtons(myCells: Int, teamCells: Int) {
+    private fun MainButtons(myCells: Int, teamCells: Int, myAllTimeCells: Int) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            CellsInfoCard(
-                count = myCells,
-                titleTextId = R.string.you_captured,
-                decorationId = R.drawable.hex_decoration_1,
-                modifier = Modifier.padding(bottom = 16.dp),
-            )
-            CellsInfoCard(
-                count = teamCells,
-                titleTextId = R.string.team_captured,
-                bgColor = JetAroundTheme.colors.blue,
+            MyAndTeamCellsCard(
+                myCells = myCells,
+                myTeamCells = teamCells,
+                bgColor = JetAroundTheme.colors.primary,
                 textColor = JetAroundTheme.colors.primaryBackground,
-                decorationId = R.drawable.hex_decoration_2,
                 modifier = Modifier.padding(bottom = 16.dp),
                 onClick = toStatisticScreen
+            )
+            MyAllCellsCard(
+                count = myAllTimeCells,
+                titleTextId = R.string.your_all_time,
+                bgColor = JetAroundTheme.colors.secondaryBackground,
+                textColor = JetAroundTheme.colors.primary,
+                decorationId = R.drawable.hex_decoration_2,
+                modifier = Modifier.padding(bottom = 16.dp),
             )
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
                 if (isMyAccount) {
@@ -280,7 +288,55 @@ class AccountScreen(
     }
 
     @Composable
-    private fun CellsInfoCard(
+    private fun MyAndTeamCellsCard(
+        myCells: Int,
+        myTeamCells: Int,
+        modifier: Modifier = Modifier,
+        onClick: (() -> Unit)? = null,
+        bgColor: Color = JetAroundTheme.colors.gray,
+        textColor: Color = JetAroundTheme.colors.textColor,
+    ) {
+        Card(
+            modifier = modifier
+                .fillMaxWidth()
+                .clickable(indication = rememberRipple(),
+                    interactionSource = remember { MutableInteractionSource() },
+                    enabled = onClick != null,
+                    onClick = onClick ?: {}),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = bgColor),
+            elevation = CardDefaults.cardElevation(4.dp)
+        ) {
+            Box(
+                modifier = Modifier.height(70.dp), contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.hex_decoration_3),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(indication = rememberRipple(),
+                            interactionSource = remember { MutableInteractionSource() },
+                            enabled = onClick != null,
+                            onClick = onClick ?: {}),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    StatisticTextColumn(
+                        myCells, R.string.you, textColor, Modifier.padding(16.dp)
+                    )
+                    StatisticTextColumn(
+                        myTeamCells, R.string.your_team, textColor, Modifier.padding(16.dp)
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun MyAllCellsCard(
         count: Int,
         titleTextId: Int,
         decorationId: Int,
@@ -300,38 +356,47 @@ class AccountScreen(
             colors = CardDefaults.cardColors(containerColor = bgColor),
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
-            Row(
-                modifier = Modifier.clickable(indication = rememberRipple(),
-                        interactionSource = remember { MutableInteractionSource() },
-                        enabled = onClick != null,
-                        onClick = onClick ?: {})
+            Box(
+                modifier = Modifier.height(70.dp), contentAlignment = Alignment.Center
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = stringResource(id = titleTextId),
-                        color = textColor,
-                        style = JetAroundTheme.typography.smallSemiBold,
-                        modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
-                    )
-                    Text(
-                        text = "$count ${stringResource(id = R.string.cells).uppercase()}",
-                        color = textColor,
-                        style = JetAroundTheme.typography.bold24
-                    )
-                }
-                Box(
+                Image(
+                    modifier = Modifier.offset(x = 60.dp),
+                    painter = painterResource(id = decorationId),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    colorFilter = ColorFilter.tint(JetAroundTheme.colors.primary)
+                )
+                Row(
                     modifier = Modifier
-                        .height(70.dp)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                        .fillMaxWidth()
+                        .clickable(indication = rememberRipple(),
+                            interactionSource = remember { MutableInteractionSource() },
+                            enabled = onClick != null,
+                            onClick = onClick ?: {})
                 ) {
-                    Image(
-                        painter = painterResource(id = decorationId),
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop
-                    )
+                    StatisticTextColumn(count, titleTextId, textColor, Modifier.padding(16.dp))
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun StatisticTextColumn(
+        count: Int,
+        titleTextId: Int,
+        textColor: Color,
+        modifier: Modifier = Modifier,
+    ) {
+        Column(modifier = modifier) {
+            Text(
+                text = stringResource(id = titleTextId),
+                color = textColor,
+                style = JetAroundTheme.typography.semiBold12,
+                modifier = Modifier.padding(bottom = 2.dp)
+            )
+            Text(
+                text = count.toString(), color = textColor, style = JetAroundTheme.typography.bold24
+            )
         }
     }
 
@@ -356,13 +421,13 @@ class AccountScreen(
             Text(
                 text = user.username,
                 color = JetAroundTheme.colors.textColor,
-                style = JetAroundTheme.typography.mediumSemiBold,
+                style = JetAroundTheme.typography.semiBold16,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
                 text = "lvl.${user.level} / lvl.100",
                 color = JetAroundTheme.colors.textColor,
-                style = JetAroundTheme.typography.smallSemiBold
+                style = JetAroundTheme.typography.semiBold12
             )
         }
     }

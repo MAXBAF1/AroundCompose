@@ -10,7 +10,7 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 fun EventDistanceToMeText(distanceToMe: Double) {
     Text(
         text = "$distanceToMe ${stringResource(id = R.string.km)}",
-        style = JetAroundTheme.typography.smallSemiBold,
+        style = JetAroundTheme.typography.semiBold12,
         color = JetAroundTheme.colors.eventCardText
     )
 }

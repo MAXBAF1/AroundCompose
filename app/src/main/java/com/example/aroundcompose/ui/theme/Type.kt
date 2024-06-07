@@ -14,7 +14,8 @@ val typography = JetAroundTypography(
     title = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
     coin = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     percent = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
-    mediumSemiBold = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
+    bold16 = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
+    semiBold16 = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
     sixteenMedium = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     mediumRegular = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_regular))),
     mediumBold = TextStyle(fontSize = 15.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
@@ -24,7 +25,7 @@ val typography = JetAroundTypography(
     textRegistration = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
     smallMedium = TextStyle(fontSize = 12.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     eventCardTitle = TextStyle(fontSize = 12.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
-    smallSemiBold = TextStyle(fontSize = 12.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
+    semiBold12 = TextStyle(fontSize = 12.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
     eventCardPlaceAndBtn = TextStyle(fontSize = 10.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
     levelInformation = TextStyle(fontSize = 10.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
 )

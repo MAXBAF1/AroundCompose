@@ -51,13 +51,14 @@ data class JetAroundTypography(
     val smallMedium: TextStyle,
     val sixteenMedium: TextStyle,
     val mediumRegular: TextStyle,
-    val mediumSemiBold: TextStyle,
+    val bold16: TextStyle,
+    val semiBold16: TextStyle,
     val mediumBold: TextStyle,
     val regular14: TextStyle,
     val title: TextStyle,
     val eventCardTitle: TextStyle,
     val eventCardPlaceAndBtn: TextStyle,
-    val smallSemiBold: TextStyle,
+    val semiBold12: TextStyle,
     val levelInformation: TextStyle,
 )
 

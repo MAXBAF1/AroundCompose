@@ -21,6 +21,7 @@ class AccountViewModel @Inject constructor(tokenManager: TokenManager) :
     private var userInfo = UserDTO()
     private var myCells: Int = 0
     private var myTeamCells: Int = 0
+    private var myAllTimeCells: Int = 0
 
     override fun obtainEvent(viewEvent: AccountEvent) {
         super.obtainEvent(viewEvent)

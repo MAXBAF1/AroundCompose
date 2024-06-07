@@ -25,7 +25,7 @@ fun MyScaleBar(value: Float) {
         }
         Text(
             text = "$value м",
-            style = JetAroundTheme.typography.mediumSemiBold,
+            style = JetAroundTheme.typography.semiBold16,
             color = JetAroundTheme.colors.darkGray
         )
     }

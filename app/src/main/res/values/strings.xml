@@ -65,8 +65,10 @@
     <string name="friends">друзья</string>
 
     <!--Account screen-->
-    <string name="you_captured">вы захватили</string>
-    <string name="team_captured">захвачено командой</string>
+    <string name="how_much_cells">сколько клеток закрасили:</string>
+    <string name="you">вы:</string>
+    <string name="your_team">ваша команда:</string>
+    <string name="your_all_time">вами за всё время</string>
     <string name="cells">клетки</string>
     <string name="exit_from_profile">выйти из профиля</string>
     <string name="copy">Скопировано</string>

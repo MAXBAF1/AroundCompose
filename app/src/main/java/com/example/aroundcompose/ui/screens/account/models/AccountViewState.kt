@@ -6,4 +6,5 @@ data class AccountViewState(
     val userInfo: UserDTO = UserDTO(),
     val myCells: Int = 0,
     val myTeamCells: Int = 0,
+    val myAllTimeCells: Int = 0,
 )
