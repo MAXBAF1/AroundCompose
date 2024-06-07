@@ -56,34 +56,35 @@ class NavGraph(
 
         NavHost(
             navController = navController,
-            startDestination = Screen.SplashScreen.name,
+            startDestination = Screens.SplashScreen.name,
             modifier = Modifier.padding(
-                top = if (navBackStackEntry?.destination?.route != Screen.MapScreen.name) {
-                    innerPaddings.calculateTopPadding()
-                } else 0.dp,
+                top = when (navBackStackEntry?.destination?.route) {
+                    Screens.MapScreen.name, Screens.AuthorizationScreen.name -> 0.dp
+                    else -> innerPaddings.calculateTopPadding()
+                },
                 bottom = innerPaddings.calculateBottomPadding(),
             )
         ) {
-            composable(Screen.SplashScreen.name) { CreateSplashScreen() }
-            composable(Screen.GreetingsScreen.name) { CreateGreetingsScreen() }
-            composable(Screen.AuthorizationScreen.name) { CreateAuthScreen(authorizationViewModel) }
-            composable(Screen.RegistrationScreen.name) {
+            composable(Screens.SplashScreen.name) { CreateSplashScreen() }
+            composable(Screens.GreetingsScreen.name) { CreateGreetingsScreen() }
+            composable(Screens.AuthorizationScreen.name) { CreateAuthScreen(authorizationViewModel) }
+            composable(Screens.RegistrationScreen.name) {
                 CreateRegistrationScreen(registrationViewModel)
             }
-            composable(Screen.TeamsScreen.name) { CreateTeamsScreen(teamsViewModel) }
-            composable(Screen.MapScreen.name) { CreateMapScreen(mapViewModel) }
-            composable(Screen.StatisticScreen.name) { CreateStatisticsScreen(statisticsViewModel) }
-            composable(Screen.SettingsScreen.name) { CreateSettingsScreen() }
-            composable(Screen.FriendsScreen.name) { CreateFriendsScreen(friendsViewModel) }
+            composable(Screens.TeamsScreen.name) { CreateTeamsScreen(teamsViewModel) }
+            composable(Screens.MapScreen.name) { CreateMapScreen(mapViewModel) }
+            composable(Screens.StatisticScreen.name) { CreateStatisticsScreen(statisticsViewModel) }
+            composable(Screens.SettingsScreen.name) { CreateSettingsScreen() }
+            composable(Screens.FriendsScreen.name) { CreateFriendsScreen(friendsViewModel) }
             composable(
-                route = "${Screen.SkillsScreen.name}?$USER_ID={$USER_ID}",
+                route = "${Screens.SkillsScreen.name}?$USER_ID={$USER_ID}",
                 arguments = listOf(navArgument(USER_ID) {
                     type = NavType.IntType
                     defaultValue = -1
                 })
             ) { CreateSkillsScreen(skillsViewModel) }
             composable(
-                route = "${Screen.AccountScreen.name}?$USER_ID={$USER_ID}",
+                route = "${Screens.AccountScreen.name}?$USER_ID={$USER_ID}",
                 arguments = listOf(navArgument(USER_ID) {
                     type = NavType.IntType
                     defaultValue = -1
@@ -104,7 +105,7 @@ class NavGraph(
             exit = { activity?.finish() },
             onNextScreen = {
                 navController.popBackStack()
-                navController.navigate(Screen.GreetingsScreen.name)
+                navController.navigate(Screens.GreetingsScreen.name)
             },
         )
     }
@@ -116,7 +117,12 @@ class NavGraph(
 
     @Composable
     private fun CreateSettingsScreen() {
-        SettingsScreen(onBackClick = { navController.popBackStack() }).Create()
+        SettingsScreen(
+            toAuthorizationScreen = {
+                navController.navigate(Screens.AuthorizationScreen.name) { popUpTo(0) }
+            },
+            onBackClick = { navController.popBackStack() },
+        ).Create()
     }
 
     @Composable
@@ -124,7 +130,7 @@ class NavGraph(
         FriendsScreen(
             viewModel = friendsViewModel,
             onBackClick = { navController.popBackStack() },
-            toUserScreen = { navController.navigate("${Screen.AccountScreen.name}?$USER_ID=$it") },
+            toUserScreen = { navController.navigate("${Screens.AccountScreen.name}?$USER_ID=$it") },
         ).Create()
     }
 
@@ -132,7 +138,7 @@ class NavGraph(
     private fun CreateStatisticsScreen(statisticsViewModel: StatisticsViewModel) {
         StatisticsScreen(
             viewModel = statisticsViewModel,
-            toUserScreen = { navController.navigate("${Screen.AccountScreen.name}?$USER_ID=$it") },
+            toUserScreen = { navController.navigate("${Screens.AccountScreen.name}?$USER_ID=$it") },
             onBackClicked = { navController.popBackStack() },
         ).Create()
     }
@@ -159,11 +165,11 @@ class NavGraph(
         AccountScreen(
             viewModel = accountViewModel,
             onBackClick = { navController.popBackStack() },
-            toSettingsScreen = { navController.navigate(Screen.SettingsScreen.name) },
-            toStatisticScreen = { navController.navigate(Screen.StatisticScreen.name) },
-            toFriendsScreen = { navController.navigate(Screen.FriendsScreen.name) },
+            toSettingsScreen = { navController.navigate(Screens.SettingsScreen.name) },
+            toStatisticScreen = { navController.navigate(Screens.StatisticScreen.name) },
+            toFriendsScreen = { navController.navigate(Screens.FriendsScreen.name) },
             toMoneysScreen = { },
-            toSkillsScreen = { navController.navigate("${Screen.SkillsScreen.name}?$USER_ID=$userId") },
+            toSkillsScreen = { navController.navigate("${Screens.SkillsScreen.name}?$USER_ID=$userId") },
             userId = userId,
         ).Create()
     }
@@ -172,9 +178,9 @@ class NavGraph(
     private fun CreateAuthScreen(viewModel: AuthorizationViewModel) {
         AuthorizationScreen(
             viewModel = viewModel,
-            onLoginClicked = { navController.navigate(Screen.MapScreen.name) },
-            onRegistrationClicked = { navController.navigate(Screen.RegistrationScreen.name) },
-            onForgotPasswordClicked = { navController.navigate(Screen.RestorePasswordScreen.name) },
+            onLoginClicked = { navController.navigate(Screens.MapScreen.name) },
+            onRegistrationClicked = { navController.navigate(Screens.RegistrationScreen.name) },
+            onForgotPasswordClicked = { navController.navigate(Screens.RestorePasswordScreen.name) },
         ).Create()
     }
 
@@ -183,7 +189,7 @@ class NavGraph(
         RegistrationScreen(
             viewModel = viewModel,
             onNextClicked = {
-                navController.navigate(Screen.TeamsScreen.name) {
+                navController.navigate(Screens.TeamsScreen.name) {
                     popUpTo(navController.graph.startDestinationId) { inclusive = true }
                     launchSingleTop = true
                 }
@@ -197,7 +203,7 @@ class NavGraph(
         SelectTeamScreen(
             viewModel = viewModel,
             onNextClicked = {
-                navController.navigate(Screen.MapScreen.name) {
+                navController.navigate(Screens.MapScreen.name) {
                     popUpTo(navController.graph.startDestinationId) { inclusive = true }
                 }
             },

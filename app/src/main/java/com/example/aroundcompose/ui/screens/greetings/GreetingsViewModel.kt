@@ -6,7 +6,7 @@ import com.example.aroundcompose.data.services.AuthenticationService
 import com.example.aroundcompose.data.services.UserInfoService
 import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.common.models.BaseViewModel
-import com.example.aroundcompose.ui.navigation.Screen
+import com.example.aroundcompose.ui.navigation.Screens
 import com.example.aroundcompose.ui.screens.greetings.models.GreetingsEvent
 import com.example.aroundcompose.ui.screens.greetings.models.GreetingsViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,18 +34,18 @@ class GreetingsViewModel @Inject constructor(private val tokenManager: TokenMana
     private fun setNewScreen() {
         val tokens = tokenManager.getTokens()
         viewModelScope.launch {
-            val newScreen = if (tokens == null) {
-                Screen.AuthorizationScreen
+            val newScreens = if (tokens == null) {
+                Screens.AuthorizationScreen
             } else {
                 val me = userInfoService.getMe()
                 if (me == null) {
                     if (authService.refresh() == HttpStatusCode.OK) {
-                        Screen.MapScreen
-                    } else Screen.AuthorizationScreen
-                } else Screen.MapScreen
+                        Screens.MapScreen
+                    } else Screens.AuthorizationScreen
+                } else Screens.MapScreen
             }
 
-            viewState.update { it.copy(newScreen = newScreen) }
+            viewState.update { it.copy(newScreens = newScreens) }
         }
     }
 }

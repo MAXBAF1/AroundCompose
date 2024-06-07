@@ -133,7 +133,7 @@ class CardView(
         ) {
             Text(
                 text = skillData.name,
-                style = JetAroundTheme.typography.sixteenMedium,
+                style = JetAroundTheme.typography.medium16,
                 color = JetAroundTheme.colors.textColor
             )
             TextPrice(Modifier.padding(top = 2.dp))

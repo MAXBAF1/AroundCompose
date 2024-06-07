@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,10 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,17 +33,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.views.CustomButton
 import com.example.aroundcompose.ui.common.views.CustomTopAppBar
+import com.example.aroundcompose.ui.screens.settings.models.SettingsEvent
 import com.example.aroundcompose.ui.screens.settings.models.ThemeTabs
 import com.example.aroundcompose.ui.screens.settings.views.CustomSwitch
 import com.example.aroundcompose.ui.screens.settings.views.CustomTabRow
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
-class SettingsScreen(private val onBackClick: () -> Unit) {
+class SettingsScreen(private val toAuthorizationScreen: () -> Unit, private val onBackClick: () -> Unit) {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun Create() {
         val viewModel = hiltViewModel<SettingsViewModel>()
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+
+        if (viewState.toAuthorizationScreen) toAuthorizationScreen()
 
         Scaffold {
             Column(
@@ -96,8 +96,14 @@ class SettingsScreen(private val onBackClick: () -> Unit) {
                 RowToDetailsScreen(
                     onClick = {}, title = stringResource(id = R.string.password)
                 )
+                RowToDetailsScreen(
+                    onClick = { viewModel.obtainEvent(SettingsEvent.ExitFromAccount) },
+                    title = stringResource(id = R.string.exit_from_account),
+                    textColor = JetAroundTheme.colors.errorColor,
+                    iconColor = JetAroundTheme.colors.errorColor,
+                    iconId = R.drawable.ic_exit
+                )
                 Spacer(modifier = Modifier.weight(1f))
-                ExitBtn(onClick = { }, modifier = Modifier.padding(bottom = 16.dp))
                 CustomButton(
                     onClick = { /*TODO*/ },
                     modifier = Modifier.padding(
@@ -132,7 +138,7 @@ class SettingsScreen(private val onBackClick: () -> Unit) {
             Text(
                 modifier = Modifier.padding(bottom = 14.dp),
                 text = stringResource(id = R.string.theme),
-                style = JetAroundTheme.typography.sixteenMedium,
+                style = JetAroundTheme.typography.medium16,
                 color = JetAroundTheme.colors.textColor
             )
             CustomTabRow(pagerState, tabList).Create()
@@ -142,7 +148,13 @@ class SettingsScreen(private val onBackClick: () -> Unit) {
 
     @Composable
     private fun RowToDetailsScreen(
-        onClick: () -> Unit, title: String, modifier: Modifier = Modifier, hint: String = "",
+        onClick: () -> Unit,
+        title: String,
+        modifier: Modifier = Modifier,
+        hint: String = "",
+        textColor: Color = JetAroundTheme.colors.textColor,
+        iconColor: Color = JetAroundTheme.colors.lightTint,
+        iconId: Int = R.drawable.ic_go_to
     ) {
         Row(
             modifier = modifier
@@ -157,21 +169,19 @@ class SettingsScreen(private val onBackClick: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = title,
-                style = JetAroundTheme.typography.sixteenMedium,
-                color = JetAroundTheme.colors.textColor
+                text = title, style = JetAroundTheme.typography.medium16, color = textColor
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     modifier = Modifier.padding(end = 4.dp),
                     text = hint,
                     style = JetAroundTheme.typography.fourteenMedium,
-                    color = JetAroundTheme.colors.lightTint
+                    color = iconColor
                 )
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_go_to),
+                    painter = painterResource(id = iconId),
                     contentDescription = "toDetailsScreenIcon",
-                    tint = JetAroundTheme.colors.lightTint
+                    tint = iconColor
                 )
             }
         }
@@ -188,7 +198,7 @@ class SettingsScreen(private val onBackClick: () -> Unit) {
         ) {
             Text(
                 text = stringResource(id = R.string.notifications),
-                style = JetAroundTheme.typography.sixteenMedium,
+                style = JetAroundTheme.typography.medium16,
                 color = JetAroundTheme.colors.textColor
             )
             CustomSwitch(
@@ -198,35 +208,6 @@ class SettingsScreen(private val onBackClick: () -> Unit) {
                 checkedTrackColor = JetAroundTheme.colors.primary,
                 uncheckedTrackColor = JetAroundTheme.colors.gray
             )
-        }
-    }
-
-    @Composable
-    private fun ExitBtn(onClick: () -> Unit, modifier: Modifier = Modifier) {
-        Button(
-            modifier = modifier,
-            onClick = onClick,
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = JetAroundTheme.colors.gray),
-            elevation = ButtonDefaults.buttonElevation(4.dp),
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.exit_from_profile),
-                    color = JetAroundTheme.colors.textColor,
-                    style = JetAroundTheme.typography.sixteenMedium,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_exit),
-                    contentDescription = "exit icon",
-                    tint = JetAroundTheme.colors.textColor
-                )
-            }
         }
     }
 }

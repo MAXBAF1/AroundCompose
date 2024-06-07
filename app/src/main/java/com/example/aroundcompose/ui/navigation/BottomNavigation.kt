@@ -13,7 +13,7 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 @Composable
 fun BottomNavigation(
     navController: NavController,
-    listItems: List<Screen>,
+    listItems: List<Screens>,
     currentRoute: String,
 ) {
     NavigationBar(
@@ -25,11 +25,11 @@ fun BottomNavigation(
                 onClick = {
                     if (currentRoute == item.name) return@NavigationBarItem
 
-                    else if (item.name == Screen.MapScreen.name) {
+                    else if (item.name == Screens.MapScreen.name) {
                         navController.navigate(item.name) {
                             popUpTo(item.name) { inclusive = true }
                         }
-                    } else navController.navigate(item.name) { popUpTo(Screen.MapScreen.name) }
+                    } else navController.navigate(item.name) { popUpTo(Screens.MapScreen.name) }
                 },
                 icon = {
                     if (item.iconId != null) {

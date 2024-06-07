@@ -145,7 +145,7 @@ class EventBottomSheet(
                     )
                     .padding(6.dp),
                 text = stringResource(id = R.string.all),
-                style = JetAroundTheme.typography.sixteenMedium,
+                style = JetAroundTheme.typography.medium16,
                 color = JetAroundTheme.colors.primary
             )
         }

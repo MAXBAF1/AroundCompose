@@ -119,7 +119,7 @@ class CustomTabRow(private val pagerState: PagerState, private val tabList: Arra
             if (themeTab.text != null) {
                 Text(
                     text = stringResource(id = themeTab.text),
-                    style = JetAroundTheme.typography.sixteenMedium,
+                    style = JetAroundTheme.typography.medium16,
                     color = contentColor
                 )
             } else if (themeTab.icon != null) {

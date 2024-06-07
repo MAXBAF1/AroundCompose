@@ -49,7 +49,7 @@ data class JetAroundTypography(
     val textBtn: TextStyle,
     val textRegistration: TextStyle,
     val smallMedium: TextStyle,
-    val sixteenMedium: TextStyle,
+    val medium16: TextStyle,
     val mediumRegular: TextStyle,
     val bold16: TextStyle,
     val semiBold16: TextStyle,

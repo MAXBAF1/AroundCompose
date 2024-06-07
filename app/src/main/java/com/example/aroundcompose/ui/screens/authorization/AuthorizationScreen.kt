@@ -53,6 +53,11 @@ class AuthorizationScreen(
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
+        if (viewState.toNextScreen) {
+            onLoginClicked()
+            viewModel.obtainEvent(AuthorizationEvent.ClearViewState)
+        }
+
         Box {
             Image(
                 painter = painterResource(id = R.drawable.background),
@@ -96,8 +101,6 @@ class AuthorizationScreen(
                 IfNotHaveAccount(onFocusedColor, modifier = Modifier.weight(1f))
             }
         }
-
-        if (viewState.toNextScreen) onLoginClicked()
     }
 
     @Composable

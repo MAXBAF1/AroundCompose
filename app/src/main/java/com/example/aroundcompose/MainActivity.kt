@@ -1,23 +1,18 @@
 package com.example.aroundcompose
 
 import android.os.Bundle
-import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.aroundcompose.ui.navigation.BottomNavigation
 import com.example.aroundcompose.ui.navigation.NavGraph
-import com.example.aroundcompose.ui.navigation.Screen
+import com.example.aroundcompose.ui.navigation.Screens
 import com.example.aroundcompose.ui.theme.AroundComposeTheme
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +29,7 @@ internal class MainActivity : ComponentActivity() {
             val currentRoute = navBackStackEntry?.destination?.route
             val arguments = navBackStackEntry?.arguments
             val userId = arguments?.getInt(NavGraph.USER_ID, -1) ?: -1
-            val showBottomNav = Screen.getBottomItems().map { it.name }
+            val showBottomNav = Screens.getBottomItems().map { it.name }
                 .contains(currentRoute?.substringBefore("?")) && userId == -1
 
             AroundComposeTheme {
@@ -49,7 +44,7 @@ internal class MainActivity : ComponentActivity() {
                     if (showBottomNav) {
                         BottomNavigation(
                             navController = navController,
-                            listItems = Screen.getBottomItems(),
+                            listItems = Screens.getBottomItems(),
                             currentRoute = currentRoute?.substringBefore("?")!!
                         )
                     }

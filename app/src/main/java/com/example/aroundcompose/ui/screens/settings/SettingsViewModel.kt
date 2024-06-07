@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(tokenManager: TokenManager) :
+class SettingsViewModel @Inject constructor(private val tokenManager: TokenManager) :
     BaseViewModel<SettingsViewState, SettingsEvent>(initialState = SettingsViewState()) {
     private val userInfoService = UserInfoService(tokenManager)
     private var meInfo = UserDTO()
@@ -24,7 +24,14 @@ class SettingsViewModel @Inject constructor(tokenManager: TokenManager) :
     }
 
     override fun obtainEvent(viewEvent: SettingsEvent) {
+        when (viewEvent) {
+            SettingsEvent.ExitFromAccount -> exitFromAccount()
+        }
+    }
 
+    private fun exitFromAccount() {
+        tokenManager.clearTokens()
+        viewState.update { it.copy(toAuthorizationScreen = true) }
     }
 
     private fun setMeInfo() {

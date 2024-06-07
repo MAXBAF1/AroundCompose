@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthorizationViewModel @Inject constructor(tokenManager: TokenManager) :
     BaseViewModel<AuthorizationViewState, AuthorizationEvent>(AuthorizationViewState()) {
-    private val fields = AuthFields()
+    private var fields = AuthFields()
     private val networkService = AuthenticationService(tokenManager)
 
 
@@ -29,7 +29,13 @@ class AuthorizationViewModel @Inject constructor(tokenManager: TokenManager) :
             AuthorizationEvent.ClickLoginBtn -> clickLoginBtn()
             AuthorizationEvent.ClickLoginGoogleBtn -> {}
             AuthorizationEvent.ClickLoginVkBtn -> {}
+            AuthorizationEvent.ClearViewState -> clearViewState()
         }
+    }
+
+    private fun clearViewState() {
+        viewState.update { AuthorizationViewState() }
+        fields = AuthFields()
     }
 
     private fun clickLoginBtn() {

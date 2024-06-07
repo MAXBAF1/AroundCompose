@@ -16,7 +16,7 @@ val typography = JetAroundTypography(
     percent = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
     bold16 = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
     semiBold16 = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_semi_bold))),
-    sixteenMedium = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
+    medium16 = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_medium))),
     mediumRegular = TextStyle(fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.involve_regular))),
     mediumBold = TextStyle(fontSize = 15.sp, fontFamily = FontFamily(Font(R.font.involve_bold))),
     regular14 = TextStyle(fontSize = 14.sp, fontFamily = FontFamily(Font(R.font.involve_regular))),

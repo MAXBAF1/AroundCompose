@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.CornerRounding
 import androidx.graphics.shapes.RoundedPolygon
@@ -29,12 +28,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.Teams
-import com.example.aroundcompose.ui.navigation.Screen
+import com.example.aroundcompose.ui.navigation.Screens
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.example.aroundcompose.utils.RoundedPolygonShape
 
 @Composable
-fun GreetingsScreen(toOtherScreen: (Screen) -> Unit) {
+fun GreetingsScreen(toOtherScreen: (Screens) -> Unit) {
     val viewModel = hiltViewModel<GreetingsViewModel>()
     val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
@@ -60,7 +59,7 @@ fun GreetingsScreen(toOtherScreen: (Screen) -> Unit) {
 
     LaunchedEffect(key1 = Unit) { isAnimationStart = true }
 
-    if (isAnimationEnd && viewState.newScreen != null) toOtherScreen(viewState.newScreen!!)
+    if (isAnimationEnd && viewState.newScreens != null) toOtherScreen(viewState.newScreens!!)
 
     Box(
         contentAlignment = Alignment.Center,
