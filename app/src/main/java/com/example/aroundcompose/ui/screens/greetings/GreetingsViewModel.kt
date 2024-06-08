@@ -2,6 +2,7 @@ package com.example.aroundcompose.ui.screens.greetings
 
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.models.UserDTO
 import com.example.aroundcompose.data.services.AuthenticationService
 import com.example.aroundcompose.data.services.UserInfoService
 import com.example.aroundcompose.ui.common.enums.Teams
@@ -23,7 +24,6 @@ class GreetingsViewModel @Inject constructor(private val tokenManager: TokenMana
     private val userInfoService = UserInfoService(tokenManager)
 
     init {
-        viewState.update { it.copy(team = Teams.getById(Random.nextInt(1, 5))) }
         setNewScreen()
     }
 
@@ -34,10 +34,11 @@ class GreetingsViewModel @Inject constructor(private val tokenManager: TokenMana
     private fun setNewScreen() {
         val tokens = tokenManager.getTokens()
         viewModelScope.launch {
+            var me: UserDTO? = null
             val newScreens = if (tokens == null) {
                 Screens.AuthorizationScreen
             } else {
-                val me = userInfoService.getMe()
+                me = userInfoService.getMe()
                 if (me == null) {
                     if (authService.refresh() == HttpStatusCode.OK) {
                         Screens.MapScreen
@@ -45,7 +46,12 @@ class GreetingsViewModel @Inject constructor(private val tokenManager: TokenMana
                 } else Screens.MapScreen
             }
 
-            viewState.update { it.copy(newScreens = newScreens) }
+            viewState.update {
+                it.copy(
+                    newScreens = newScreens,
+                    team = Teams.getById(me?.teamId ?: Random.nextInt(1, 5))
+                )
+            }
         }
     }
 }

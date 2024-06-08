@@ -16,12 +16,24 @@ import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 @Composable
-fun TeamView(containerColor: Color, isEnable: Boolean, onClick: () -> Unit) {
+fun TeamView(
+    containerColor: Color,
+    isEnable: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Card(
+        modifier = modifier
+            .size(159.dp)
+            .clip(shape = JetAroundTheme.shapes.teamShape)
+            .clickable(
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(color = JetAroundTheme.colors.textColor)
+            ),
         shape = JetAroundTheme.shapes.teamShape,
         border = BorderStroke(
-            width = if (isEnable) 5.dp else 2.dp,
-            color = JetAroundTheme.colors.textColor
+            width = if (isEnable) 5.dp else 2.dp, color = JetAroundTheme.colors.textColor
         ),
         colors = CardColors(
             containerColor = containerColor,
@@ -29,13 +41,7 @@ fun TeamView(containerColor: Color, isEnable: Boolean, onClick: () -> Unit) {
             disabledContainerColor = containerColor,
             disabledContentColor = Color.Transparent
         ),
-        modifier = Modifier
-            .size(159.dp)
-            .clip(shape = JetAroundTheme.shapes.teamShape)
-            .clickable(
-                onClick = onClick,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = JetAroundTheme.colors.textColor)
-            )
-    ) {}
+    ) {
+
+    }
 }

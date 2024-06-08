@@ -3,7 +3,9 @@ package com.example.aroundcompose.ui.screens.authorization
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.services.AuthenticationService
+import com.example.aroundcompose.data.services.UserInfoService
 import com.example.aroundcompose.ui.common.enums.FieldType
+import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.common.models.FieldData
 import com.example.aroundcompose.ui.screens.authorization.models.AuthFields
@@ -20,8 +22,8 @@ import javax.inject.Inject
 class AuthorizationViewModel @Inject constructor(tokenManager: TokenManager) :
     BaseViewModel<AuthorizationViewState, AuthorizationEvent>(AuthorizationViewState()) {
     private var fields = AuthFields()
-    private val networkService = AuthenticationService(tokenManager)
-
+    private val authenticationService = AuthenticationService(tokenManager)
+    private val userInfoService = UserInfoService(tokenManager)
 
     override fun obtainEvent(viewEvent: AuthorizationEvent) {
         when (viewEvent) {
@@ -40,8 +42,14 @@ class AuthorizationViewModel @Inject constructor(tokenManager: TokenManager) :
 
     private fun clickLoginBtn() {
         viewModelScope.launch {
-            when (networkService.authenticate(fields)) {
-                HttpStatusCode.OK -> viewState.update { it.copy(toNextScreen = true) }
+            when (authenticationService.authenticate(fields)) {
+                HttpStatusCode.OK -> {
+                    val myTeam = userInfoService.getMe()?.teamId ?: -1
+                    viewState.update {
+                        it.copy(toNextScreen = true, userTeam = Teams.getById(myTeam))
+                    }
+                }
+
                 else -> viewState.update { it.copy(toNextScreen = false) } // FIXME сделать обработку ошибок
             }
         }

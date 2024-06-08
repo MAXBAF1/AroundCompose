@@ -41,6 +41,7 @@ import com.example.aroundcompose.ui.screens.authorization.models.AuthFields
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationEvent
 import com.example.aroundcompose.ui.screens.authorization.views.LoginUsingBtn
 import com.example.aroundcompose.ui.theme.JetAroundTheme
+import com.example.aroundcompose.utils.UpdateThemeStyleByTeam
 import kotlinx.coroutines.delay
 
 class AuthorizationScreen(
@@ -52,6 +53,8 @@ class AuthorizationScreen(
     @Composable
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+
+        UpdateThemeStyleByTeam(viewState.userTeam)
 
         if (viewState.toNextScreen) {
             onLoginClicked()
@@ -71,34 +74,31 @@ class AuthorizationScreen(
                     .fillMaxSize()
                     .padding(horizontal = 30.dp)
             ) {
-                val onFocusedColor = JetAroundTheme.colors.onFocusedColor
-
                 Spacer(
                     modifier = Modifier
                         .weight(1.25f)
                         .fillMaxSize()
                 )
-
                 Title(Modifier.padding(bottom = 40.dp))
-
                 TextFields(
-                    fields = viewState.fields, onValueChange = { fieldType, value ->
+                    fields = viewState.fields,
+                    onValueChange = { fieldType, value ->
                         viewModel.obtainEvent(AuthorizationEvent.ChangeFieldText(fieldType, value))
-                    }, modifier = Modifier.padding(bottom = 14.dp)
+                    },
+                    modifier = Modifier.padding(bottom = 14.dp),
                 )
-
                 ForgotPassword(
-                    onFocusedColor,
-                    Modifier
+                    onFocusedColor = JetAroundTheme.colors.primary,
+                    modifier = Modifier
                         .align(Alignment.End)
-                        .padding(bottom = 40.dp)
+                        .padding(bottom = 40.dp),
                 )
-
                 LoginButtons(viewState.isEnabledLoginBtn, onLoginClick = {
                     viewModel.obtainEvent(AuthorizationEvent.ClickLoginBtn)
                 })
-
-                IfNotHaveAccount(onFocusedColor, modifier = Modifier.weight(1f))
+                IfNotHaveAccount(
+                    onFocusedColor = JetAroundTheme.colors.primary, modifier = Modifier.weight(1f)
+                )
             }
         }
     }
@@ -110,9 +110,8 @@ class AuthorizationScreen(
                 text = stringResource(id = R.string.heading),
                 modifier = Modifier.padding(bottom = 10.dp),
                 style = JetAroundTheme.typography.headingLogin,
-                color = JetAroundTheme.colors.onFocusedColor
+                color = JetAroundTheme.colors.primary
             )
-
             Text(
                 text = stringResource(id = R.string.label),
                 style = JetAroundTheme.typography.fourteenMedium,
@@ -155,13 +154,12 @@ class AuthorizationScreen(
         Text(
             text = stringResource(id = R.string.forgot_password),
             style = JetAroundTheme.typography.textRegistration.copy(color = forgotPasswordColor),
-            modifier = modifier.clickable(
-                onClick = {
-                    forgotPasswordColor = Color.DarkGray
+            modifier = modifier.clickable(onClick = {
+                forgotPasswordColor = Color.DarkGray
 
 
 //                onForgotPasswordClicked() TODO: Добавить экран восстановления пароля
-                },
+            },
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(radius = 0.dp)
             )
@@ -262,11 +260,10 @@ class AuthorizationScreen(
             Text(
                 text = AnnotatedString(stringResource(id = R.string.registration_click)),
                 style = JetAroundTheme.typography.textRegistration.copy(color = registrationColor),
-                modifier = Modifier.clickable(
-                    onClick = {
-                        registrationColor = Color.DarkGray
-                        onRegistrationClicked()
-                    },
+                modifier = Modifier.clickable(onClick = {
+                    registrationColor = Color.DarkGray
+                    onRegistrationClicked()
+                },
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(radius = 0.dp)
                 )

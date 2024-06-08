@@ -1,17 +1,12 @@
 package com.example.aroundcompose.ui.theme
 
-import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
 
 @Composable
 internal fun AroundComposeTheme(
-    style: JetAroundStyle = JetAroundStyle.Base,
+    style: JetAroundStyle = JetAroundStyle.Blue,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
@@ -19,12 +14,20 @@ internal fun AroundComposeTheme(
         true -> {
             when (style) {
                 JetAroundStyle.Base -> baseDarkPalette
+                JetAroundStyle.Blue -> blueDarkPalette
+                JetAroundStyle.Purple -> purpleDarkPalette
+                JetAroundStyle.Yellow -> yellowDarkPalette
+                JetAroundStyle.LightBlue -> lightBlueDarkPalette
             }
         }
 
         false -> {
             when (style) {
                 JetAroundStyle.Base -> baseLightPalette
+                JetAroundStyle.Blue -> blueLightPalette
+                JetAroundStyle.Purple -> purpleLightPalette
+                JetAroundStyle.Yellow -> yellowLightPalette
+                JetAroundStyle.LightBlue -> lightBlueLightPalette
             }
         }
     }

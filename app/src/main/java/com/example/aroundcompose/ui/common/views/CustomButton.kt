@@ -18,7 +18,7 @@ fun CustomButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    containerColor: Color = JetAroundTheme.colors.onFocusedColor
+    containerColor: Color = JetAroundTheme.colors.primary
 ) {
     TextButton(
         modifier = modifier.fillMaxWidth(),
