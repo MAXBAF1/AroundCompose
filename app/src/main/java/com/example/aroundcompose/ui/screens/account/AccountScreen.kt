@@ -118,7 +118,9 @@ class AccountScreen(
                     }
                     Text(
                         modifier = Modifier.padding(bottom = 16.dp),
-                        text = stringResource(id = R.string.how_much_cells).uppercase(),
+                        text = stringResource(
+                            id = if (isMyAccount) R.string.how_much_cells else R.string.other_player_how_much_cells
+                        ).uppercase(),
                         style = JetAroundTheme.typography.bold16,
                         color = JetAroundTheme.colors.primary
                     )
@@ -217,7 +219,7 @@ class AccountScreen(
             )
             MyAllCellsCard(
                 count = myAllTimeCells,
-                titleTextId = R.string.your_all_time,
+                titleTextId = R.string.all_time,
                 bgColor = JetAroundTheme.colors.secondaryBackground,
                 textColor = JetAroundTheme.colors.primary,
                 decorationId = R.drawable.hex_decoration_2,
@@ -325,10 +327,16 @@ class AccountScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     StatisticTextColumn(
-                        myCells, R.string.you, textColor, Modifier.padding(16.dp)
+                        myCells,
+                        if (isMyAccount) R.string.you else R.string.other_player,
+                        textColor,
+                        Modifier.padding(16.dp)
                     )
                     StatisticTextColumn(
-                        myTeamCells, R.string.your_team, textColor, Modifier.padding(16.dp)
+                        myTeamCells,
+                        if (isMyAccount) R.string.your_team else R.string.other_player_team,
+                        textColor,
+                        Modifier.padding(16.dp)
                     )
                 }
             }
@@ -374,7 +382,7 @@ class AccountScreen(
                             enabled = onClick != null,
                             onClick = onClick ?: {})
                 ) {
-                    StatisticTextColumn(count, titleTextId, textColor, Modifier.padding(16.dp))
+                    StatisticTextColumn(count, titleTextId, textColor, Modifier.padding(16.dp), true)
                 }
             }
         }
@@ -386,6 +394,7 @@ class AccountScreen(
         titleTextId: Int,
         textColor: Color,
         modifier: Modifier = Modifier,
+        addCellsText: Boolean = false,
     ) {
         Column(modifier = modifier) {
             Text(
@@ -395,7 +404,9 @@ class AccountScreen(
                 modifier = Modifier.padding(bottom = 2.dp)
             )
             Text(
-                text = count.toString(), color = textColor, style = JetAroundTheme.typography.bold24
+                text = if (addCellsText) "$count ${stringResource(R.string.cells).uppercase()}" else "$count",
+                color = textColor,
+                style = JetAroundTheme.typography.bold24
             )
         }
     }
