@@ -65,10 +65,13 @@
     <string name="friends">друзья</string>
 
     <!--Account screen-->
-    <string name="how_much_cells">сколько клеток закрасили:</string>
+    <string name="how_much_cells">сколько клеток закрасили</string>
+    <string name="other_player_how_much_cells">сколько клеток закрасил</string>
     <string name="you">вы:</string>
+    <string name="other_player">игрок:</string>
     <string name="your_team">ваша команда:</string>
-    <string name="your_all_time">вами за всё время</string>
+    <string name="other_player_team">его команда:</string>
+    <string name="all_time">за всё время</string>
     <string name="cells">клетки</string>
     <string name="copy">Скопировано</string>
 

@@ -31,22 +31,14 @@ import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.navigation.Screens
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.example.aroundcompose.utils.RoundedPolygonShape
+import com.example.aroundcompose.utils.UpdateThemeStyleByTeam
 
 @Composable
 fun GreetingsScreen(toOtherScreen: (Screens) -> Unit) {
     val viewModel = hiltViewModel<GreetingsViewModel>()
     val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
-    val shape = RoundedPolygonShape(
-        RoundedPolygon(numVertices = 6, rounding = CornerRounding(radius = 0.14F))
-    )
-
-    val backgroundColor = when (viewState.team) {
-        Teams.LIGHT_BLUE -> JetAroundTheme.colors.lightBlue
-        Teams.YELLOW -> JetAroundTheme.colors.yellow
-        Teams.PURPLE -> JetAroundTheme.colors.purple
-        Teams.BLUE, Teams.NONE -> JetAroundTheme.colors.blue
-    }
+    UpdateThemeStyleByTeam(viewState.team)
 
     var isAnimationStart by remember { mutableStateOf(false) }
     var isAnimationEnd by remember { mutableStateOf(false) }
@@ -54,12 +46,21 @@ fun GreetingsScreen(toOtherScreen: (Screens) -> Unit) {
     val height by animateDpAsState(
         targetValue = if (isAnimationStart) 162.dp else 0.dp,
         animationSpec = tween(durationMillis = 3000),
-        label = ""
+        label = "download animation"
     ) { isAnimationEnd = true }
 
     LaunchedEffect(key1 = Unit) { isAnimationStart = true }
 
     if (isAnimationEnd && viewState.newScreens != null) toOtherScreen(viewState.newScreens!!)
+
+    val shape = RoundedPolygonShape(RoundedPolygon(6, rounding = CornerRounding(0.14F)))
+    val backgroundColor = when (viewState.team) {
+        Teams.BLUE -> JetAroundTheme.colors.blue
+        Teams.LIGHT_BLUE -> JetAroundTheme.colors.lightBlue
+        Teams.YELLOW -> JetAroundTheme.colors.yellow
+        Teams.PURPLE -> JetAroundTheme.colors.purple
+        Teams.NONE -> JetAroundTheme.colors.notActiveColor
+    }
 
     Box(
         contentAlignment = Alignment.Center,

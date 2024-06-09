@@ -14,7 +14,6 @@ data class JetAroundColors(
     val darkGray: Color,
     val searchHint: Color,
     val textFieldHint: Color,
-    val onFocusedColor: Color,
     val notActiveColor: Color,
     val textColor: Color,
     val titleColor: Color,
@@ -84,6 +83,10 @@ data class JetAroundMargin(
     val mapScreenMargin: Dp,
 )
 
+enum class JetAroundStyle {
+    Base, Blue, Purple, Yellow, LightBlue
+}
+
 object JetAroundTheme {
     internal val colors: JetAroundColors
         @Composable get() = LocalJetAroundColors.current
@@ -100,11 +103,6 @@ object JetAroundTheme {
     internal val margins: JetAroundMargin
         @Composable get() = LocalJetAroundMargin.current
 }
-
-enum class JetAroundStyle {
-    Base
-}
-
 
 internal val LocalJetAroundColors = staticCompositionLocalOf<JetAroundColors> {
     error("No colors provided")

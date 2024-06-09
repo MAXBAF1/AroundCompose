@@ -104,7 +104,7 @@ private fun InformationText(hint: String, isFocused: Boolean, isError: Boolean) 
         text = hint,
         color = when {
             isError -> JetAroundTheme.colors.errorColor
-            isFocused -> JetAroundTheme.colors.onFocusedColor
+            isFocused -> JetAroundTheme.colors.primary
             else -> JetAroundTheme.colors.textColor
         },
         style = JetAroundTheme.typography.smallMedium,
@@ -149,7 +149,7 @@ private fun DecorationBox(
                 width = if (isFocused) 3.dp else 2.dp,
                 color = when {
                     isError -> JetAroundTheme.colors.errorColor
-                    isFocused -> JetAroundTheme.colors.onFocusedColor
+                    isFocused -> JetAroundTheme.colors.primary
                     else -> tint
                 },
                 shape = JetAroundTheme.shapes.textFieldShape
