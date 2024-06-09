@@ -15,20 +15,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.ui.screens.splash.permission.models.PermissionsEvent
 import com.example.aroundcompose.ui.screens.splash.permission.models.PermissionsViewState
 import com.example.aroundcompose.ui.screens.splash.permission.views.PermissionsBottomSheet
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PermissionsScreen(
     viewModel: PermissionsViewModel,
     onBackPressed: () -> Unit,
     onPermissionsGranted: () -> Unit,
 ) {
-    val viewState by viewModel.getViewState().collectAsState()
+    val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
     val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
     val context = LocalContext.current
 

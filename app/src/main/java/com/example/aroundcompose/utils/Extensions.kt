@@ -92,7 +92,3 @@ suspend inline fun <reified T> HttpResponse?.castOrNull(): T? {
 
     return null
 }
-
-fun PaddingValues.copy(start: Dp, top: Dp, end: Dp, bottom: Dp): PaddingValues {
-    return PaddingValues(this.calculateStartPadding(LayoutDirection.Rtl))
-}

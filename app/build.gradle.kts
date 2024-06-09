@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -57,54 +55,53 @@ android {
 
 dependencies {
     // Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0-RC")
 
     // EncryptedSharedPreferences
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
     // Ktor
-    val ktorVersion = "2.3.10"
+    val ktorVersion = "2.3.11"
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-android:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     // Shapes
-    implementation("androidx.graphics:graphics-shapes:1.0.0-alpha05")
+    implementation("androidx.graphics:graphics-shapes:1.0.0-beta01")
 
     // H3
     implementation("com.uber:h3:4.1.1")
 
     // Hilt
-    val hiltVersion = 2.48
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    val hiltVersion = "2.51.1"
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
     // Accompanist
-    implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
+    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 
     // Compose lifecycle
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0-rc02")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 
     // Compose MapBox
     implementation("com.mapbox.extension:maps-compose:0.1.0")
     implementation("com.mapbox.maps:android:11.0.0-beta.1")
 
     // Handling Permission scenario
-    implementation("dev.shreyaspatil.permission-flow:permission-flow-compose:1.2.0")
+    implementation("dev.shreyaspatil.permission-flow:permission-flow-compose:2.0.0")
 
     // libs for fetching user current location and handling this Task API
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
-    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0-RC")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 
-
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx")
+    implementation("androidx.activity:activity-compose:1.9.0")
     implementation(platform("androidx.compose:compose-bom:2024.05.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -114,7 +111,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.05.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

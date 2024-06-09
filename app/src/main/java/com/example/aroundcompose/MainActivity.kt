@@ -58,7 +58,6 @@ internal class MainActivity : ComponentActivity() {
                                 currentRoute = currentRoute?.substringBefore("?")!!
                             )
                         }
-
                     }) { innerPaddings ->
                         NavGraph(
                             navController = navController, innerPaddings = innerPaddings
