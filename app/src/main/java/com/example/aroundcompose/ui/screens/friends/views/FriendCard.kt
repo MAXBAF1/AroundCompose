@@ -1,6 +1,5 @@
 package com.example.aroundcompose.ui.screens.friends.views
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -118,12 +116,8 @@ class FriendCard(
                 LevelView(
                     level = level,
                     textColor = JetAroundTheme.colors.titleColor,
-                    modifier = Modifier
-                        .padding(start = 2.dp) // Position
-                        .size(16.dp)
-                        .clip(CircleShape)
-                        .background(JetAroundTheme.colors.gray)
-                        .padding(top = 4.dp) // Inner padding
+                    bgColor = JetAroundTheme.colors.gray,
+                    modifier = Modifier.padding(start = 2.dp)
                 )
             }
             Text(

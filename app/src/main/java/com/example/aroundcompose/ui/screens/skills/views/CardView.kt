@@ -11,9 +11,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -28,8 +28,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.aroundcompose.R
-import com.example.aroundcompose.ui.common.views.LevelView
 import com.example.aroundcompose.data.models.SkillDTO
+import com.example.aroundcompose.ui.common.views.LevelView
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 class CardView(
@@ -78,7 +78,7 @@ class CardView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
-                    .padding(horizontal = 12.dp, vertical = 10.dp)
+                    .padding(start = 12.dp, end = 12.dp, top = 10.dp, bottom = 10.dp)
                     .fillMaxWidth()
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -102,24 +102,23 @@ class CardView(
     @Composable
     private fun SkillIcon() {
         Box {
-            Icon(
-                painter = painterResource(id = R.drawable.avatar_example), // FIXME обработка URL
-                contentDescription = "skill icon",
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
+                    .size(40.dp)
                     .clip(JetAroundTheme.shapes.upgradeShape)
                     .background(JetAroundTheme.colors.veryLightGray)
-                    .padding(8.dp)
-            )
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_mine), // FIXME обработка URL
+                    contentDescription = "skill icon"
+                )
+            }
+
             LevelView(
                 level = skillData.currentLevel,
                 textColor = JetAroundTheme.colors.primaryBackground,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(top = 26.dp, start = 26.dp) // Position
-                    .size(16.dp)
-                    .clip(CircleShape)
-                    .background(JetAroundTheme.colors.primary)
-                    .padding(top = 4.dp) // Inner padding
+                modifier = Modifier.offset(x = 28.dp, y = 28.dp) // Position
             )
         }
     }

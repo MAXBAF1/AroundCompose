@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,66 +37,69 @@ class FriendsScreen(
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
-        Box {
-            Image(
-                painter = painterResource(id = R.drawable.friends_background),
-                contentDescription = "backgroundImage",
-                modifier = Modifier.align(Alignment.BottomEnd),
-                contentScale = ContentScale.Crop
-            )
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 30.dp, top = 30.dp, end = 30.dp)
-            ) {
-                CustomTopAppBar(
-                    modifier = Modifier.padding(bottom = 24.dp),
-                    textId = R.string.friends,
-                    onBackClick = onBackClick
+        Surface(color = JetAroundTheme.colors.primaryBackground) {
+            Box {
+                Image(
+                    painter = painterResource(id = R.drawable.friends_background),
+                    contentDescription = "backgroundImage",
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    contentScale = ContentScale.Crop
                 )
 
-                SearchView(modifier = Modifier.padding(top = 14.dp, bottom = 8.dp),
-                    value = viewState.searchText,
-                    onValueChange = {
-                        viewModel.obtainEvent(FriendsEvent.OnSearchTextChange(it))
-                    })
-
-                if (viewState.searchText == "") {
-                    UsersContainer(
-                        list = viewState.friendsList, toUserScreen = toUserScreen
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(start = 30.dp, top = 30.dp, end = 30.dp)
+                ) {
+                    CustomTopAppBar(
+                        modifier = Modifier.padding(bottom = 24.dp),
+                        textId = R.string.friends,
+                        onBackClick = onBackClick
                     )
-                } else {
-                    if (!viewState.friendsFilteredList.isNullOrEmpty()) {
+
+                    SearchView(modifier = Modifier.padding(top = 14.dp, bottom = 8.dp),
+                        value = viewState.searchText,
+                        onValueChange = {
+                            viewModel.obtainEvent(FriendsEvent.OnSearchTextChange(it))
+                        })
+
+                    if (viewState.searchText == "") {
                         UsersContainer(
-                            list = viewState.friendsFilteredList!!, toUserScreen = toUserScreen
+                            list = viewState.friendsList, toUserScreen = toUserScreen
                         )
+                    } else {
+                        if (!viewState.friendsFilteredList.isNullOrEmpty()) {
+                            UsersContainer(
+                                list = viewState.friendsFilteredList!!, toUserScreen = toUserScreen
+                            )
 
-                        HorizontalDivider(
-                            thickness = 2.dp,
-                            color = JetAroundTheme.colors.notActiveColor,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 16.dp, horizontal = 16.dp)
-                        )
-                    }
+                            HorizontalDivider(
+                                thickness = 2.dp,
+                                color = JetAroundTheme.colors.notActiveColor,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp, horizontal = 16.dp)
+                            )
+                        }
 
-                    viewState.usersList?.let {
-                        UsersContainer(list = it, toUserScreen = toUserScreen)
+                        viewState.usersList?.let {
+                            UsersContainer(list = it, toUserScreen = toUserScreen)
+                        }
                     }
                 }
             }
-        }
 
-        LaunchedEffect(key1 = viewState.searchText) {
-            if (viewState.searchText.isBlank()) return@LaunchedEffect
+            LaunchedEffect(key1 = viewState.searchText) {
+                if (viewState.searchText.isBlank()) return@LaunchedEffect
 
-            delay(200)
+                delay(200)
 
-            viewModel.obtainEvent(FriendsEvent.SetUsersList)
+                viewModel.obtainEvent(FriendsEvent.SetUsersList)
+            }
         }
     }
+
 
     @Composable
     private fun UsersContainer(

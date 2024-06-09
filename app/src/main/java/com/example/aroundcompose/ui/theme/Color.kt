@@ -34,7 +34,7 @@ internal val baseLightPalette = JetAroundColors(
 )
 
 internal val baseDarkPalette = JetAroundColors(
-    primaryBackground = Color(0xFFFFFFFF),
+    primaryBackground = Color(0xFFFCFCFC),
     lightTint = Color(0xFFBDBDBD),
     mapBtnBg = Color(1f, 1f, 1f, 1f),
     darkGray = Color(0xFF5C5C5C),
