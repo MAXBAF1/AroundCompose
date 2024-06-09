@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,24 +43,26 @@ class StatisticsScreen(
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 30.dp, top = 30.dp, end = 30.dp)
-        ) {
-            CustomTopAppBar(
-                textId = R.string.statistic,
-                onBackClick = onBackClicked
-            )
-            TeamsStatistics(viewState.teamsProgressMap, Modifier.weight(0.45f))
+        Surface(color = JetAroundTheme.colors.primaryBackground) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 30.dp, top = 30.dp, end = 30.dp)
+            ) {
+                CustomTopAppBar(
+                    textId = R.string.statistic,
+                    onBackClick = onBackClicked
+                )
+                TeamsStatistics(viewState.teamsProgressMap, Modifier.weight(0.45f))
 
-            TopLists(
-                currentButton = viewState.currentButton,
-                list = if (viewState.currentButton) viewState.serverList else viewState.friendsList,
-                onMoreInfoClick = toUserScreen,
-                modifier = Modifier.weight(0.55F)
-            )
+                TopLists(
+                    currentButton = viewState.currentButton,
+                    list = if (viewState.currentButton) viewState.serverList else viewState.friendsList,
+                    onMoreInfoClick = toUserScreen,
+                    modifier = Modifier.weight(0.55F)
+                )
+            }
         }
     }
 

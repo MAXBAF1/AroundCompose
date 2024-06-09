@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -62,29 +63,29 @@ fun GreetingsScreen(toOtherScreen: (Screens) -> Unit) {
         Teams.NONE -> JetAroundTheme.colors.notActiveColor
     }
 
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(JetAroundTheme.colors.primaryBackground)
-    ) {
+    Surface(color = JetAroundTheme.colors.primaryBackground) {
         Box(
-            contentAlignment = Alignment.BottomCenter,
-            modifier = Modifier
-                .padding(end = 40.dp)
-                .rotate(-11.5f)
-                .clip(shape)
-                .size(162.dp)
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize(),
         ) {
             Box(
+                contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier
-                    .width(162.dp)
-                    .height(height)
-                    .background(backgroundColor)
-                    .align(Alignment.BottomCenter)
-            )
+                    .padding(end = 40.dp)
+                    .rotate(-11.5f)
+                    .clip(shape)
+                    .size(162.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(162.dp)
+                        .height(height)
+                        .background(backgroundColor)
+                        .align(Alignment.BottomCenter)
+                )
+            }
+            Image(painter = painterResource(id = R.drawable.mascot), contentDescription = "mascot")
         }
-        Image(painter = painterResource(id = R.drawable.mascot), contentDescription = "mascot")
     }
 }
 

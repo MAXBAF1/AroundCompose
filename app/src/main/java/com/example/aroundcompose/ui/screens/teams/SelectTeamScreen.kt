@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,30 +35,31 @@ class SelectTeamScreen(
 
         UpdateThemeStyleByTeam(viewState.currentTeam)
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(JetAroundTheme.colors.primaryBackground)
-                .padding(start = 30.dp, top = 125.dp, end = 30.dp)
-        ) {
-            Title()
-
-            GridLayoutTeams(
-                currentTeam = viewState.currentTeam,
-                onClick = { viewModel.obtainEvent(TeamsEvent.ChangeTeam(it)) },
-                modifier = Modifier.padding(top = 40.dp)
-            )
-
-            NextButtonView(
-                enabled = viewState.isEnableNextBtn,
-                onClick = { viewModel.obtainEvent(TeamsEvent.ClickNextBtn) },
+        Surface(color = JetAroundTheme.colors.primaryBackground) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .padding(top = 40.dp)
-                    .align(Alignment.End)
-            )
+                    .fillMaxSize()
+                    .padding(start = 30.dp, top = 125.dp, end = 30.dp)
+            ) {
+                Title()
 
-            if (viewState.toNextScreen) onNextClicked()
+                GridLayoutTeams(
+                    currentTeam = viewState.currentTeam,
+                    onClick = { viewModel.obtainEvent(TeamsEvent.ChangeTeam(it)) },
+                    modifier = Modifier.padding(top = 40.dp)
+                )
+
+                NextButtonView(
+                    enabled = viewState.isEnableNextBtn,
+                    onClick = { viewModel.obtainEvent(TeamsEvent.ClickNextBtn) },
+                    modifier = Modifier
+                        .padding(top = 40.dp)
+                        .align(Alignment.End)
+                )
+
+                if (viewState.toNextScreen) onNextClicked()
+            }
         }
     }
 

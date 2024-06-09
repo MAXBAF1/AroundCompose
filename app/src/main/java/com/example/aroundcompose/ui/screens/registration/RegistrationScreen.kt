@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,30 +35,31 @@ class RegistrationScreen(
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(JetAroundTheme.colors.primaryBackground)
-                .padding(start = 30.dp, top = 30.dp, end = 30.dp)
-        ) {
-            CustomTopAppBar(R.string.registration, onBackClicked)
-
-            TextFields(
-                fields = viewState.fields,
-                onValueChange = { fieldType, text ->
-                    viewModel.obtainEvent(RegistrationEvent.ChangeFieldText(fieldType, text))
-                },
-                modifier = Modifier.padding(top = 28.dp)
-            )
-
-            NextButtonView(
-                enabled = viewState.isEnabledNextBtn,
-                onClick = { viewModel.obtainEvent(RegistrationEvent.ClickNextBtn) },
+        Surface(color = JetAroundTheme.colors.primaryBackground) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .padding(top = 40.dp)
-                    .align(Alignment.End)
-            )
+                    .fillMaxSize()
+                    .padding(start = 30.dp, top = 30.dp, end = 30.dp)
+            ) {
+                CustomTopAppBar(R.string.registration, onBackClicked)
+
+                TextFields(
+                    fields = viewState.fields,
+                    onValueChange = { fieldType, text ->
+                        viewModel.obtainEvent(RegistrationEvent.ChangeFieldText(fieldType, text))
+                    },
+                    modifier = Modifier.padding(top = 28.dp)
+                )
+
+                NextButtonView(
+                    enabled = viewState.isEnabledNextBtn,
+                    onClick = { viewModel.obtainEvent(RegistrationEvent.ClickNextBtn) },
+                    modifier = Modifier
+                        .padding(top = 40.dp)
+                        .align(Alignment.End)
+                )
+            }
         }
 
         if (viewState.toNextScreen) onNextClicked()

@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -23,6 +25,7 @@ import com.example.aroundcompose.ui.common.views.CustomTopAppBar
 import com.example.aroundcompose.data.models.SkillDTO
 import com.example.aroundcompose.ui.screens.skills.models.SkillsEvent
 import com.example.aroundcompose.ui.screens.skills.views.CardView
+import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 class SkillsScreen(
     private val viewModel: SkillsViewModel,
@@ -33,41 +36,44 @@ class SkillsScreen(
     fun Create() {
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
-        Box {
-            Image(
-                painter = painterResource(id = R.drawable.skills_background),
-                contentDescription = "backgroundImage",
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(top = 90.dp),
-                contentScale = ContentScale.Crop
-            )
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 30.dp, top = 30.dp, end = 30.dp)
-            ) {
-                CustomTopAppBar(
-                    textId = R.string.skills,
-                    isBackButtonNeeded = userId != -1,
-                    showMoney = userId == -1,
-                    numberOfCoins = viewState.coins,
-                    onBackClick = onBackClick
+        Surface(color = JetAroundTheme.colors.primaryBackground) {
+            Box {
+                Image(
+                    painter = painterResource(id = R.drawable.skills_background),
+                    contentDescription = "backgroundImage",
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(top = 90.dp),
+                    contentScale = ContentScale.Crop,
+                    colorFilter = ColorFilter.tint(JetAroundTheme.colors.primary)
                 )
 
-                SkillsContainer(
-                    skills = viewState.skills,
-                    skillState = viewState.skillsStates,
-                    onCardClick = { index ->
-                        viewModel.obtainEvent(SkillsEvent.ClickOnCard(index))
-                    },
-                    onUpgradeClick = { index ->
-                        viewModel.obtainEvent(SkillsEvent.ClickUpgradeBtn(index))
-                    },
-                    modifier = Modifier.verticalScroll(rememberScrollState())
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(start = 30.dp, top = 30.dp, end = 30.dp)
+                ) {
+                    CustomTopAppBar(
+                        textId = R.string.skills,
+                        isBackButtonNeeded = userId != -1,
+                        showMoney = userId == -1,
+                        numberOfCoins = viewState.coins,
+                        onBackClick = onBackClick
+                    )
+
+                    SkillsContainer(
+                        skills = viewState.skills,
+                        skillState = viewState.skillsStates,
+                        onCardClick = { index ->
+                            viewModel.obtainEvent(SkillsEvent.ClickOnCard(index))
+                        },
+                        onUpgradeClick = { index ->
+                            viewModel.obtainEvent(SkillsEvent.ClickUpgradeBtn(index))
+                        },
+                        modifier = Modifier.verticalScroll(rememberScrollState())
+                    )
+                }
             }
         }
     }

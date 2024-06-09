@@ -2,13 +2,15 @@ package com.example.aroundcompose.ui.navigation
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -43,8 +45,6 @@ class NavGraph(
     @SuppressLint("StateFlowValueCalledInComposition")
     @Composable
     fun Create() {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-
         val mapViewModel = hiltViewModel<MapViewModel>()
         val authorizationViewModel = hiltViewModel<AuthorizationViewModel>()
         val registrationViewModel = hiltViewModel<RegistrationViewModel>()
@@ -57,13 +57,8 @@ class NavGraph(
         NavHost(
             navController = navController,
             startDestination = Screens.SplashScreen.name,
-            modifier = Modifier.padding(
-                top = when (navBackStackEntry?.destination?.route) {
-                    Screens.MapScreen.name, Screens.AuthorizationScreen.name -> 0.dp
-                    else -> innerPaddings.calculateTopPadding()
-                },
-                bottom = innerPaddings.calculateBottomPadding(),
-            )
+            modifier = Modifier.padding(bottom = innerPaddings.calculateBottomPadding()),
+            contentAlignment = Alignment.TopStart
         ) {
             composable(Screens.SplashScreen.name) { CreateSplashScreen() }
             composable(Screens.GreetingsScreen.name) { CreateGreetingsScreen() }
@@ -112,7 +107,7 @@ class NavGraph(
 
     @Composable
     private fun CreateGreetingsScreen() {
-        GreetingsScreen(toOtherScreen = { navController.navigate(it.name) })
+        GreetingsScreen(toOtherScreen = { navController.navigate(it.name) { popUpTo(0) } })
     }
 
     @Composable

@@ -3,8 +3,13 @@ package com.example.aroundcompose.ui.common.views
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,11 +31,15 @@ fun CustomTopAppBar(
     trailingIconId: Int? = null,
     onTrailingBtnClick: () -> Unit = {},
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier.padding(
+            WindowInsets.systemBars.only(WindowInsetsSides.Top).asPaddingValues()
+        )
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 12.dp),
+                .padding(bottom = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {

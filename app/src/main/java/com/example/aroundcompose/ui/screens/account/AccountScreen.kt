@@ -28,6 +28,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -83,7 +84,7 @@ class AccountScreen(
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
         LaunchedEffect(key1 = Unit) { viewModel.obtainEvent(AccountEvent.GetUserInfo(userId)) }
 
-        Scaffold(containerColor = JetAroundTheme.colors.primaryBackground) {
+        Surface(color = JetAroundTheme.colors.primaryBackground) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()

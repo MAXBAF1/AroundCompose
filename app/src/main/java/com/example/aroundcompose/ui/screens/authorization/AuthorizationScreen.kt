@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -61,44 +62,46 @@ class AuthorizationScreen(
             viewModel.obtainEvent(AuthorizationEvent.ClearViewState)
         }
 
-        Box {
-            Image(
-                painter = painterResource(id = R.drawable.background),
-                contentDescription = "backgroundImage"
-            )
+        Surface(color = JetAroundTheme.colors.primaryBackground) {
+            Box {
+                Image(
+                    painter = painterResource(id = R.drawable.background),
+                    contentDescription = "backgroundImage"
+                )
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 30.dp)
-            ) {
-                Spacer(
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .weight(1.25f)
                         .fillMaxSize()
-                )
-                Title(Modifier.padding(bottom = 40.dp))
-                TextFields(
-                    fields = viewState.fields,
-                    onValueChange = { fieldType, value ->
-                        viewModel.obtainEvent(AuthorizationEvent.ChangeFieldText(fieldType, value))
-                    },
-                    modifier = Modifier.padding(bottom = 14.dp),
-                )
-                ForgotPassword(
-                    onFocusedColor = JetAroundTheme.colors.primary,
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(bottom = 40.dp),
-                )
-                LoginButtons(viewState.isEnabledLoginBtn, onLoginClick = {
-                    viewModel.obtainEvent(AuthorizationEvent.ClickLoginBtn)
-                })
-                IfNotHaveAccount(
-                    onFocusedColor = JetAroundTheme.colors.primary, modifier = Modifier.weight(1f)
-                )
+                        .padding(horizontal = 30.dp)
+                ) {
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1.25f)
+                            .fillMaxSize()
+                    )
+                    Title(Modifier.padding(bottom = 40.dp))
+                    TextFields(
+                        fields = viewState.fields,
+                        onValueChange = { fieldType, value ->
+                            viewModel.obtainEvent(AuthorizationEvent.ChangeFieldText(fieldType, value))
+                        },
+                        modifier = Modifier.padding(bottom = 14.dp),
+                    )
+                    ForgotPassword(
+                        onFocusedColor = JetAroundTheme.colors.primary,
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .padding(bottom = 40.dp),
+                    )
+                    LoginButtons(viewState.isEnabledLoginBtn, onLoginClick = {
+                        viewModel.obtainEvent(AuthorizationEvent.ClickLoginBtn)
+                    })
+                    IfNotHaveAccount(
+                        onFocusedColor = JetAroundTheme.colors.primary, modifier = Modifier.weight(1f)
+                    )
+                }
             }
         }
     }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,7 +49,7 @@ class SettingsScreen(private val toAuthorizationScreen: () -> Unit, private val 
 
         if (viewState.toAuthorizationScreen) toAuthorizationScreen()
 
-        Scaffold {
+        Surface(color = JetAroundTheme.colors.primaryBackground) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
