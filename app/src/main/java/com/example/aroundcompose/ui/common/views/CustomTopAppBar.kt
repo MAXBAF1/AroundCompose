@@ -23,28 +23,41 @@ import com.example.aroundcompose.ui.theme.JetAroundTheme
 @Composable
 fun CustomTopAppBar(
     textId: Int,
-    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isBackButtonNeeded: Boolean = true,
+    onBackClick: (() -> Unit)? = null,
     showMoney: Boolean = false,
     numberOfCoins: Int = 1335,
     trailingIconId: Int? = null,
     onTrailingBtnClick: () -> Unit = {},
 ) {
     Column(
-        modifier = modifier.padding(
-            WindowInsets.systemBars.only(WindowInsetsSides.Top).asPaddingValues()
-        )
+        modifier = modifier
+            .padding(
+                WindowInsets.systemBars
+                    .only(WindowInsetsSides.Top)
+                    .asPaddingValues()
+            )
+            .padding(
+                top = if (showMoney) {
+                    20.dp
+                } else if (onBackClick != null || trailingIconId != null) {
+                    18.dp
+                } else JetAroundTheme.margins.mainMargin
+            )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 14.dp),
+                .padding(bottom = if (showMoney) {
+                    10.dp
+                } else if (onBackClick != null || trailingIconId != null) {
+                    8.dp
+                } else 20.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (isBackButtonNeeded) {
+                if (onBackClick != null) {
                     CustomIconButton(
                         onClick = onBackClick,
                         iconId = R.drawable.ic_arrow_left,

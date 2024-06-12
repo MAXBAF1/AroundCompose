@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,11 +47,13 @@ class StatisticsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 30.dp, top = 30.dp, end = 30.dp)
+                    .padding(
+                        start = JetAroundTheme.margins.mainMargin,
+                        end = JetAroundTheme.margins.mainMargin
+                    )
             ) {
                 CustomTopAppBar(
-                    textId = R.string.statistic,
-                    onBackClick = onBackClicked
+                    textId = R.string.statistic, onBackClick = onBackClicked
                 )
                 TeamsStatistics(viewState.teamsProgressMap, Modifier.weight(0.45f))
 
@@ -88,30 +89,25 @@ class StatisticsScreen(
 
             teamsProgress[4]?.let {
                 StatisticTeamView(
-                    currentPercent = it,
-                    team = Teams.LIGHT_BLUE,
-                    isLeader = true
+                    currentPercent = it, team = Teams.LIGHT_BLUE, isLeader = true
                 ).Create()
             }
 
             teamsProgress[3]?.let {
                 StatisticTeamView(
-                    currentPercent = it,
-                    team = Teams.YELLOW
+                    currentPercent = it, team = Teams.YELLOW
                 ).Create()
             }
 
             teamsProgress[2]?.let {
                 StatisticTeamView(
-                    currentPercent = it,
-                    team = Teams.PURPLE
+                    currentPercent = it, team = Teams.PURPLE
                 ).Create()
             }
 
             teamsProgress[1]?.let {
                 StatisticTeamView(
-                    currentPercent = it,
-                    team = Teams.BLUE
+                    currentPercent = it, team = Teams.BLUE
                 ).Create()
             }
 
@@ -134,12 +130,9 @@ class StatisticsScreen(
                 .clip(JetAroundTheme.shapes.teamsStatisticsShape)
                 .background(JetAroundTheme.colors.textColor)
         ) {
-            ListButtons(
-                currentButton = currentButton,
-                onClick = {
-                    viewModel.obtainEvent(StatisticsEvent.OnListBtnClick)
-                }
-            )
+            ListButtons(currentButton = currentButton, onClick = {
+                viewModel.obtainEvent(StatisticsEvent.OnListBtnClick)
+            })
 
             Column(
                 modifier = modifier.padding(horizontal = 20.dp)
@@ -164,8 +157,7 @@ class StatisticsScreen(
             verticalArrangement = Arrangement.Top
         ) {
             items(usersList.size) { index ->
-                UserCard(
-                    position = index + 1,
+                UserCard(position = index + 1,
                     imageId = R.drawable.avatar_example,
                     name = usersList[index].second.username,
                     score = usersList[index].second.score,
@@ -178,8 +170,7 @@ class StatisticsScreen(
                     },
                     onClick = {
                         onMoreInfoClick(usersList[index].second.id)
-                    }
-                )
+                    })
             }
         }
     }
@@ -199,15 +190,11 @@ class StatisticsScreen(
                 .padding(vertical = 15.dp, horizontal = 20.dp)
         ) {
             ButtonListView(
-                textId = R.string.server,
-                currentButton = currentButton,
-                onClick = onClick
+                textId = R.string.server, currentButton = currentButton, onClick = onClick
             )
 
             ButtonListView(
-                textId = R.string.friends,
-                currentButton = !currentButton,
-                onClick = onClick
+                textId = R.string.friends, currentButton = !currentButton, onClick = onClick
             )
         }
     }

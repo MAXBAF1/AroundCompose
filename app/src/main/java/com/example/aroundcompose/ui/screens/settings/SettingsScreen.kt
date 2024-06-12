@@ -15,7 +15,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,7 +52,7 @@ class SettingsScreen(private val toAuthorizationScreen: () -> Unit, private val 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = JetAroundTheme.margins.mainMargin, bottom = 16.dp),
+                    .padding(bottom = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
@@ -87,12 +86,12 @@ class SettingsScreen(private val toAuthorizationScreen: () -> Unit, private val 
                 RowToDetailsScreen(
                     onClick = {},
                     title = stringResource(id = R.string.name),
-                    hint = viewState.meInfo.username
+                    hint = viewState.myInfo.username
                 )
                 RowToDetailsScreen(
                     onClick = {},
                     title = stringResource(id = R.string.mail),
-                    hint = viewState.meInfo.email
+                    hint = viewState.myInfo.email
                 )
                 RowToDetailsScreen(
                     onClick = {}, title = stringResource(id = R.string.password)

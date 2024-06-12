@@ -27,7 +27,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -90,7 +89,6 @@ class AccountScreen(
                     .fillMaxSize()
                     .padding(
                         start = JetAroundTheme.margins.mainMargin,
-                        top = JetAroundTheme.margins.mainMargin,
                         end = JetAroundTheme.margins.mainMargin,
                         bottom = 16.dp
                     ),
@@ -101,7 +99,7 @@ class AccountScreen(
                     CustomTopAppBar(
                         modifier = Modifier.padding(bottom = 24.dp),
                         textId = R.string.account,
-                        onBackClick = onBackClick,
+                        onBackClick = if (isMyAccount) null else onBackClick,
                         trailingIconId = if (isMyAccount) R.drawable.ic_settings else null,
                         onTrailingBtnClick = toSettingsScreen
                     )

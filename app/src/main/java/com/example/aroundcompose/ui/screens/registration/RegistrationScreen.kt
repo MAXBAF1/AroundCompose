@@ -1,6 +1,5 @@
 package com.example.aroundcompose.ui.screens.registration
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,9 +39,12 @@ class RegistrationScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 30.dp, top = 30.dp, end = 30.dp)
+                    .padding(
+                        start = JetAroundTheme.margins.mainMargin,
+                        end = JetAroundTheme.margins.mainMargin,
+                    )
             ) {
-                CustomTopAppBar(R.string.registration, onBackClicked)
+                CustomTopAppBar(R.string.registration)
 
                 TextFields(
                     fields = viewState.fields,

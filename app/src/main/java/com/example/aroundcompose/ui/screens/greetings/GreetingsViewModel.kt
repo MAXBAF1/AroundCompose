@@ -1,6 +1,7 @@
 package com.example.aroundcompose.ui.screens.greetings
 
 import androidx.lifecycle.viewModelScope
+import com.example.aroundcompose.data.MyInfoSingleton
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.models.UserDTO
 import com.example.aroundcompose.data.services.AuthenticationService
@@ -39,6 +40,7 @@ class GreetingsViewModel @Inject constructor(private val tokenManager: TokenMana
                 Screens.AuthorizationScreen
             } else {
                 me = userInfoService.getMe()
+                MyInfoSingleton.myInfo = me
                 if (me == null) {
                     if (authService.refresh() == HttpStatusCode.OK) {
                         Screens.MapScreen

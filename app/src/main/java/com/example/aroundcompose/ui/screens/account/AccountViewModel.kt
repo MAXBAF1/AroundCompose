@@ -1,6 +1,7 @@
 package com.example.aroundcompose.ui.screens.account
 
 import androidx.lifecycle.viewModelScope
+import com.example.aroundcompose.data.MyInfoSingleton
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.models.UserDTO
 import com.example.aroundcompose.data.services.StatisticService
@@ -34,7 +35,7 @@ class AccountViewModel @Inject constructor(tokenManager: TokenManager) :
     private fun getUserInfo(id: Int) {
         viewModelScope.launch {
             userInfo = (if (id == -1) {
-                userInfoService.getMe()
+                MyInfoSingleton.myInfo
             } else userInfoService.getUser(id)) ?: UserDTO()
 
             myCells = statisticService.getUserById(id)?.score ?: 0

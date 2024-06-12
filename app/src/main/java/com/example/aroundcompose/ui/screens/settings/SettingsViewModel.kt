@@ -1,6 +1,7 @@
 package com.example.aroundcompose.ui.screens.settings
 
 import androidx.lifecycle.viewModelScope
+import com.example.aroundcompose.data.MyInfoSingleton
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.models.UserDTO
 import com.example.aroundcompose.data.services.UserInfoService
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(private val tokenManager: TokenManager) :
     BaseViewModel<SettingsViewState, SettingsEvent>(initialState = SettingsViewState()) {
     private val userInfoService = UserInfoService(tokenManager)
-    private var meInfo = UserDTO()
+    private var myInfo = UserDTO()
 
 
     init {
@@ -36,8 +37,8 @@ class SettingsViewModel @Inject constructor(private val tokenManager: TokenManag
 
     private fun setMeInfo() {
         viewModelScope.launch {
-            meInfo = userInfoService.getMe() ?: return@launch
-            viewState.update { it.copy(meInfo = meInfo) }
+            myInfo = MyInfoSingleton.myInfo ?: return@launch
+            viewState.update { it.copy(myInfo = myInfo) }
         }
     }
 }

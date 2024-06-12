@@ -75,7 +75,7 @@ class MapScreen(
         MyMapboxMap(mapViewCallback = { mv ->
             mapView = mv
             initMap(mapView, viewState.lastLocation)
-            viewModel.obtainEvent(MapEvent.SetupService)
+            viewModel.obtainEvent(MapEvent.Init)
             if (!LocationService.isRunning) startService(context)
         }, onMoveListener = {
             removeCameraFollow(mapView, positionChangedListener)
@@ -84,7 +84,6 @@ class MapScreen(
             compassIconId = R.drawable.ic_compass
             rotation = it
         }).Create()
-
 
         Column(
             modifier = Modifier

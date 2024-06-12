@@ -4,10 +4,11 @@ import android.util.Log
 import com.example.aroundcompose.data.models.CellDTO
 import com.example.aroundcompose.data.models.IDTO
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.android.Android
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocket
+import io.ktor.client.plugins.websocket.ws
 import io.ktor.client.request.header
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
@@ -24,9 +25,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import org.hildan.krossbow.stomp.StompClient
+import org.hildan.krossbow.stomp.headers.StompSubscribeHeaders
+import org.hildan.krossbow.websocket.ktor.KtorWebSocketClient
 
 object JwtRequestManager {
-    private val client = HttpClient(Android) {
+    private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
@@ -35,6 +39,8 @@ object JwtRequestManager {
         }
         install(WebSockets)
     }
+    private val wsClient = KtorWebSocketClient(client)
+    private val stompClient = StompClient(wsClient)
 
     suspend fun createRequest(
         methodType: HttpMethod,
@@ -61,20 +67,51 @@ object JwtRequestManager {
         }
     }
 
+
     suspend fun receiveCellsFromWebSocket(
         receivedCellsChannel: Channel<CellDTO>,
         accessToken: String,
     ) {
+        withContext(Dispatchers.IO) {
+            val session = stompClient.connect(
+                url = AroundConfig.WS_HOST.toString(),
+                customStompConnectHeaders = mapOf(HttpHeaders.Authorization to "Bearer $accessToken")
+            )
+
+            val subscription = session.subscribe(
+                StompSubscribeHeaders(
+                    destination = AroundConfig.CELLS_CHANGES_EVENT.toString(),
+                    customHeaders = mapOf(HttpHeaders.Authorization to "Bearer $accessToken")
+                )
+            )
+
+            subscription.collect {
+                val receivedText = it.bodyAsText
+                val receivedCell = Json.decodeFromString(CellDTO.serializer(), receivedText)
+
+                Log.i("MyLog", "SUCCESS get cell from ws: $receivedCell")
+                receivedCellsChannel.send(receivedCell)
+            }
+        }
+    }
+
+    suspend fun receiveCellsFromWebSocke(
+        receivedCellsChannel: Channel<CellDTO>,
+        accessToken: String,
+    ) {
         try {
-            client.webSocket(AroundConfig.CELLS_CHANGES_EVENT.toString(), request = {
-                header(HttpHeaders.Authorization, "Bearer $accessToken")
-            }) {
+            client.ws(
+                urlString = AroundConfig.CELLS_CHANGES_EVENT.toString(),
+                request = { header(HttpHeaders.Authorization, "Bearer $accessToken") },
+            ) {
                 for (frame in incoming) {
                     when (frame) {
                         is Frame.Text -> {
                             val receivedText = frame.readText()
                             val receivedCell =
                                 Json.decodeFromString(CellDTO.serializer(), receivedText)
+
+                            Log.i("MyLog", "SUCCESS get cell from ws: $receivedCell")
                             receivedCellsChannel.send(receivedCell)
                         }
 
@@ -83,13 +120,13 @@ object JwtRequestManager {
                 }
             }
         } catch (e: Exception) {
-            println("Error receiving from WebSocket: ${e.message}")
+            Log.e("MyLog", "Error receiving from WebSocket: ${e.message}")
         } finally {
             receivedCellsChannel.close()
         }
     }
 
-    suspend fun sendCellToWebSocket(cell: CellDTO, accessToken: String,) {
+    suspend fun sendCellToWebSocket(cell: CellDTO, accessToken: String) {
         try {
             client.webSocket(AroundConfig.CELLS_CHANGES_FROM_USER.toString(), request = {
                 header(HttpHeaders.Authorization, "Bearer $accessToken")

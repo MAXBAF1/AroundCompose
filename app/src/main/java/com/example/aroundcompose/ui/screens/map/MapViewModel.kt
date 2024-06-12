@@ -2,12 +2,13 @@ package com.example.aroundcompose.ui.screens.map
 
 import android.content.SharedPreferences
 import androidx.lifecycle.viewModelScope
-import com.example.aroundcompose.data.JwtRequestManager
+import com.example.aroundcompose.data.MyInfoSingleton
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.models.CellDTO
 import com.example.aroundcompose.data.models.EventDTO
 import com.example.aroundcompose.data.services.CellsService
 import com.example.aroundcompose.data.services.EventsService
+import com.example.aroundcompose.data.services.UserInfoService
 import com.example.aroundcompose.di.NotEncryptedSharedPref
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.common.models.EventData
@@ -32,6 +33,9 @@ class MapViewModel @Inject constructor(
     private val tokenManager: TokenManager,
 ) : BaseViewModel<MapViewState, MapEvent>(initialState = MapViewState()) {
     private val cellsService = CellsService(tokenManager)
+    private val eventsService = EventsService(tokenManager)
+    private val userInfoService = UserInfoService(tokenManager)
+
     private val paintedCells: ArrayList<CellDTO> = arrayListOf()
     private var lastCell: String = ""
     private val coins = 0
@@ -40,14 +44,12 @@ class MapViewModel @Inject constructor(
     private var isEventSheetShowed = false
     private var isEventInfoSheetShowed = false
 
-    private val eventsService = EventsService(tokenManager)
 
     private var events: List<EventDTO> = listOf()
 
     override fun obtainEvent(viewEvent: MapEvent) {
         when (viewEvent) {
             is MapEvent.Init -> init()
-            MapEvent.SetupService -> setupService()
             is MapEvent.EditSearchText -> searchText = viewEvent.text
             MapEvent.MinusZoomLevel -> updateZoomLevel(viewEvent)
             MapEvent.PlusZoomLevel -> updateZoomLevel(viewEvent)
@@ -75,11 +77,22 @@ class MapViewModel @Inject constructor(
     }
 
     private fun init() {
+        if (MyInfoSingleton.myInfo == null) {
+            viewModelScope.launch {
+                userInfoService.getMe()?.let { myInfo ->
+                    MyInfoSingleton.myInfo = myInfo
+                    viewState.update { it.copy(myInfo = myInfo) }
+                }
+            }
+        } else viewState.update { it.copy(myInfo = MyInfoSingleton.myInfo) }
+
         this.cameraState.center = getLastLocationFromSharedPref()
         LocationService.lastLocation = cameraState.center
         viewState.update {
             it.copy(lastLocation = cameraState.center, searchText = searchText, coins = coins)
         }
+
+        setupService()
     }
 
     private fun updateZoomLevel(zoomLevelUpdateEvent: MapEvent) {
@@ -109,7 +122,7 @@ class MapViewModel @Inject constructor(
 
         val receivedCellsChannel = Channel<CellDTO>()
         viewModelScope.launch {
-            JwtRequestManager.receiveCellsFromWebSocket(receivedCellsChannel, accessToken)
+            //JwtRequestManager.receiveCellsFromWebSocket(receivedCellsChannel, accessToken)
         }
 
         viewModelScope.launch {
@@ -124,7 +137,7 @@ class MapViewModel @Inject constructor(
 
             if (lastCell != newCell) {
                 viewModelScope.launch {
-                    JwtRequestManager.sendCellToWebSocket(CellDTO(newCell), accessToken)
+                    //JwtRequestManager.sendCellToWebSocket(CellDTO(newCell), accessToken)
                     lastCell = newCell
                 }
             }

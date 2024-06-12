@@ -62,8 +62,11 @@ dependencies {
 
     // Ktor
     val ktorVersion = "2.3.11"
+    implementation("org.hildan.krossbow:krossbow-websocket-ktor:7.0.0")
+    implementation("org.hildan.krossbow:krossbow-stomp-core:7.0.0")
+    //implementation("org.hildan.krossbow:krossbow-websocket-builtin:7.0.0")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-android:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
