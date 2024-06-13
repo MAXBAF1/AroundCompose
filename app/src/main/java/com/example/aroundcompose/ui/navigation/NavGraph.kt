@@ -2,6 +2,7 @@ package com.example.aroundcompose.ui.navigation
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import com.example.aroundcompose.ui.screens.teams.SelectTeamScreen
 import com.example.aroundcompose.ui.screens.teams.TeamsViewModel
 
 class NavGraph(
+    private val activity: Context,
     private val navController: NavHostController,
     private val innerPaddings: PaddingValues,
 ) {
@@ -170,6 +172,7 @@ class NavGraph(
     @Composable
     private fun CreateAuthScreen(viewModel: AuthorizationViewModel) {
         AuthorizationScreen(
+            activity = activity,
             viewModel = viewModel,
             onLoginClicked = { navController.navigate(Screens.MapScreen.name) { popUpTo(0) } },
             onRegistrationClicked = { navController.navigate(Screens.RegistrationScreen.name) },

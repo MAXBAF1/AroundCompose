@@ -1,5 +1,7 @@
 package com.example.aroundcompose.ui.screens.authorization
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,24 +30,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.views.CustomButton
 import com.example.aroundcompose.ui.common.views.TextFieldView
+import com.example.aroundcompose.ui.screens.authorization.AuthorizationViewModel.Companion.WEB_CLIENT_ID
 import com.example.aroundcompose.ui.screens.authorization.models.AuthFields
 import com.example.aroundcompose.ui.screens.authorization.models.AuthorizationEvent
 import com.example.aroundcompose.ui.screens.authorization.views.LoginUsingBtn
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.example.aroundcompose.utils.UpdateThemeStyleByTeam
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
 
 class AuthorizationScreen(
+    private val activity: Context,
     private val viewModel: AuthorizationViewModel,
     private val onLoginClicked: () -> Unit,
     private val onRegistrationClicked: () -> Unit,
@@ -53,7 +68,9 @@ class AuthorizationScreen(
 ) {
     @Composable
     fun Create() {
-        val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+        val viewState by viewModel
+            .getViewState()
+            .collectAsStateWithLifecycle()
 
         UpdateThemeStyleByTeam(viewState.userTeam)
 
@@ -85,7 +102,11 @@ class AuthorizationScreen(
                     TextFields(
                         fields = viewState.fields,
                         onValueChange = { fieldType, value ->
-                            viewModel.obtainEvent(AuthorizationEvent.ChangeFieldText(fieldType, value))
+                            viewModel.obtainEvent(
+                                AuthorizationEvent.ChangeFieldText(
+                                    fieldType, value
+                                )
+                            )
                         },
                         modifier = Modifier.padding(bottom = 14.dp),
                     )
@@ -99,7 +120,8 @@ class AuthorizationScreen(
                         viewModel.obtainEvent(AuthorizationEvent.ClickLoginBtn)
                     })
                     IfNotHaveAccount(
-                        onFocusedColor = JetAroundTheme.colors.primary, modifier = Modifier.weight(1f)
+                        onFocusedColor = JetAroundTheme.colors.primary,
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
@@ -157,12 +179,11 @@ class AuthorizationScreen(
         Text(
             text = stringResource(id = R.string.forgot_password),
             style = JetAroundTheme.typography.textRegistration.copy(color = forgotPasswordColor),
-            modifier = modifier.clickable(onClick = {
-                forgotPasswordColor = Color.DarkGray
-
-
+            modifier = modifier.clickable(
+                onClick = {
+                    forgotPasswordColor = Color.DarkGray
 //                onForgotPasswordClicked() TODO: Добавить экран восстановления пароля
-            },
+                },
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(radius = 0.dp)
             )
@@ -171,23 +192,69 @@ class AuthorizationScreen(
 
     @Composable
     private fun LoginButtons(enabled: Boolean, onLoginClick: () -> Unit) {
+        var isGoogleClicked by remember { mutableStateOf(false) }
+
         CustomButton(
+            modifier = Modifier.padding(bottom = 16.dp),
             text = stringResource(id = R.string.login_btn).uppercase(),
             enabled = enabled,
             onClick = onLoginClick
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextOr()
-        Spacer(modifier = Modifier.height(16.dp))
-        LoginUsingButtons()
+        TextOr(modifier = Modifier.padding(bottom = 16.dp))
+        LoginUsingButtons(
+            onGoogleClick = {
+                isGoogleClicked = true
+//               viewModel . obtainEvent (AuthorizationEvent.ClickLoginGoogleBtn)
+            },
+            onVkClick = { viewModel.obtainEvent(AuthorizationEvent.ClickLoginVkBtn) },
+        )
+
+        if (isGoogleClicked) SignInGoogle()
     }
 
     @Composable
-    private fun TextOr() {
+    private fun SignInGoogle() {
+        val googleIdOption = GetGoogleIdOption(
+            filterByAuthorizedAccounts = false,
+            serverClientId = WEB_CLIENT_ID,
+            autoSelectEnabled = true,
+        )
+
+        val request = GetCredentialRequest(credentialOptions = listOf(googleIdOption))
+        val context = LocalContext.current
+        LaunchedEffect(key1 = Unit) {
+            launch {
+                try {
+                    val result = CredentialManager
+                        .create(context)
+                        .getCredential(context, request)
+                    handleSignIn(result)
+                } catch (e: GetCredentialException) {
+                    Log.e("MyLog", e.stackTraceToString())
+                }
+            }
+        }
+    }
+
+    private fun handleSignIn(result: GetCredentialResponse) {
+        val credential = result.credential
+        if (credential is CustomCredential) {
+            if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                try {
+                    val googleIdToken = GoogleIdTokenCredential.createFrom(credential.data)
+                } catch (e: GoogleIdTokenParsingException) {
+                    Log.e("MyLog", "Received an invalid google id token response", e)
+                }
+            } else Log.e("MyLog", "Unexpected type of credential")
+        } else Log.e("MyLog", "Unexpected type of credential")
+    }
+
+    @Composable
+    private fun TextOr(modifier: Modifier = Modifier) {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp)
         ) {
@@ -219,23 +286,25 @@ class AuthorizationScreen(
     }
 
     @Composable
-    private fun LoginUsingButtons() {
+    private fun LoginUsingButtons(onGoogleClick: () -> Unit, onVkClick: () -> Unit) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            LoginUsingBtn(painterId = R.drawable.ic_google,
+            LoginUsingBtn(
+                painterId = R.drawable.ic_google,
                 stringId = R.string.google_btn,
                 modifier = Modifier.weight(1f),
-                onClick = {})
-
+                onClick = onGoogleClick,
+            )
             Spacer(modifier = Modifier.width(16.dp))
-
-            LoginUsingBtn(painterId = R.drawable.ic_vk,
+            LoginUsingBtn(
+                painterId = R.drawable.ic_vk,
                 stringId = R.string.vk_btn,
                 modifier = Modifier.weight(1f),
-                onClick = {})
+                onClick = onVkClick,
+            )
         }
     }
 
@@ -263,10 +332,11 @@ class AuthorizationScreen(
             Text(
                 text = AnnotatedString(stringResource(id = R.string.registration_click)),
                 style = JetAroundTheme.typography.textRegistration.copy(color = registrationColor),
-                modifier = Modifier.clickable(onClick = {
-                    registrationColor = Color.DarkGray
-                    onRegistrationClicked()
-                },
+                modifier = Modifier.clickable(
+                    onClick = {
+                        registrationColor = Color.DarkGray
+                        onRegistrationClicked()
+                    },
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(radius = 0.dp)
                 )
