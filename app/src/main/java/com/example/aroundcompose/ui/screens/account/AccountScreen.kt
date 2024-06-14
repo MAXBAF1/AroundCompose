@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Matrix
@@ -82,13 +83,17 @@ class AccountScreen(
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun Create() {
-        val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+        val viewState by viewModel
+            .getViewState()
+            .collectAsStateWithLifecycle()
         LaunchedEffect(key1 = Unit) { viewModel.obtainEvent(AccountEvent.GetUserInfo(userId)) }
 
         val themeColor = if (isMyAccount) {
             JetAroundTheme.colors.primary
         } else {
-            Teams.getById(viewState.userInfo.teamId).getColor()
+            Teams
+                .getById(viewState.userInfo.teamId)
+                .getColor()
         }
 
         Surface(color = JetAroundTheme.colors.primaryBackground) {
@@ -111,7 +116,11 @@ class AccountScreen(
                         trailingIconId = if (isMyAccount) R.drawable.ic_settings else null,
                         onTrailingBtnClick = toSettingsScreen
                     )
-                    Avatar(modifier = Modifier.padding(bottom = 16.dp))
+                    Avatar(
+                        level = viewState.userInfo.level,
+                        themeColor = themeColor,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
                     Row(
                         modifier = Modifier.padding(bottom = 24.dp),
                         horizontalArrangement = Arrangement.Center,
@@ -154,7 +163,9 @@ class AccountScreen(
         matrix.scale(newSize, newSize)
         matrix.translate(1f, 1f)
         matrix.rotateZ(30F)
-        path.asComposePath().transform(matrix)
+        path
+            .asComposePath()
+            .transform(matrix)
 
         Box(modifier = Modifier
             .drawBehind {
@@ -209,7 +220,9 @@ class AccountScreen(
             )
             CustomIconButton(onClick = {
                 clipboardManager.setText(AnnotatedString(id.toString()))
-                Toast.makeText(context, R.string.copy, Toast.LENGTH_SHORT).show()
+                Toast
+                    .makeText(context, R.string.copy, Toast.LENGTH_SHORT)
+                    .show()
             }, iconId = R.drawable.ic_copy, description = "copy")
         }
     }
@@ -422,15 +435,22 @@ class AccountScreen(
     }
 
     @Composable
-    private fun Avatar(modifier: Modifier = Modifier) {
+    private fun Avatar(level: Int, themeColor: Color, modifier: Modifier = Modifier) {
         val shape = RoundedPolygonShape(
             RoundedPolygon(numVertices = 6, rounding = CornerRounding(radius = 0.05F))
         )
+        val levelIndicator = 1f - (level / 100f)
+
+        val colorStops = arrayOf(
+            levelIndicator - 0.1f to Color.Black,
+            levelIndicator to themeColor,
+        )
+
         Image(
             modifier = modifier
                 .size(180.dp)
                 .clip(shape)
-                .border(4.dp, JetAroundTheme.colors.textColor, shape),
+                .border(4.dp, Brush.verticalGradient(colorStops = colorStops), shape),
             painter = painterResource(id = R.drawable.avatar_example),
             contentDescription = "avatar"
         )
