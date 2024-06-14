@@ -37,7 +37,9 @@ import com.example.aroundcompose.utils.UpdateThemeStyleByTeam
 @Composable
 fun GreetingsScreen(toOtherScreen: (Screens) -> Unit) {
     val viewModel = hiltViewModel<GreetingsViewModel>()
-    val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+    val viewState by viewModel
+        .getViewState()
+        .collectAsStateWithLifecycle()
 
     UpdateThemeStyleByTeam(viewState.team)
 
@@ -74,11 +76,11 @@ fun GreetingsScreen(toOtherScreen: (Screens) -> Unit) {
                     .padding(end = 40.dp)
                     .rotate(-11.5f)
                     .clip(shape)
-                    .size(162.dp)
+                    .size(161.dp)
             ) {
                 Box(
                     modifier = Modifier
-                        .width(162.dp)
+                        .width(161.dp)
                         .height(height)
                         .background(backgroundColor)
                         .align(Alignment.BottomCenter)
