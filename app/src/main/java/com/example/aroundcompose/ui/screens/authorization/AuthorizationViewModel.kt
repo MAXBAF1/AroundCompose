@@ -3,8 +3,6 @@ package com.example.aroundcompose.ui.screens.authorization
 import android.util.Log
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialResponse
-import androidx.credentials.PasswordCredential
-import androidx.credentials.PublicKeyCredential
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.services.AuthenticationService
@@ -38,81 +36,28 @@ class AuthorizationViewModel @Inject constructor(
         when (viewEvent) {
             is AuthorizationEvent.ChangeFieldText -> changeFieldText(viewEvent.type, viewEvent.text)
             AuthorizationEvent.ClickLoginBtn -> clickLoginBtn()
-            AuthorizationEvent.ClickLoginGoogleBtn -> clickLoginGoogleBtn()
+            is AuthorizationEvent.HandleGoogleResponse -> handleSignIn(viewEvent.result)
+            AuthorizationEvent.ClickGoogleBtn -> viewState.update { it.copy(isGoogleBtnClicked = true) }
             AuthorizationEvent.ClickLoginVkBtn -> {}
             AuthorizationEvent.ClearViewState -> clearViewState()
+
         }
     }
 
-    private fun clickLoginGoogleBtn() {
-        /*val googleIdOption: GetGoogleIdOption = GetGoogleIdOption
-            .Builder()
-            .setFilterByAuthorizedAccounts(true)
-            .setServerClientId(WEB_CLIENT_ID)
-            .setAutoSelectEnabled(true)
-            .build()
-
-        val request: GetCredentialRequest = GetCredentialRequest
-            .Builder()
-            .addCredentialOption(googleIdOption)
-            .build()
-
-
-        viewModelScope.launch {
-            try {
-                val result = CredentialManager.create(context).getCredential(
-                    request = request,
-                    context = context,
-                )
-                handleSignIn(result)
-            } catch (e: GetCredentialException) {
-                Log.e("MyLog", "$e")
-            }
-        }*/
-    }
 
     private fun handleSignIn(result: GetCredentialResponse) {
-        // Handle the successfully returned credential.
+        viewState.update { it.copy(isGoogleBtnClicked = false) }
+
         val credential = result.credential
-
-        when (credential) {
-
-            // Passkey credential
-            is PublicKeyCredential -> {
-                // Share responseJson such as a GetCredentialResponse on your server to
-                // validate and authenticate
-                val responseJson = credential.authenticationResponseJson
-            }
-
-            // Password credential
-            is PasswordCredential -> {
-                // Send ID and password to your server to validate and authenticate.
-                val username = credential.id
-                val password = credential.password
-            }
-
-            // GoogleIdToken credential
-            is CustomCredential -> {
-                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                    try {
-                        // Use googleIdTokenCredential and extract id to validate and
-                        // authenticate on your server.
-                        val googleIdTokenCredential = GoogleIdTokenCredential
-                            .createFrom(credential.data)
-                    } catch (e: GoogleIdTokenParsingException) {
-                        Log.e("MyLog", "Received an invalid google id token response", e)
-                    }
-                } else {
-                    // Catch any unrecognized custom credential type here.
-                    Log.e("MyLog", "Unexpected type of credential")
+        if (credential is CustomCredential) {
+            if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                try {
+                    val googleIdToken = GoogleIdTokenCredential.createFrom(credential.data)
+                } catch (e: GoogleIdTokenParsingException) {
+                    Log.e("MyLog", "Received an invalid google id token response", e)
                 }
-            }
-
-            else -> {
-                // Catch any unrecognized credential type here.
-                Log.e("MyLog", "Unexpected type of credential")
-            }
-        }
+            } else Log.e("MyLog", "Unexpected type of credential")
+        } else Log.e("MyLog", "Unexpected type of credential")
     }
 
     private fun clearViewState() {

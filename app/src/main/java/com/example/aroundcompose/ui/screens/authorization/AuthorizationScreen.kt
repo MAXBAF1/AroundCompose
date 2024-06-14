@@ -37,7 +37,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.GetCredentialException
@@ -53,8 +52,6 @@ import com.example.aroundcompose.ui.screens.authorization.views.LoginUsingBtn
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.example.aroundcompose.utils.UpdateThemeStyleByTeam
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -78,6 +75,7 @@ class AuthorizationScreen(
             onLoginClicked()
             viewModel.obtainEvent(AuthorizationEvent.ClearViewState)
         }
+        var isGoogleClicked by remember { mutableStateOf(false) }
 
         Surface(color = JetAroundTheme.colors.primaryBackground) {
             Box {
@@ -116,14 +114,21 @@ class AuthorizationScreen(
                             .align(Alignment.End)
                             .padding(bottom = 40.dp),
                     )
-                    LoginButtons(viewState.isEnabledLoginBtn, onLoginClick = {
-                        viewModel.obtainEvent(AuthorizationEvent.ClickLoginBtn)
-                    })
+                    LoginButtons(viewState.isEnabledLoginBtn,
+                        onLoginClick = { viewModel.obtainEvent(AuthorizationEvent.ClickLoginBtn) },
+                        onGoogleClick = { viewModel.obtainEvent(AuthorizationEvent.ClickGoogleBtn) },
+                        onVkClick = {})
                     IfNotHaveAccount(
                         onFocusedColor = JetAroundTheme.colors.primary,
                         modifier = Modifier.weight(1f)
                     )
                 }
+            }
+        }
+
+        if (viewState.isGoogleBtnClicked) {
+            SignInGoogle {
+                viewModel.obtainEvent(AuthorizationEvent.HandleGoogleResponse(it))
             }
         }
     }
@@ -179,11 +184,10 @@ class AuthorizationScreen(
         Text(
             text = stringResource(id = R.string.forgot_password),
             style = JetAroundTheme.typography.textRegistration.copy(color = forgotPasswordColor),
-            modifier = modifier.clickable(
-                onClick = {
-                    forgotPasswordColor = Color.DarkGray
+            modifier = modifier.clickable(onClick = {
+                forgotPasswordColor = Color.DarkGray
 //                onForgotPasswordClicked() TODO: Добавить экран восстановления пароля
-                },
+            },
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(radius = 0.dp)
             )
@@ -191,9 +195,12 @@ class AuthorizationScreen(
     }
 
     @Composable
-    private fun LoginButtons(enabled: Boolean, onLoginClick: () -> Unit) {
-        var isGoogleClicked by remember { mutableStateOf(false) }
-
+    private fun LoginButtons(
+        enabled: Boolean,
+        onLoginClick: () -> Unit,
+        onGoogleClick: () -> Unit,
+        onVkClick: () -> Unit,
+    ) {
         CustomButton(
             modifier = Modifier.padding(bottom = 16.dp),
             text = stringResource(id = R.string.login_btn).uppercase(),
@@ -201,24 +208,17 @@ class AuthorizationScreen(
             onClick = onLoginClick
         )
         TextOr(modifier = Modifier.padding(bottom = 16.dp))
-        LoginUsingButtons(
-            onGoogleClick = {
-                isGoogleClicked = true
-//               viewModel . obtainEvent (AuthorizationEvent.ClickLoginGoogleBtn)
-            },
-            onVkClick = { viewModel.obtainEvent(AuthorizationEvent.ClickLoginVkBtn) },
-        )
-
-        if (isGoogleClicked) SignInGoogle()
+        LoginUsingButtons(onGoogleClick = onGoogleClick, onVkClick = onVkClick)
     }
 
     @Composable
-    private fun SignInGoogle() {
-        val googleIdOption = GetGoogleIdOption(
-            filterByAuthorizedAccounts = false,
-            serverClientId = WEB_CLIENT_ID,
-            autoSelectEnabled = true,
-        )
+    private fun SignInGoogle(onResult: (GetCredentialResponse) -> Unit) {
+        val googleIdOption = GetGoogleIdOption
+            .Builder()
+            .setServerClientId(WEB_CLIENT_ID)
+            .setFilterByAuthorizedAccounts(false)
+            .setAutoSelectEnabled(true)
+            .build()
 
         val request = GetCredentialRequest(credentialOptions = listOf(googleIdOption))
         val context = LocalContext.current
@@ -228,25 +228,12 @@ class AuthorizationScreen(
                     val result = CredentialManager
                         .create(context)
                         .getCredential(context, request)
-                    handleSignIn(result)
+                    onResult(result)
                 } catch (e: GetCredentialException) {
                     Log.e("MyLog", e.stackTraceToString())
                 }
             }
         }
-    }
-
-    private fun handleSignIn(result: GetCredentialResponse) {
-        val credential = result.credential
-        if (credential is CustomCredential) {
-            if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                try {
-                    val googleIdToken = GoogleIdTokenCredential.createFrom(credential.data)
-                } catch (e: GoogleIdTokenParsingException) {
-                    Log.e("MyLog", "Received an invalid google id token response", e)
-                }
-            } else Log.e("MyLog", "Unexpected type of credential")
-        } else Log.e("MyLog", "Unexpected type of credential")
     }
 
     @Composable
@@ -332,11 +319,10 @@ class AuthorizationScreen(
             Text(
                 text = AnnotatedString(stringResource(id = R.string.registration_click)),
                 style = JetAroundTheme.typography.textRegistration.copy(color = registrationColor),
-                modifier = Modifier.clickable(
-                    onClick = {
-                        registrationColor = Color.DarkGray
-                        onRegistrationClicked()
-                    },
+                modifier = Modifier.clickable(onClick = {
+                    registrationColor = Color.DarkGray
+                    onRegistrationClicked()
+                },
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(radius = 0.dp)
                 )
