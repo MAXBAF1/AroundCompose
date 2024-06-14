@@ -1,6 +1,5 @@
 package com.example.aroundcompose.ui.screens.authorization
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -57,7 +56,6 @@ import kotlinx.coroutines.launch
 
 
 class AuthorizationScreen(
-    private val activity: Context,
     private val viewModel: AuthorizationViewModel,
     private val onLoginClicked: () -> Unit,
     private val onRegistrationClicked: () -> Unit,
@@ -65,9 +63,7 @@ class AuthorizationScreen(
 ) {
     @Composable
     fun Create() {
-        val viewState by viewModel
-            .getViewState()
-            .collectAsStateWithLifecycle()
+        val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
         UpdateThemeStyleByTeam(viewState.userTeam)
 
@@ -75,7 +71,8 @@ class AuthorizationScreen(
             onLoginClicked()
             viewModel.obtainEvent(AuthorizationEvent.ClearViewState)
         }
-        var isGoogleClicked by remember { mutableStateOf(false) }
+
+        var isGoogleBtnClicked by remember { mutableStateOf(false) }
 
         Surface(color = JetAroundTheme.colors.primaryBackground) {
             Box {
@@ -116,7 +113,7 @@ class AuthorizationScreen(
                     )
                     LoginButtons(viewState.isEnabledLoginBtn,
                         onLoginClick = { viewModel.obtainEvent(AuthorizationEvent.ClickLoginBtn) },
-                        onGoogleClick = { viewModel.obtainEvent(AuthorizationEvent.ClickGoogleBtn) },
+                        onGoogleClick = { isGoogleBtnClicked = true },
                         onVkClick = {})
                     IfNotHaveAccount(
                         onFocusedColor = JetAroundTheme.colors.primary,
@@ -126,10 +123,14 @@ class AuthorizationScreen(
             }
         }
 
-        if (viewState.isGoogleBtnClicked) {
-            SignInGoogle {
-                viewModel.obtainEvent(AuthorizationEvent.HandleGoogleResponse(it))
-            }
+        if (isGoogleBtnClicked) {
+            SignInGoogle(
+                onResult = {
+                    isGoogleBtnClicked = false
+                    viewModel.obtainEvent(AuthorizationEvent.HandleGoogleResponse(it))
+                },
+                onCancelled = { isGoogleBtnClicked = false },
+            )
         }
     }
 
@@ -212,24 +213,19 @@ class AuthorizationScreen(
     }
 
     @Composable
-    private fun SignInGoogle(onResult: (GetCredentialResponse) -> Unit) {
-        val googleIdOption = GetGoogleIdOption
-            .Builder()
-            .setServerClientId(WEB_CLIENT_ID)
-            .setFilterByAuthorizedAccounts(false)
-            .setAutoSelectEnabled(true)
-            .build()
+    private fun SignInGoogle(onResult: (GetCredentialResponse) -> Unit, onCancelled: () -> Unit) {
+        val googleIdOption = GetGoogleIdOption.Builder().setServerClientId(WEB_CLIENT_ID)
+            .setFilterByAuthorizedAccounts(false).setAutoSelectEnabled(true).build()
 
         val request = GetCredentialRequest(credentialOptions = listOf(googleIdOption))
         val context = LocalContext.current
         LaunchedEffect(key1 = Unit) {
             launch {
                 try {
-                    val result = CredentialManager
-                        .create(context)
-                        .getCredential(context, request)
+                    val result = CredentialManager.create(context).getCredential(context, request)
                     onResult(result)
                 } catch (e: GetCredentialException) {
+                    onCancelled()
                     Log.e("MyLog", e.stackTraceToString())
                 }
             }

@@ -8,5 +8,4 @@ data class AuthorizationViewState(
     val isEnabledLoginBtn: Boolean = false,
     val toNextScreen: Boolean = false,
     val userTeam: Teams = Teams.NONE,
-    val isGoogleBtnClicked: Boolean = false
 )

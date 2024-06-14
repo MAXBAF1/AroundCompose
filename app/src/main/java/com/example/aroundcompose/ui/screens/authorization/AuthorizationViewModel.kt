@@ -45,7 +45,6 @@ class AuthorizationViewModel @Inject constructor(
             is AuthorizationEvent.ChangeFieldText -> changeFieldText(viewEvent.type, viewEvent.text)
             AuthorizationEvent.ClickLoginBtn -> clickLoginBtn()
             is AuthorizationEvent.HandleGoogleResponse -> handleSignIn(viewEvent.result)
-            AuthorizationEvent.ClickGoogleBtn -> viewState.update { it.copy(isGoogleBtnClicked = true) }
             AuthorizationEvent.ClickLoginVkBtn -> {}
             AuthorizationEvent.ClearViewState -> clearViewState()
 
@@ -54,8 +53,6 @@ class AuthorizationViewModel @Inject constructor(
 
 
     private fun handleSignIn(result: GetCredentialResponse) {
-        viewState.update { it.copy(isGoogleBtnClicked = false) }
-
         val credential = result.credential
         if (credential is CustomCredential) {
             if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {

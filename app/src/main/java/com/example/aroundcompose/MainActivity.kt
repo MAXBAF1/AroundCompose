@@ -62,7 +62,6 @@ internal class MainActivity : ComponentActivity() {
                         }
                     }) { innerPaddings ->
                         NavGraph(
-                            activity = this,
                             navController = navController,
                             innerPaddings = innerPaddings
                         ).Create()
