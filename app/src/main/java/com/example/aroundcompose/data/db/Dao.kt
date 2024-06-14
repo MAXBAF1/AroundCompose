@@ -15,13 +15,10 @@ interface Dao {
     suspend fun insertNewAccountData(account: Account)
 
     @Insert(entity = Skills::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNewSkillsData(skills: Skills)
+    suspend fun insertNewSkillData(skill: Skills)
 
     @Insert(entity = Settings::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewSettingsData(settings: Settings)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNewGeolocationData(geolocation: String)
 
     @Query("SELECT * FROM account")
     fun getAllAccountData(): Flow<Account>
@@ -31,7 +28,4 @@ interface Dao {
 
     @Query("SELECT * FROM settings")
     fun getAllSettingsData(): Flow<Settings>
-
-    @Query("SELECT geolocation FROM general")
-    fun getGeolocationData(): Flow<String>
 }

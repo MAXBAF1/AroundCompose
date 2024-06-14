@@ -2,8 +2,6 @@ package com.example.aroundcompose.ui.navigation
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable

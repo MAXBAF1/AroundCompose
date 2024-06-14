@@ -77,6 +77,7 @@ class MapViewModel @Inject constructor(
     private fun init() {
         this.cameraState.center = getLastLocationFromSharedPref()
         LocationService.lastLocation = cameraState.center
+
         viewState.update {
             it.copy(lastLocation = cameraState.center, searchText = searchText, coins = coins)
         }

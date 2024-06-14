@@ -12,6 +12,6 @@ data class SkillDTO(
     @SerialName("rule") val rule: List<Int> = listOf(),
     @SerialName("cost") val cost: List<Int> = listOf(),
     @SerialName("description") val description: String,
-    @SerialName("image") val iconUrl: String,
+    @SerialName("image") val imageUrl: String,
     @SerialName("icon") val iconId: Int,
 ): IDTO()

@@ -11,4 +11,5 @@ data class Account(
     val email: String,
     val level: Int,
     val teamId: Int,
+    val geolocation: String,
 )
