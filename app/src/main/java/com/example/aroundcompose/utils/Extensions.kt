@@ -4,8 +4,6 @@ import android.graphics.Rect
 import android.location.Location
 import android.view.View
 import android.view.ViewTreeObserver
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -19,8 +17,6 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import com.example.aroundcompose.ui.screens.map.models.MutableCameraState
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraState

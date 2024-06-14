@@ -1,8 +1,14 @@
 package com.example.aroundcompose.ui.screens.teams
 
+import android.content.SharedPreferences
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.db.DatabaseRepository
+import com.example.aroundcompose.data.db.entities.SettingsEntity
+import com.example.aroundcompose.data.models.SkillDTO
+import com.example.aroundcompose.data.services.SkillsService
 import com.example.aroundcompose.data.services.UserInfoService
+import com.example.aroundcompose.di.NotEncryptedSharedPref
 import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.common.models.BaseViewModel
 import com.example.aroundcompose.ui.screens.teams.models.TeamsEvent
@@ -14,7 +20,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TeamsViewModel @Inject constructor(tokenManager: TokenManager) :
+class TeamsViewModel @Inject constructor(
+    @NotEncryptedSharedPref private val sharedPreferences: SharedPreferences,
+    private val tokenManager: TokenManager,
+    private val repository: DatabaseRepository
+) :
     BaseViewModel<TeamsViewState, TeamsEvent>(initialState = TeamsViewState()) {
     private var currentTeam = Teams.NONE
     private val userInfoService = UserInfoService(tokenManager)
@@ -36,9 +46,51 @@ class TeamsViewModel @Inject constructor(tokenManager: TokenManager) :
     private fun clickNextBtn() {
         viewModelScope.launch {
             when (userInfoService.patchMe(teamId = currentTeam.value)) {
-                HttpStatusCode.OK -> viewState.update { it.copy(toNextScreen = true) }
+                HttpStatusCode.OK -> {
+                    if (!isFirstRun()) {
+                        val userInfoService = UserInfoService(tokenManager)
+                        val skillsService = SkillsService(tokenManager)
+
+                        val userInfo = userInfoService.getMe()
+                        var skills: List<SkillDTO> = listOf()
+
+                        skillsService
+                            .getUserSkills(userInfo?.id ?: return@launch)
+                            ?.let { userSkills ->
+                                skills = userSkills.toList()
+                            }
+
+                        repository.insertNewAccountData(userInfo, "0 0")
+                        skills.forEach { skill ->
+                            repository.insertNewSkillData(skill)
+                        }
+                        repository.insertNewSettingsData(
+                            SettingsEntity(
+                                toggleNotification = false,
+                                theme = "Авто",
+                                language = "Русский"
+                            )
+                        )
+                    }
+
+                    viewState.update { it.copy(toNextScreen = true) }
+                }
+
                 else -> viewState.update { it.copy(toNextScreen = false) } // FIXME сделать обработку ошибок
             }
         }
+    }
+
+    private fun isFirstRun(): Boolean {
+        val containsFirstRun = sharedPreferences.contains("firstRun")
+
+        if (!containsFirstRun) {
+            sharedPreferences
+                .edit()
+                .putBoolean("firstRun", false)
+                .apply()
+        }
+
+        return containsFirstRun
     }
 }
