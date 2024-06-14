@@ -41,7 +41,7 @@ class MapViewModel @Inject constructor(
     private val coins = 0
     private var searchText = ""
     private var cameraState = MutableCameraState()
-    private var isEventSheetShowed = false
+    private var isEventsSheetShowed = false
     private var isEventInfoSheetShowed = false
 
 
@@ -54,7 +54,7 @@ class MapViewModel @Inject constructor(
             MapEvent.MinusZoomLevel -> updateZoomLevel(viewEvent)
             MapEvent.PlusZoomLevel -> updateZoomLevel(viewEvent)
             is MapEvent.UpdateCameraPosition -> cameraState = viewEvent.cameraState.toMutable()
-            is MapEvent.ShowEventSheet -> showEventSheet(viewEvent.show)
+            is MapEvent.ShowEventsSheet -> showEventSheet(viewEvent.show)
             is MapEvent.ShowEventInfoSheet -> showEventInfoSheet(viewEvent.show, viewEvent.event)
         }
     }
@@ -68,11 +68,11 @@ class MapViewModel @Inject constructor(
     }
 
     private fun showEventSheet(show: Boolean) {
-        isEventSheetShowed = show
+        isEventsSheetShowed = show
+        viewState.update { it.copy(isEventsSheetShowed = isEventsSheetShowed) }
         viewModelScope.launch {
             events = eventsService.getAllEvents() ?: return@launch
-
-            viewState.update { it.copy(isEventSheetShowed = isEventSheetShowed, events = events) }
+            viewState.update { it.copy(events = events) }
         }
     }
 

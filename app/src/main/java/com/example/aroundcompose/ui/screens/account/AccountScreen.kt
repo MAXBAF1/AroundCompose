@@ -370,7 +370,7 @@ class AccountScreen(
                     onClick = onClick ?: {}),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(containerColor = bgColor),
-            elevation = CardDefaults.cardElevation(4.dp, pressedElevation = 0.dp, hoveredElevation = 0.dp, focusedElevation = 0.dp, draggedElevation = 0.dp)
+            elevation = CardDefaults.cardElevation(4.dp)
         ) {
             Box(
                 modifier = Modifier.height(70.dp), contentAlignment = Alignment.Center
