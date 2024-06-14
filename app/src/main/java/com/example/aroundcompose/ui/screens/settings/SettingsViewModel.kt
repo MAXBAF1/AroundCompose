@@ -1,6 +1,7 @@
 package com.example.aroundcompose.ui.screens.settings
 
 import androidx.lifecycle.viewModelScope
+import com.example.aroundcompose.data.MyInfoSingleton
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.db.DatabaseRepository
 import com.example.aroundcompose.data.models.SettingsDTO
@@ -23,7 +24,6 @@ class SettingsViewModel @Inject constructor(
     private val userInfoService = UserInfoService(tokenManager)
     private var meInfo = UserDTO()
     private var settingsInfo = SettingsDTO()
-
 
     init {
         setMeInfo()

@@ -2,6 +2,7 @@ package com.example.aroundcompose.ui.screens.map.models
 
 import com.example.aroundcompose.data.models.CellDTO
 import com.example.aroundcompose.data.models.EventDTO
+import com.example.aroundcompose.data.models.UserDTO
 import com.example.aroundcompose.ui.common.models.EventData
 import com.mapbox.geojson.Point
 
@@ -15,5 +16,6 @@ data class MapViewState(
     val isEventInfoSheetShowed: Boolean = false,
     val chosenEvent: EventData? = null,
 
-    val events: List<EventDTO> = listOf()
+    val events: List<EventDTO> = listOf(),
+    val myInfo: UserDTO? = null
 )

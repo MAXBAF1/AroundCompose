@@ -1,6 +1,7 @@
 package com.example.aroundcompose.ui.screens.statistics
 
 import androidx.lifecycle.viewModelScope
+import com.example.aroundcompose.data.MyInfoSingleton
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.models.FriendDTO
 import com.example.aroundcompose.data.services.StatisticService
@@ -40,7 +41,7 @@ class StatisticsViewModel @Inject constructor(tokenManager: TokenManager) :
 
     private fun setStatisticInfo() {
         viewModelScope.launch {
-            currentUserId = userInfoService.getMe()?.id ?: return@launch
+            currentUserId = MyInfoSingleton.myInfo?.id ?: return@launch
 
             statisticsService.getAllTeams()?.forEach { teamDTO ->
                 teamsProgressMap[teamDTO.id] = teamDTO.score.toFloat()

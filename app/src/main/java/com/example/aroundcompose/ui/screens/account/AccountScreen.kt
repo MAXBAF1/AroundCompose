@@ -27,7 +27,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -60,6 +59,8 @@ import androidx.graphics.shapes.toPath
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
 import com.example.aroundcompose.data.models.UserDTO
+import com.example.aroundcompose.ui.common.enums.Teams
+import com.example.aroundcompose.ui.common.enums.getColor
 import com.example.aroundcompose.ui.common.views.CustomIconButton
 import com.example.aroundcompose.ui.common.views.CustomTopAppBar
 import com.example.aroundcompose.ui.screens.account.models.AccountEvent
@@ -84,13 +85,18 @@ class AccountScreen(
         val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
         LaunchedEffect(key1 = Unit) { viewModel.obtainEvent(AccountEvent.GetUserInfo(userId)) }
 
+        val themeColor = if (isMyAccount) {
+            JetAroundTheme.colors.primary
+        } else {
+            Teams.getById(viewState.userInfo.teamId).getColor()
+        }
+
         Surface(color = JetAroundTheme.colors.primaryBackground) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(
                         start = JetAroundTheme.margins.mainMargin,
-                        top = JetAroundTheme.margins.mainMargin,
                         end = JetAroundTheme.margins.mainMargin,
                         bottom = 16.dp
                     ),
@@ -101,7 +107,7 @@ class AccountScreen(
                     CustomTopAppBar(
                         modifier = Modifier.padding(bottom = 24.dp),
                         textId = R.string.account,
-                        onBackClick = onBackClick,
+                        onBackClick = if (isMyAccount) null else onBackClick,
                         trailingIconId = if (isMyAccount) R.drawable.ic_settings else null,
                         onTrailingBtnClick = toSettingsScreen
                     )
@@ -115,17 +121,19 @@ class AccountScreen(
                             user = viewState.userInfo,
                             modifier = Modifier.padding(end = if (isMyAccount) 0.dp else 20.dp)
                         )
-                        if (!isMyAccount) AddFriendBtn()
+                        if (!isMyAccount) AddFriendBtn(themeColor)
                     }
                     Text(
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        text = stringResource(
+                        modifier = Modifier.padding(bottom = 16.dp), text = stringResource(
                             id = if (isMyAccount) R.string.how_much_cells else R.string.other_player_how_much_cells
-                        ).uppercase(),
-                        style = JetAroundTheme.typography.bold16,
-                        color = JetAroundTheme.colors.primary
+                        ).uppercase(), style = JetAroundTheme.typography.bold16, color = themeColor
                     )
-                    MainButtons(viewState.myCells, viewState.myTeamCells, viewState.myAllTimeCells)
+                    MainButtons(
+                        teamColor = themeColor,
+                        myCells = viewState.myCells,
+                        teamCells = viewState.myTeamCells,
+                        myAllTimeCells = viewState.myAllTimeCells
+                    )
                     PlaceId(viewState.userInfo.id)
                 }
             }
@@ -133,12 +141,11 @@ class AccountScreen(
     }
 
     @Composable
-    private fun AddFriendBtn() {
+    private fun AddFriendBtn(shadowColor: Color) {
         val polygon = RoundedPolygon(numVertices = 6, rounding = CornerRounding(radius = 0.14F))
         val shape = RoundedPolygonShape(polygon)
         val size = 54.dp
         val bgColor = JetAroundTheme.colors.primaryBackground
-        val shadowColor = JetAroundTheme.colors.blue
         var checked by remember { mutableStateOf(false) }
 
         val matrix = Matrix()
@@ -208,12 +215,12 @@ class AccountScreen(
     }
 
     @Composable
-    private fun MainButtons(myCells: Int, teamCells: Int, myAllTimeCells: Int) {
+    private fun MainButtons(teamColor: Color, myCells: Int, teamCells: Int, myAllTimeCells: Int) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             MyAndTeamCellsCard(
                 myCells = myCells,
                 myTeamCells = teamCells,
-                bgColor = JetAroundTheme.colors.primary,
+                bgColor = teamColor,
                 textColor = JetAroundTheme.colors.primaryBackground,
                 modifier = Modifier.padding(bottom = 16.dp),
                 onClick = toStatisticScreen
@@ -222,7 +229,7 @@ class AccountScreen(
                 count = myAllTimeCells,
                 titleTextId = R.string.all_time,
                 bgColor = JetAroundTheme.colors.secondaryBackground,
-                textColor = JetAroundTheme.colors.primary,
+                textColor = teamColor,
                 decorationId = R.drawable.hex_decoration_2,
                 modifier = Modifier.padding(bottom = 16.dp),
             )
@@ -363,7 +370,7 @@ class AccountScreen(
                     onClick = onClick ?: {}),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(containerColor = bgColor),
-            elevation = CardDefaults.cardElevation(4.dp)
+            elevation = CardDefaults.cardElevation(4.dp, pressedElevation = 0.dp, hoveredElevation = 0.dp, focusedElevation = 0.dp, draggedElevation = 0.dp)
         ) {
             Box(
                 modifier = Modifier.height(70.dp), contentAlignment = Alignment.Center
@@ -373,7 +380,7 @@ class AccountScreen(
                     painter = painterResource(id = decorationId),
                     contentDescription = "",
                     contentScale = ContentScale.Crop,
-                    colorFilter = ColorFilter.tint(JetAroundTheme.colors.primary)
+                    colorFilter = ColorFilter.tint(textColor)
                 )
                 Row(
                     modifier = Modifier
@@ -383,7 +390,9 @@ class AccountScreen(
                             enabled = onClick != null,
                             onClick = onClick ?: {})
                 ) {
-                    StatisticTextColumn(count, titleTextId, textColor, Modifier.padding(16.dp), true)
+                    StatisticTextColumn(
+                        count, titleTextId, textColor, Modifier.padding(16.dp), true
+                    )
                 }
             }
         }

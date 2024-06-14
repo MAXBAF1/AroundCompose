@@ -37,7 +37,9 @@ internal class MainActivity : ComponentActivity() {
             val currentRoute = navBackStackEntry?.destination?.route
             val arguments = navBackStackEntry?.arguments
             val userId = arguments?.getInt(NavGraph.USER_ID, -1) ?: -1
-            val showBottomNav = Screens.getBottomItems().map { it.name }
+            val showBottomNav = Screens
+                .getBottomItems()
+                .map { it.name }
                 .contains(currentRoute?.substringBefore("?")) && userId == -1
 
             AroundComposeTheme(
@@ -60,7 +62,9 @@ internal class MainActivity : ComponentActivity() {
                         }
                     }) { innerPaddings ->
                         NavGraph(
-                            navController = navController, innerPaddings = innerPaddings
+                            activity = this,
+                            navController = navController,
+                            innerPaddings = innerPaddings
                         ).Create()
                     }
                 }

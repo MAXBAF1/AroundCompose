@@ -60,47 +60,59 @@ class MapScreen(
 
     @Composable
     fun Create() {
-        val viewState by viewModel.getViewState().collectAsState()
+        val viewState by viewModel
+            .getViewState()
+            .collectAsState()
         var mapView: MapView? by remember { mutableStateOf(null) }
         val searchText by remember { mutableStateOf("") }
         val positionChangedListener by remember {
             mutableStateOf(OnIndicatorPositionChangedListener {
-                mapView?.getMapboxMap()?.setCamera(CameraOptions.Builder().center(it).build())
+                mapView
+                    ?.getMapboxMap()
+                    ?.setCamera(
+                        CameraOptions
+                            .Builder()
+                            .center(it)
+                            .build()
+                    )
             })
         }
         var rotation by remember { mutableFloatStateOf(0F) }
         var compassIconId by remember { mutableIntStateOf(R.drawable.ic_navigate) }
         val context = LocalContext.current
 
-        MyMapboxMap(mapViewCallback = { mv ->
-            mapView = mv
-            initMap(mapView, viewState.lastLocation)
-            viewModel.obtainEvent(MapEvent.SetupService)
-            if (!LocationService.isRunning) startService(context)
-        }, onMoveListener = {
-            removeCameraFollow(mapView, positionChangedListener)
-            viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
-        }, onRotate = {
-            compassIconId = R.drawable.ic_compass
-            rotation = it
-        }).Create()
-
+        MyMapboxMap(
+            mapViewCallback = { mv ->
+                mapView = mv
+                initMap(mapView, viewState.lastLocation)
+                viewModel.obtainEvent(MapEvent.Init)
+                if (!LocationService.isRunning) startService(context)
+            },
+            onMoveListener = {
+                removeCameraFollow(mapView, positionChangedListener)
+                viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
+            },
+            onRotate = {
+                compassIconId = R.drawable.ic_compass
+                rotation = it
+            },
+        ).Create()
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(JetAroundTheme.margins.mapScreenMargin),
         ) {
-            Spacer(
-                Modifier.windowInsetsTopHeight(WindowInsets.systemBars)
-            )
+            Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
 
             Row {
-                SearchView(modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 10.dp),
+                SearchView(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 10.dp),
                     value = searchText,
-                    onClick = { viewModel.obtainEvent(MapEvent.ShowEventSheet(true)) }) {
+                    onClick = { viewModel.obtainEvent(MapEvent.ShowEventSheet(true)) },
+                ) {
                     TODO()
                 }
                 CoinView(modifier = Modifier, value = coins.intValue)
@@ -109,7 +121,7 @@ class MapScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 28.dp),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
             ) {
                 //MyScaleBar(scaleBarValue ?: 0f)
                 Column(
@@ -119,28 +131,34 @@ class MapScreen(
                     Spacer(modifier = Modifier.size(width = 0.dp, height = 0.dp))
                     Column {
                         Spacer(modifier = Modifier.size(width = 0.dp, height = 60.dp))
-                        MapBtn(iconId = R.drawable.ic_plus, onClick = {
-                            viewModel.obtainEvent(MapEvent.PlusZoomLevel)
-                        })
+                        MapBtn(
+                            iconId = R.drawable.ic_plus,
+                            onClick = { viewModel.obtainEvent(MapEvent.PlusZoomLevel) },
+                        )
                         Spacer(modifier = Modifier.size(width = 0.dp, height = 12.dp))
-                        MapBtn(iconId = R.drawable.ic_minus,
-                            onClick = { viewModel.obtainEvent(MapEvent.MinusZoomLevel) })
+                        MapBtn(
+                            iconId = R.drawable.ic_minus,
+                            onClick = { viewModel.obtainEvent(MapEvent.MinusZoomLevel) },
+                        )
                     }
                     MapBtn(iconId = compassIconId, rotation = rotation) {
-                        onCompassClick(mapView, positionChangedListener, onNorthFaced = {
-                            rotation = 0F
-                            compassIconId = R.drawable.ic_navigate
-                        }, onZoomChanged = {
-                            mapView?.getMapboxMap()?.cameraState?.let {
-                                viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
-                            }
-                        })
+                        onCompassClick(
+                            mapView = mapView,
+                            positionChangedListener = positionChangedListener,
+                            onNorthFaced = {
+                                rotation = 0F
+                                compassIconId = R.drawable.ic_navigate
+                            },
+                            onZoomChanged = {
+                                mapView?.getMapboxMap()?.cameraState?.let {
+                                    viewModel.obtainEvent(MapEvent.UpdateCameraPosition(it))
+                                }
+                            },
+                        )
                     }
                 }
             }
-            Spacer(
-                Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)
-            )
+            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
         }
 
         paintCells(mapView, viewState.paintedCells.map { it.id })
@@ -171,19 +189,30 @@ class MapScreen(
     }
 
     private fun updateZoomLevel(mapView: MapView?, zoomLevel: Double) {
-        mapView?.getMapboxMap()?.easeTo(
-            cameraOptions = CameraOptions.Builder().zoom(zoomLevel).build()
-        )
+        mapView
+            ?.getMapboxMap()
+            ?.easeTo(
+                cameraOptions = CameraOptions
+                    .Builder()
+                    .zoom(zoomLevel)
+                    .build()
+            )
     }
 
     private fun initMap(mapView: MapView?, lastLocation: Point?) {
         val zoomLevel = if (lastLocation == null) 0.0 else MapConstant.ZOOM_LEVEL
 
-        mapView?.getMapboxMap()?.setCamera(
-            CameraOptions.Builder().zoom(zoomLevel).pitch(0.0).bearing(0.0).center(
-                lastLocation
-            ).build()
-        )
+        mapView
+            ?.getMapboxMap()
+            ?.setCamera(
+                CameraOptions
+                    .Builder()
+                    .zoom(zoomLevel)
+                    .pitch(0.0)
+                    .bearing(0.0)
+                    .center(lastLocation)
+                    .build()
+            )
     }
 
     private fun paintCells(mapView: MapView?, paintedCells: List<String>) {
@@ -234,14 +263,22 @@ class MapScreen(
         val mapboxMap = mapView?.getMapboxMap()
 
         if (mapboxMap?.cameraState?.bearing != 0.0 || mapboxMap.cameraState.pitch != 0.0) {
-            mapboxMap?.easeTo(CameraOptions.Builder().bearing(0.0).pitch(0.0).build())
+            mapboxMap?.easeTo(
+                CameraOptions
+                    .Builder()
+                    .bearing(0.0)
+                    .pitch(0.0)
+                    .build()
+            )
             onNorthFaced()
 
         } else {
             mapboxMap.easeTo(
-                cameraOptions = CameraOptions.Builder().center(LocationService.lastLocation)
-                    .zoom(maxOf(mapboxMap.cameraState.zoom, MapConstant.ZOOM_LEVEL)).build(),
-                animatorListener = animatorListener
+                cameraOptions = CameraOptions
+                    .Builder()
+                    .center(LocationService.lastLocation)
+                    .zoom(maxOf(mapboxMap.cameraState.zoom, MapConstant.ZOOM_LEVEL))
+                    .build(), animatorListener = animatorListener
             )
         }
     }

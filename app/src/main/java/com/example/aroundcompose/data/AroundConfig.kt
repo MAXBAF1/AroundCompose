@@ -18,9 +18,9 @@ enum class AroundConfig(private val value: String) {
     CELLS_ADDRESS("$HOST_ADDRESS/chunks"),
     CELLS_ALL_ADDRESS("$CELLS_ADDRESS/all"),
 
-    WS_HOST("wss://aroundgame.ru/ws"),
+    WS_HOST("wss://aroundgame.ru:8080/ws"),
     CELLS_CHANGES_FROM_USER("$WS_HOST/topic/chunk.changes"),
-    CELLS_CHANGES_EVENT("$WS_HOST/topic/chunk.event");
+    CELLS_CHANGES_EVENT("/topic/chunk.event");
 
     override fun toString(): String = value
 }

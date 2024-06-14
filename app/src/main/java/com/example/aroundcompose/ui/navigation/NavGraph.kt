@@ -2,6 +2,7 @@ package com.example.aroundcompose.ui.navigation
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import com.example.aroundcompose.ui.screens.teams.SelectTeamScreen
 import com.example.aroundcompose.ui.screens.teams.TeamsViewModel
 
 class NavGraph(
+    private val activity: Context,
     private val navController: NavHostController,
     private val innerPaddings: PaddingValues,
 ) {
@@ -170,8 +172,9 @@ class NavGraph(
     @Composable
     private fun CreateAuthScreen(viewModel: AuthorizationViewModel) {
         AuthorizationScreen(
+            activity = activity,
             viewModel = viewModel,
-            onLoginClicked = { navController.navigate(Screens.MapScreen.name) },
+            onLoginClicked = { navController.navigate(Screens.MapScreen.name) { popUpTo(0) } },
             onRegistrationClicked = { navController.navigate(Screens.RegistrationScreen.name) },
             onForgotPasswordClicked = { navController.navigate(Screens.RestorePasswordScreen.name) },
         ).Create()
@@ -181,12 +184,7 @@ class NavGraph(
     private fun CreateRegistrationScreen(viewModel: RegistrationViewModel) {
         RegistrationScreen(
             viewModel = viewModel,
-            onNextClicked = {
-                navController.navigate(Screens.TeamsScreen.name) {
-                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
-                    launchSingleTop = true
-                }
-            },
+            onNextClicked = { navController.navigate(Screens.TeamsScreen.name) { popUpTo(0) } },
             onBackClicked = { navController.popBackStack() },
         ).Create()
     }
@@ -195,11 +193,7 @@ class NavGraph(
     private fun CreateTeamsScreen(viewModel: TeamsViewModel) {
         SelectTeamScreen(
             viewModel = viewModel,
-            onNextClicked = {
-                navController.navigate(Screens.MapScreen.name) {
-                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
-                }
-            },
+            onNextClicked = { navController.navigate(Screens.MapScreen.name) { popUpTo(0) } },
         ).Create()
     }
 

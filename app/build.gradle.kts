@@ -55,6 +55,12 @@ android {
 }
 
 dependencies {
+    // Google Oauth
+    val credentialsVersion = "1.3.0-beta02"
+    implementation("androidx.credentials:credentials:$credentialsVersion")
+    implementation("androidx.credentials:credentials-play-services-auth:$credentialsVersion")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
@@ -63,8 +69,11 @@ dependencies {
 
     // Ktor
     val ktorVersion = "2.3.11"
+    implementation("org.hildan.krossbow:krossbow-websocket-ktor:7.1.0")
+    implementation("org.hildan.krossbow:krossbow-stomp-core:7.1.0")
+    //implementation("org.hildan.krossbow:krossbow-websocket-builtin:7.0.0")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-android:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 

@@ -11,7 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,8 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.aroundcompose.R
-import com.example.aroundcompose.ui.common.views.CustomTopAppBar
 import com.example.aroundcompose.data.models.SkillDTO
+import com.example.aroundcompose.ui.common.views.CustomTopAppBar
 import com.example.aroundcompose.ui.screens.skills.models.SkillsEvent
 import com.example.aroundcompose.ui.screens.skills.views.CardView
 import com.example.aroundcompose.ui.theme.JetAroundTheme
@@ -52,14 +51,16 @@ class SkillsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(start = 30.dp, top = 30.dp, end = 30.dp)
+                        .padding(
+                            start = JetAroundTheme.margins.mainMargin,
+                            end = JetAroundTheme.margins.mainMargin
+                        )
                 ) {
                     CustomTopAppBar(
                         textId = R.string.skills,
-                        isBackButtonNeeded = userId != -1,
                         showMoney = userId == -1,
                         numberOfCoins = viewState.coins,
-                        onBackClick = onBackClick
+                        onBackClick = if (userId != -1) onBackClick else null
                     )
 
                     SkillsContainer(
