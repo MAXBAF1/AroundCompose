@@ -40,7 +40,9 @@ class StatisticsScreen(
 ) {
     @Composable
     fun Create() {
-        val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+        val viewState by viewModel
+            .getViewState()
+            .collectAsStateWithLifecycle()
 
         Surface(color = JetAroundTheme.colors.primaryBackground) {
             Column(
@@ -94,21 +96,15 @@ class StatisticsScreen(
             }
 
             teamsProgress[3]?.let {
-                StatisticTeamView(
-                    currentPercent = it, team = Teams.YELLOW
-                ).Create()
+                StatisticTeamView(currentPercent = it, team = Teams.YELLOW).Create()
             }
 
             teamsProgress[2]?.let {
-                StatisticTeamView(
-                    currentPercent = it, team = Teams.PURPLE
-                ).Create()
+                StatisticTeamView(currentPercent = it, team = Teams.PURPLE).Create()
             }
 
             teamsProgress[1]?.let {
-                StatisticTeamView(
-                    currentPercent = it, team = Teams.BLUE
-                ).Create()
+                StatisticTeamView(currentPercent = it, team = Teams.BLUE).Create()
             }
 
             HexagonView(Modifier.offset(x = 249.dp, y = 146.dp))
