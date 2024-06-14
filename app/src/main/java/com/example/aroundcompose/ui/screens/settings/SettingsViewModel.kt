@@ -1,7 +1,6 @@
 package com.example.aroundcompose.ui.screens.settings
 
 import androidx.lifecycle.viewModelScope
-import com.example.aroundcompose.data.MyInfoSingleton
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.db.DatabaseRepository
 import com.example.aroundcompose.data.models.SettingsDTO
@@ -45,10 +44,10 @@ class SettingsViewModel @Inject constructor(
             meInfo = repository.getAllAccountData()
             settingsInfo = repository.getAllSettingsData()
 
-            viewState.update { it.copy(meInfo = meInfo, settingsInfo = settingsInfo) }
+            viewState.update { it.copy(myInfo = meInfo, settingsInfo = settingsInfo) }
 
             meInfo = userInfoService.getMe() ?: return@launch
-            viewState.update { it.copy(meInfo = meInfo, settingsInfo = settingsInfo) }
+            viewState.update { it.copy(myInfo = meInfo, settingsInfo = settingsInfo) }
         }
     }
 }

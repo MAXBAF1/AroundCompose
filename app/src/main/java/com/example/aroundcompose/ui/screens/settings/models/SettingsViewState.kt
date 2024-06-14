@@ -4,7 +4,7 @@ import com.example.aroundcompose.data.models.SettingsDTO
 import com.example.aroundcompose.data.models.UserDTO
 
 data class SettingsViewState(
-    val meInfo: UserDTO = UserDTO(),
+    val myInfo: UserDTO = UserDTO(),
     val settingsInfo: SettingsDTO = SettingsDTO(),
     val toAuthorizationScreen: Boolean = false
 )

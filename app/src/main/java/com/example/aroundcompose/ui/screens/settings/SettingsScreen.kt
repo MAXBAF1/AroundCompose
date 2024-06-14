@@ -39,12 +39,16 @@ import com.example.aroundcompose.ui.screens.settings.views.CustomSwitch
 import com.example.aroundcompose.ui.screens.settings.views.CustomTabRow
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
-class SettingsScreen(private val toAuthorizationScreen: () -> Unit, private val onBackClick: () -> Unit) {
+class SettingsScreen(
+    private val toAuthorizationScreen: () -> Unit, private val onBackClick: () -> Unit
+) {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun Create() {
         val viewModel = hiltViewModel<SettingsViewModel>()
-        val viewState by viewModel.getViewState().collectAsStateWithLifecycle()
+        val viewState by viewModel
+            .getViewState()
+            .collectAsStateWithLifecycle()
 
         if (viewState.toAuthorizationScreen) toAuthorizationScreen()
 

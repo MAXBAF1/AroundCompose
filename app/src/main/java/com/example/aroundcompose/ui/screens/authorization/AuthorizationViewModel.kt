@@ -125,7 +125,6 @@ class AuthorizationViewModel @Inject constructor(
         }
     }
 
-
     private fun isFirstRun(): Boolean {
         val containsFirstRun = sharedPreferences.contains("firstRun")
 
@@ -137,6 +136,7 @@ class AuthorizationViewModel @Inject constructor(
         }
 
         return containsFirstRun
+    }
 
     companion object {
         const val WEB_CLIENT_ID =
