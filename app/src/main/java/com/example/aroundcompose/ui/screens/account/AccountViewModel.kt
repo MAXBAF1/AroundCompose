@@ -2,6 +2,7 @@ package com.example.aroundcompose.ui.screens.account
 
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.db.DatabaseRepository
 import com.example.aroundcompose.data.models.UserDTO
 import com.example.aroundcompose.data.services.StatisticService
 import com.example.aroundcompose.data.services.UserInfoService
@@ -14,7 +15,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AccountViewModel @Inject constructor(tokenManager: TokenManager) :
+class AccountViewModel @Inject constructor(
+    tokenManager: TokenManager,
+    private val repository: DatabaseRepository
+) :
     BaseViewModel<AccountViewState, AccountEvent>(initialState = AccountViewState()) {
     private val userInfoService = UserInfoService(tokenManager)
     private val statisticService = StatisticService(tokenManager)
@@ -33,6 +37,14 @@ class AccountViewModel @Inject constructor(tokenManager: TokenManager) :
 
     private fun getUserInfo(id: Int) {
         viewModelScope.launch {
+            if (id == -1) {
+                userInfo = repository.getAllAccountData()
+            }
+
+            viewState.update {
+                it.copy(userInfo = userInfo.copy(), myCells = myCells, myTeamCells = myTeamCells)
+            }
+
             userInfo = (if (id == -1) {
                 userInfoService.getMe()
             } else userInfoService.getUser(id)) ?: UserDTO()

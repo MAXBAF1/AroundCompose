@@ -4,28 +4,27 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.aroundcompose.data.db.entities.Account
-import com.example.aroundcompose.data.db.entities.Settings
-import com.example.aroundcompose.data.db.entities.Skills
-import kotlinx.coroutines.flow.Flow
+import com.example.aroundcompose.data.db.entities.AccountEntity
+import com.example.aroundcompose.data.db.entities.SettingsEntity
+import com.example.aroundcompose.data.db.entities.SkillsEntity
 
 @Dao
 interface Dao {
-    @Insert(entity = Account::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNewAccountData(account: Account)
+    @Insert(entity = AccountEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNewAccountData(account: AccountEntity)
 
-    @Insert(entity = Skills::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNewSkillData(skill: Skills)
+    @Insert(entity = SkillsEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNewSkillData(skill: SkillsEntity)
 
-    @Insert(entity = Settings::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNewSettingsData(settings: Settings)
+    @Insert(entity = SettingsEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNewSettingsData(settings: SettingsEntity)
 
     @Query("SELECT * FROM account")
-    fun getAllAccountData(): Flow<Account>
+    suspend fun getAllAccountData(): AccountEntity
 
     @Query("SELECT * FROM skills")
-    fun getAllSkillsData(): Flow<Skills>
+    suspend fun getAllSkillsData(): List<SkillsEntity>
 
     @Query("SELECT * FROM settings")
-    fun getAllSettingsData(): Flow<Settings>
+    suspend fun getAllSettingsData(): SettingsEntity
 }

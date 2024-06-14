@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "skills")
-data class Skills(
+data class SkillsEntity(
     @PrimaryKey
     val id: Int,
     val maxLevel: Int,

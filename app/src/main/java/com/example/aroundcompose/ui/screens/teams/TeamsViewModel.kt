@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.TokenManager
 import com.example.aroundcompose.data.db.DatabaseRepository
-import com.example.aroundcompose.data.db.entities.Settings
+import com.example.aroundcompose.data.db.entities.SettingsEntity
 import com.example.aroundcompose.data.models.SkillDTO
 import com.example.aroundcompose.data.services.SkillsService
 import com.example.aroundcompose.data.services.UserInfoService
@@ -65,7 +65,7 @@ class TeamsViewModel @Inject constructor(
                             repository.insertNewSkillData(skill)
                         }
                         repository.insertNewSettingsData(
-                            Settings(
+                            SettingsEntity(
                                 toggleNotification = false,
                                 theme = "Авто",
                                 language = "Русский"

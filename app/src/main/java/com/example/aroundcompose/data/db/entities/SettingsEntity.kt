@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "settings")
-data class Settings(
+data class SettingsEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val toggleNotification: Boolean,

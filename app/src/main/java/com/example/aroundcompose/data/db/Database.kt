@@ -2,15 +2,15 @@ package com.example.aroundcompose.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.aroundcompose.data.db.entities.Account
-import com.example.aroundcompose.data.db.entities.Settings
-import com.example.aroundcompose.data.db.entities.Skills
+import com.example.aroundcompose.data.db.entities.AccountEntity
+import com.example.aroundcompose.data.db.entities.SettingsEntity
+import com.example.aroundcompose.data.db.entities.SkillsEntity
 
 @Database(
     entities = [
-        Account::class,
-        Skills::class,
-        Settings::class,
+        AccountEntity::class,
+        SkillsEntity::class,
+        SettingsEntity::class,
     ],
     version = 1,
     exportSchema = false
