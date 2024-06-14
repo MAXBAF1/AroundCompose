@@ -3,6 +3,8 @@ package com.example.aroundcompose.ui.screens.settings
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.MyInfoSingleton
 import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.db.DatabaseRepository
+import com.example.aroundcompose.data.models.SettingsDTO
 import com.example.aroundcompose.data.models.UserDTO
 import com.example.aroundcompose.data.services.UserInfoService
 import com.example.aroundcompose.ui.common.models.BaseViewModel
@@ -14,11 +16,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(private val tokenManager: TokenManager) :
+class SettingsViewModel @Inject constructor(
+    private val tokenManager: TokenManager,
+    private val repository: DatabaseRepository
+) :
     BaseViewModel<SettingsViewState, SettingsEvent>(initialState = SettingsViewState()) {
     private val userInfoService = UserInfoService(tokenManager)
-    private var myInfo = UserDTO()
-
+    private var meInfo = UserDTO()
+    private var settingsInfo = SettingsDTO()
 
     init {
         setMeInfo()
@@ -37,8 +42,13 @@ class SettingsViewModel @Inject constructor(private val tokenManager: TokenManag
 
     private fun setMeInfo() {
         viewModelScope.launch {
-            myInfo = MyInfoSingleton.myInfo ?: return@launch
-            viewState.update { it.copy(myInfo = myInfo) }
+            meInfo = repository.getAllAccountData()
+            settingsInfo = repository.getAllSettingsData()
+
+            viewState.update { it.copy(meInfo = meInfo, settingsInfo = settingsInfo) }
+
+            meInfo = userInfoService.getMe() ?: return@launch
+            viewState.update { it.copy(meInfo = meInfo, settingsInfo = settingsInfo) }
         }
     }
 }

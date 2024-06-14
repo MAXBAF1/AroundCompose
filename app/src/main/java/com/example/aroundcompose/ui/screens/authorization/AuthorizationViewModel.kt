@@ -1,12 +1,18 @@
 package com.example.aroundcompose.ui.screens.authorization
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialResponse
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.db.DatabaseRepository
+import com.example.aroundcompose.data.db.entities.SettingsEntity
+import com.example.aroundcompose.data.models.SkillDTO
 import com.example.aroundcompose.data.services.AuthenticationService
+import com.example.aroundcompose.data.services.SkillsService
 import com.example.aroundcompose.data.services.UserInfoService
+import com.example.aroundcompose.di.NotEncryptedSharedPref
 import com.example.aroundcompose.ui.common.enums.FieldType
 import com.example.aroundcompose.ui.common.enums.Teams
 import com.example.aroundcompose.ui.common.models.BaseViewModel
@@ -26,7 +32,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthorizationViewModel @Inject constructor(
-    tokenManager: TokenManager,
+    @NotEncryptedSharedPref private val sharedPreferences: SharedPreferences,
+    private val tokenManager: TokenManager,
+    private val repository: DatabaseRepository
 ) : BaseViewModel<AuthorizationViewState, AuthorizationEvent>(AuthorizationViewState()) {
     private var fields = AuthFields()
     private val authenticationService = AuthenticationService(tokenManager)
@@ -69,6 +77,32 @@ class AuthorizationViewModel @Inject constructor(
         viewModelScope.launch {
             when (authenticationService.authenticate(fields)) {
                 HttpStatusCode.OK -> {
+                    if (!isFirstRun()) {
+                        val userInfoService = UserInfoService(tokenManager)
+                        val skillsService = SkillsService(tokenManager)
+
+                        val userInfo = userInfoService.getMe()
+                        var skills: List<SkillDTO> = listOf()
+
+                        skillsService
+                            .getUserSkills(userInfo?.id ?: return@launch)
+                            ?.let { userSkills ->
+                                skills = userSkills.toList()
+                            }
+
+                        repository.insertNewAccountData(userInfo, "0 0")
+                        skills.forEach { skill ->
+                            repository.insertNewSkillData(skill)
+                        }
+                        repository.insertNewSettingsData(
+                            SettingsEntity(
+                                toggleNotification = false,
+                                theme = "Авто",
+                                language = "Русский"
+                            )
+                        )
+                    }
+
                     val myTeam = userInfoService.getMe()?.teamId ?: -1
                     viewState.update {
                         it.copy(toNextScreen = true, userTeam = Teams.getById(myTeam))
@@ -90,6 +124,19 @@ class AuthorizationViewModel @Inject constructor(
             )
         }
     }
+
+
+    private fun isFirstRun(): Boolean {
+        val containsFirstRun = sharedPreferences.contains("firstRun")
+
+        if (!containsFirstRun) {
+            sharedPreferences
+                .edit()
+                .putBoolean("firstRun", false)
+                .apply()
+        }
+
+        return containsFirstRun
 
     companion object {
         const val WEB_CLIENT_ID =

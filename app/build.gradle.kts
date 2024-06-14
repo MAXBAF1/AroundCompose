@@ -5,6 +5,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     kotlin("plugin.serialization")
     id("kotlinx-serialization")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -75,6 +76,14 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+
+    // Room
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+//    ksp("androidx.room:room-compiler:$roomVersion")
 
     // Shapes
     implementation("androidx.graphics:graphics-shapes:1.0.0-beta01")

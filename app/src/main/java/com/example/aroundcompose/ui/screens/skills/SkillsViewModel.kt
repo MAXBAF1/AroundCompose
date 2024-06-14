@@ -2,6 +2,7 @@ package com.example.aroundcompose.ui.screens.skills
 
 import androidx.lifecycle.viewModelScope
 import com.example.aroundcompose.data.TokenManager
+import com.example.aroundcompose.data.db.DatabaseRepository
 import com.example.aroundcompose.data.models.SkillDTO
 import com.example.aroundcompose.data.models.UserDTO
 import com.example.aroundcompose.data.services.SkillsService
@@ -16,7 +17,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SkillsViewModel @Inject constructor(tokenManager: TokenManager) :
+class SkillsViewModel @Inject constructor(
+    tokenManager: TokenManager,
+    private val repository: DatabaseRepository
+) :
     BaseViewModel<SkillsViewState, SkillsEvent>(initialState = SkillsViewState()) {
     private var userInfo: UserDTO? = UserDTO()
     private var skills: List<SkillDTO> = listOf()
@@ -37,8 +41,20 @@ class SkillsViewModel @Inject constructor(tokenManager: TokenManager) :
 
     private fun setUserInfo() {
         viewModelScope.launch {
-            userInfo = userInfoService.getMe()
+            skills = repository
+                .getAllSkillsData()
+                .toList()
+            skillsStates = MutableList(skills.size) { false }
 
+            viewState.update {
+                it.copy(
+                    coins = userInfo?.coins ?: return@launch,
+                    skills = skills.toList(),
+                    skillsStates = skillsStates.toList()
+                )
+            }
+
+            userInfo = userInfoService.getMe()
             skillsService.getUserSkills(userInfo?.id ?: return@launch)?.let { userSkills ->
                 skills = userSkills.toList()
                 skillsStates = MutableList(userSkills.size) { false }
