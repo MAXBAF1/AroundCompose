@@ -36,7 +36,7 @@ import com.example.aroundcompose.ui.screens.map.models.MapEvent
 import com.example.aroundcompose.ui.screens.map.views.MapBtn
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap
 import com.example.aroundcompose.ui.screens.map.views.MyMapboxMap.MapConstant
-import com.example.aroundcompose.ui.screens.map.views.event_bottom_sheet_views.EventBottomSheet
+import com.example.aroundcompose.ui.screens.map.views.event_bottom_sheet_views.EventsBottomSheet
 import com.example.aroundcompose.ui.screens.map.views.event_info_sheet.EventInfoSheet
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 import com.mapbox.geojson.Point
@@ -111,7 +111,7 @@ class MapScreen(
                         .weight(1f)
                         .padding(end = 10.dp),
                     value = searchText,
-                    onClick = { viewModel.obtainEvent(MapEvent.ShowEventSheet(true)) },
+                    onClick = { viewModel.obtainEvent(MapEvent.ShowEventsSheet(true)) },
                 ) {
                     TODO()
                 }
@@ -167,10 +167,10 @@ class MapScreen(
             updateZoomLevel(mapView, viewState.zoomLevel)
         }
 
-        if (viewState.isEventSheetShowed) {
-            EventBottomSheet(
+        if (viewState.isEventsSheetShowed) {
+            EventsBottomSheet(
                 events = viewState.events,
-                onDismissRequest = { viewModel.obtainEvent(MapEvent.ShowEventSheet(false)) },
+                onDismissRequest = { viewModel.obtainEvent(MapEvent.ShowEventsSheet(false)) },
                 onEventClick = { viewModel.obtainEvent(MapEvent.ShowEventInfoSheet(true, it)) },
             ).Create()
         }

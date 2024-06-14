@@ -12,7 +12,7 @@ data class MapViewState(
     val coins: Int = 0,
     val paintedCells: List<CellDTO> = listOf(),
     val zoomLevel: Double = 0.0,
-    val isEventSheetShowed: Boolean = false,
+    val isEventsSheetShowed: Boolean = false,
     val isEventInfoSheetShowed: Boolean = false,
     val chosenEvent: EventData? = null,
 

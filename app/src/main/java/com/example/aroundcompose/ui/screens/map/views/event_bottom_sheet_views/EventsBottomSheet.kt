@@ -30,7 +30,7 @@ import com.example.aroundcompose.ui.common.views.SearchView
 import com.example.aroundcompose.ui.theme.JetAroundTheme
 
 
-class EventBottomSheet(
+class EventsBottomSheet(
     private val events: List<EventDTO>,
     private val onDismissRequest: () -> Unit,
     private val onEventClick: (EventData) -> Unit,
